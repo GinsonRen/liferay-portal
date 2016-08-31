@@ -12,6 +12,8 @@
 	<command name="publish">
 		<execute macro="Button#clickPublish" />
 
+		<execute function="Pause" locator1="5000" />
+
 		<execute macro="Alert#viewSuccessMessage" />
 	</command>
 
