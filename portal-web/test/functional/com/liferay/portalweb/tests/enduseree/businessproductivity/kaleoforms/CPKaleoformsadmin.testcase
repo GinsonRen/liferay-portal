@@ -115,6 +115,8 @@
 	</command>
 
 	<command name="AddProcessWithDataDefinitionFieldSet" priority="3">
+		<property name="portal.acceptance" value="true" />
+
 		<var name="ddlDataDefinitionDescription" value="Data Definition Description" />
 		<var name="ddlDataDefinitionName" value="Data Definition" />
 		<var name="field" value="Text" />
@@ -200,6 +202,8 @@
 	</command>
 
 	<command name="AddProcessWithNewFieldSetAndWorkflowViaSourceTab" priority="3">
+		<property name="portal.acceptance" value="true" />
+
 		<var name="kfFieldSetName" value="Field Set Data Definition" />
 		<var name="kfProcessDescription" value="Kaleo Forms Process Description" />
 		<var name="kfProcessName" value="Kaleo Forms Process" />
@@ -956,6 +960,8 @@
 	</command>
 
 	<command name="DeleteForm" priority="4">
+		<property name="portal.acceptance" value="true" />
+
 		<var name="kfFieldSetName" value="Field Set Data Definition" />
 		<var name="kfProcessDescription" value="Kaleo Forms Process Description" />
 		<var name="kfProcessName" value="Kaleo Forms Process" />
@@ -1579,6 +1585,8 @@
 	</command>
 
 	<command name="EditFieldsPredefinedDefinitionViaAddProcess" priority="3">
+		<property name="portal.acceptance" value="true" />
+
 		<execute macro="Navigator#openURL" />
 
 		<execute macro="ProductMenu#gotoSitesContent">
@@ -1758,6 +1766,8 @@
 	</command>
 
 	<command name="EditProcessForms" priority="5">
+		<property name="portal.acceptance" value="true" />
+
 		<var name="kfProcessName" value="Kaleo Forms Process" />
 
 		<execute macro="Navigator#openURL" />
@@ -1963,6 +1973,8 @@
 	</command>
 
 	<command name="EditProcessNewFieldSet" priority="4">
+		<property name="portal.acceptance" value="true" />
+
 		<var name="kfFieldSetName" value="Field Set Data Definition" />
 		<var name="kfProcessName" value="Kaleo Forms Process" />
 
@@ -2089,6 +2101,8 @@
 	</command>
 
 	<command name="EditProcessNewWorkflowViaSourceTab" priority="5">
+		<property name="portal.acceptance" value="true" />
+
 		<var name="kfFieldSetName" value="Field Set Data Definition" />
 		<var name="kfProcessDescription" value="Kaleo Forms Process Description" />
 		<var name="kfProcessName" value="Kaleo Forms Process" />
@@ -2734,6 +2748,8 @@
 	</command>
 
 	<command name="ExportAllProcessRecordsXML" priority="4">
+		<property name="portal.acceptance" value="true" />
+
 		<description message="This is a use case for LPS-49107." />
 
 		<var name="kfFieldSetName" value="Field Set Data Definition" />
@@ -3045,6 +3061,8 @@
 	</command>
 
 	<command name="ExportApprovedProcessRecordsXML" priority="4">
+		<property name="portal.acceptance" value="true" />
+
 		<description message="This is a use case for LPS-49107." />
 
 		<var name="kfFieldSetName" value="Field Set Data Definition" />
@@ -3589,6 +3607,8 @@
 	</command>
 
 	<command name="ViewProcessRecordDetails" priority="3">
+		<property name="portal.acceptance" value="true" />
+
 		<var name="kfFieldSetName" value="Field Set Data Definition" />
 		<var name="kfProcessName" value="Kaleo Forms Process" />
 
