@@ -299,6 +299,7 @@
 	</command>
 
 	<command name="AssertPendingFormPresentAfterDeletingDifferentProcessDefinition" priority="4">
+		<property name="portal.acceptance" value="true" />
 		<execute macro="Navigator#openURL" />
 
 		<execute macro="ProductMenu#gotoSitesContent">
@@ -796,6 +797,8 @@
 	</command>
 
 	<command name="AssignRolePermissionsCompleteFormPG" priority="4">
+		<property name="portal.acceptance" value="true" />
+
 		<execute macro="ProductMenu#gotoControlPanelUsers">
 			<var name="portlet" value="Roles" />
 		</execute>
@@ -996,6 +999,7 @@
 	</command>
 
 	<command name="AssignRolePermissionsRejectPG" priority="5">
+		<property name="portal.acceptance" value="true" />
 		<property name="test.name.skip.portal.instance" value="KaleoformsUsecase#AssignRolePermissionsRejectPG" />
 
 		<execute macro="ProductMenu#gotoControlPanelUsers">
@@ -2872,6 +2876,8 @@
 	</command>
 
 	<command name="CompleteProcessPredefinedInventory" priority="3">
+		<property name="portal.acceptance" value="true" />
+
 		<execute macro="Navigator#openURL" />
 
 		<execute macro="ProductMenu#gotoSitesContent">
@@ -4283,6 +4289,8 @@
 	</command>
 
 	<command name="EditProcessEditFormAfterFormSubmission" priority="3">
+		<property name="portal.acceptance" value="true" />
+
 		<execute macro="Navigator#openURL" />
 
 		<execute macro="ProductMenu#gotoSitesContent">
@@ -4491,6 +4499,8 @@
 	</command>
 
 	<command name="EditProcessFieldSetAfterFormSubmission" priority="3">
+		<property name="portal.acceptance" value="true" />
+
 		<execute macro="Navigator#openURL" />
 
 		<execute macro="ProductMenu#gotoSitesContent">
@@ -5210,6 +5220,8 @@
 	</command>
 
 	<command name="EditProcessWorkflowAfterFormSubmission" priority="4">
+		<property name="portal.acceptance" value="true" />
+
 		<execute macro="ProductMenu#gotoControlPanelConfiguration">
 			<var name="portlet" value="Workflow Definition" />
 		</execute>
@@ -6528,6 +6540,8 @@
 	</command>
 
 	<command name="RejectAndResubmitProcess" priority="3">
+		<property name="portal.acceptance" value="true" />
+
 		<execute macro="Navigator#openURL" />
 
 		<execute macro="ProductMenu#gotoSitesContent">
@@ -6668,6 +6682,8 @@
 	</command>
 
 	<command name="RejectAndResubmitProcessAndViewNotifications" priority="4">
+		<property name="portal.acceptance" value="true" />
+
 		<execute macro="Navigator#openURL" />
 
 		<execute macro="ProductMenu#gotoSitesContent">
@@ -7121,6 +7137,8 @@
 	</command>
 
 	<command name="ViewApprovedProcessRecords" priority="5">
+		<property name="portal.acceptance" value="true" />
+
 		<execute macro="Navigator#openURL" />
 
 		<execute macro="ProductMenu#gotoSitesContent">
@@ -8469,6 +8487,8 @@
 	</command>
 
 	<command name="ViewRejectedProcessRecords" priority="4">
+		<property name="portal.acceptance" value="true" />
+
 		<execute macro="Navigator#openURL" />
 
 		<execute macro="ProductMenu#gotoSitesContent">
@@ -8717,6 +8737,8 @@
 	</command>
 
 	<command name="ViewWorkflowComments" priority="3">
+		<property name="portal.acceptance" value="true" />
+
 		<description message="This is a use case for LPS-65977." />
 
 		<execute macro="Navigator#openURL" />
@@ -8882,6 +8904,8 @@
 	</command>
 
 	<command name="WithdrawProcess" priority="5">
+		<property name="portal.acceptance" value="true" />
+
 		<execute macro="Navigator#openURL" />
 
 		<execute macro="ProductMenu#gotoSitesContent">
