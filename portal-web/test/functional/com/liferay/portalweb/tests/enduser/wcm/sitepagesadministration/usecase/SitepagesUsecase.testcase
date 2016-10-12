@@ -891,6 +891,8 @@
 	</command>
 
 	<command name="ViewSecureContentAndPageAsUser" priority="3">
+		<property name="portal.acceptance" value="true" />
+
 		<execute macro="TestCase#getSiteName">
 			<return from="siteName" name="siteName" />
 			<var name="siteName" value="${siteName}" />
