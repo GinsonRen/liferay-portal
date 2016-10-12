@@ -175,6 +175,7 @@
 			<var name="emailFromUserName" value="${emailFromUserName}" />
 			<var name="gmailAssetType" value="${gmailAssetType}" />
 			<var name="gmailMessageTitle" value="${gmailMessageTitle}" />
+			<var name="siteName" value="${siteName}" />
 		</execute>
 
 		<var name="key_gmailAssetType" value="${gmailAssetType}" />
