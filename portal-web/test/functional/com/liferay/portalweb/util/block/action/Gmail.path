@@ -174,7 +174,7 @@
 </tr>
 <tr>
 	<td>GMAIL_HTML_MODE_MAIL_TABLE_MESSAGE_TITLE</td>
-	<td>//form[@method='POST']//table[2]/tbody/tr[contains(.,'${key_gmailAssetType}')]/td[3]//a/span</td>
+	<td>//form[@method='POST']//table[2]/tbody/tr[contains(.,'${key_gmailAssetType}')]/td[3]//a/span | //form[@method='POST']//table[2]/tbody/tr[contains(.,'${key_gmailAssetType}')] and contains(.,'${key_siteName}')]/td[3]//a/span</td>
 	<td></td>
 </tr>
 <tr>
