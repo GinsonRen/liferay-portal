@@ -17,6 +17,8 @@
 
 		<execute function="AssertTextEquals#assertPartialText" locator1="Gmail#GMAIL_HTML_MODE_MAIL_TABLE_USER_NAME" value1="${emailFromUserName}" />
 
+		<var name="key_siteName" value="${siteName}" />
+
 		<execute function="AssertClick#assertPartialTextClickAt" locator1="Gmail#GMAIL_HTML_MODE_MAIL_TABLE_MESSAGE_TITLE" value1="${gmailMessageTitle}" />
 
 		<execute function="Pause" locator1="3000" />
@@ -174,6 +176,7 @@
 			<var name="emailFromUserName" value="${emailFromUserName}" />
 			<var name="gmailAssetType" value="${gmailAssetType}" />
 			<var name="gmailMessageTitle" value="${gmailMessageTitle}" />
+			<var name="siteName" value="${siteName}" />
 		</execute>
 
 		<var name="key_gmailAssetType" value="${gmailAssetType}" />

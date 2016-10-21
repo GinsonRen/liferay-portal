@@ -891,6 +891,8 @@
 	</command>
 
 	<command name="ViewSecureContentAndPageAsUser" priority="3">
+		<property name="portal.acceptance" value="true" />
+
 		<execute macro="TestCase#getSiteName">
 			<return from="siteName" name="siteName" />
 			<var name="siteName" value="${siteName}" />
@@ -1040,6 +1042,7 @@
 			<var name="gmailAssetType" value="Blogs" />
 			<var name="gmailMessageBody" value="Blogs Entry Title" />
 			<var name="gmailMessageTitle" value="Test Test Published &quot;Blogs Entry Title&quot; on ${siteName} Blogs" />
+			<var name="siteName" value="${siteName}" />
 		</execute>
 
 		<execute macro="Gmail#openMessageContinueReadingButton">
