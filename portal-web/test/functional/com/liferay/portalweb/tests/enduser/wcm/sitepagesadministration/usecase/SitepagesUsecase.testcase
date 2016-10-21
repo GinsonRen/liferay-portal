@@ -891,6 +891,8 @@
 	</command>
 
 	<command name="ViewSecureContentAndPageAsUser" priority="3">
+		<property name="portal.acceptance" value="true" />
+
 		<execute macro="TestCase#getSiteName">
 			<return from="siteName" name="siteName" />
 			<var name="siteName" value="${siteName}" />
@@ -1069,7 +1071,6 @@
 		</execute>
 
 		<execute macro="Gmail#openMessageLink">
-			<var name="contentTitle" value="MB Thread Message Subject" />
 			<var name="gmailAssetType" value="Message Boards" />
 			<var name="pageName" value="Blog and Message Board Page" />
 			<var name="siteName" value="${siteName}" />
@@ -1113,7 +1114,7 @@
 
 		<execute macro="Alert#viewRequestFailedToComplete" />
 
-		<execute function="AssertTextEquals#assertPartialText" locator1="Message#ERROR_2" value1="You do not have the required permissions." />
+		<execute function="AssertTextEquals#assertPartialText" locator1="Message#ERROR_2" value1="The message could not be found." />
 	</command>
 
 	<command name="WebContentAdministrationSitesPagesPanel" priority="3">
