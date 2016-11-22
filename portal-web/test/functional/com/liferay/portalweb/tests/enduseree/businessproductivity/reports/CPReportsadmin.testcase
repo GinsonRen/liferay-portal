@@ -663,6 +663,7 @@
 	</command>
 
 	<command name="ViewEmailRecipientDelivery" priority="4">
+		<property name="portal.acceptance" value="true" />
 		<property name="test.assert.javascript.errors" value="false" />
 
 		<var method="TestPropsUtil#get('email.address.1')" name="emailAddress1" />
