@@ -663,6 +663,7 @@
 	</command>
 
 	<command name="ViewEmailRecipientDelivery" priority="4">
+		<property name="portal.acceptance" value="true" />
 		<property name="test.assert.javascript.errors" value="false" />
 
 		<var method="TestPropsUtil#get('email.address.1')" name="emailAddress1" />
@@ -684,6 +685,8 @@
 		<execute macro="ProductMenu#gotoSitesConfiguration">
 			<var name="portlet" value="Report Admin" />
 		</execute>
+
+		<execute function="Pause" locator1="5000" />
 
 		<execute macro="ReportsAdmin#gotoDefinitions" />
 
@@ -714,7 +717,7 @@
 			<var name="emailFromUserName" value="Joe Bloggs" />
 			<var name="gmailAssetType" value="New Report: reports_admin_template_source_sample_class_name.pdf" />
 			<var name="gmailMessageAttachment" value="reports_admin_template_source_sample_class_name.pdf" />
-			<var name="gmailMessageBody" value="Please review the attached report." />
+			<var name="gmailMessageBody" value="You have a new report." />
 			<var name="gmailMessageTitle" value="New Report: reports_admin_template_source_sample_class_name.pdf" />
 		</execute>
 
