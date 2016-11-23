@@ -580,6 +580,7 @@
 	</command>
 
 	<command name="ViewEmailNotificationDelivery" priority="4">
+		<property name="portal.acceptance" value="true" />
 		<property name="test.assert.javascript.errors" value="false" />
 
 		<var method="TestPropsUtil#get('email.address.1')" name="emailAddress1" />
@@ -606,6 +607,8 @@
 		<execute macro="ProductMenu#gotoSitesConfiguration">
 			<var name="portlet" value="Report Admin" />
 		</execute>
+
+		<execute function="Pause" value1="5000" />
 
 		<execute macro="ReportsAdmin#gotoDefinitions" />
 
@@ -643,6 +646,8 @@
 		<var name="key_pageNameURL" value="report" />
 
 		<execute function="AssertClick#assertPartialTextClickAt" locator1="Gmail#GMAIL_HTML_MODE_MESSAGE_BODY_LINK" value1="report" />
+
+		<execute function="Pause" value1="10000" />
 
 		<execute function="SelectWindow" locator1="title=Reports Admin - ${siteName}" />
 
