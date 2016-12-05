@@ -709,6 +709,16 @@ version 1.1.0.
 - [LPS-69488]: Remove the default Node.js version configuration, as it has been
 moved to [Liferay Gradle Plugins].
 
+## 2.0.9 - 2016-12-01
+
+### Changed
+- [LPS-69492]: Update the [Liferay Gradle Plugins] dependency to version 3.0.45.
+
+## 2.0.10 - 2016-12-02
+
+### Changed
+- [LPS-69518]: Update the [Liferay Gradle Plugins] dependency to version 3.0.46.
+
 [Liferay CDN]: https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public
 [Liferay Gradle Plugins]: https://github.com/liferay/liferay-portal/tree/master/modules/sdk/gradle-plugins
 [Liferay Gradle Plugins App Javadoc Builder]: https://github.com/liferay/liferay-portal/tree/master/modules/sdk/gradle-plugins-app-javadoc-builder
@@ -773,6 +783,8 @@ moved to [Liferay Gradle Plugins].
 [LPS-69445]: https://issues.liferay.com/browse/LPS-69445
 [LPS-69470]: https://issues.liferay.com/browse/LPS-69470
 [LPS-69488]: https://issues.liferay.com/browse/LPS-69488
+[LPS-69492]: https://issues.liferay.com/browse/LPS-69492
+[LPS-69518]: https://issues.liferay.com/browse/LPS-69518
 [LRDOCS-2594]: https://issues.liferay.com/browse/LRDOCS-2594
 [LRDOCS-2841]: https://issues.liferay.com/browse/LRDOCS-2841
 [LRDOCS-2981]: https://issues.liferay.com/browse/LRDOCS-2981

@@ -448,7 +448,8 @@ public class XMLSourceProcessor extends BaseSourceProcessor {
 			newContent = formatPoshiXML(fileName, newContent);
 		}
 		else if (fileName.contains("/resource-actions/")) {
-			formatResourceActionXML(fileName, newContent);
+			formatResourceActionXML(fileName, newContent, "model");
+			formatResourceActionXML(fileName, newContent, "portlet");
 		}
 		else if (fileName.endsWith("/service.xml")) {
 			formatServiceXML(fileName, absolutePath, newContent);
@@ -958,39 +959,45 @@ public class XMLSourceProcessor extends BaseSourceProcessor {
 		return fixPoshiXMLNumberOfTabs(content);
 	}
 
-	protected void formatResourceActionXML(String fileName, String content)
+	protected void formatResourceActionXML(
+			String fileName, String content, String type)
 		throws Exception {
 
 		Document document = readXML(content);
 
 		Element rootElement = document.getRootElement();
 
-		List<Element> portletResourceElements = rootElement.elements(
-			"portlet-resource");
+		List<Element> resourceElements = rootElement.elements(
+			type + "-resource");
 
-		for (Element portletResourceElement : portletResourceElements) {
-			Element portletNameElement = portletResourceElement.element(
-				"portlet-name");
+		for (Element resourceElement : resourceElements) {
+			Element nameElement = resourceElement.element(type + "-name");
 
-			String portletName = portletNameElement.getText();
+			if (nameElement == null) {
+				continue;
+			}
 
-			Element permissionsElement = portletResourceElement.element(
-				"permissions");
+			String name = nameElement.getText();
+
+			Element permissionsElement = resourceElement.element("permissions");
+
+			if (permissionsElement == null) {
+				continue;
+			}
 
 			List<Element> permissionsChildElements =
 				permissionsElement.elements();
 
 			for (Element permissionsChildElement : permissionsChildElements) {
 				checkOrder(
-					fileName, permissionsChildElement, "action-key",
-					portletName,
+					fileName, permissionsChildElement, "action-key", name,
 					new ResourceActionActionKeyElementComparator());
 			}
 		}
 
 		checkOrder(
-			fileName, rootElement, "portlet-resource", null,
-			new ResourceActionPortletResourceElementComparator());
+			fileName, rootElement, type + "-resource", null,
+			new ResourceActionResourceElementComparator(type + "-name"));
 	}
 
 	protected void formatServiceXML(
@@ -1620,13 +1627,21 @@ public class XMLSourceProcessor extends BaseSourceProcessor {
 
 	}
 
-	private static class ResourceActionPortletResourceElementComparator
+	private static class ResourceActionResourceElementComparator
 		extends ElementComparator {
+
+		public ResourceActionResourceElementComparator(String nameAttribute) {
+			super(nameAttribute);
+		}
 
 		@Override
 		protected String getElementName(Element portletResourceElement) {
 			Element portletNameElement = portletResourceElement.element(
-				"portlet-name");
+				getNameAttribute());
+
+			if (portletNameElement == null) {
+				return null;
+			}
 
 			return portletNameElement.getText();
 		}

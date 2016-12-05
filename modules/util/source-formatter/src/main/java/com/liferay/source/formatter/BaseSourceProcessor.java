@@ -2793,7 +2793,7 @@ public abstract class BaseSourceProcessor implements SourceProcessor {
 		return line;
 	}
 
-	protected String sortMethodCalls(
+	protected String sortMethodCall(
 		String content, String methodName, String... variableTypeRegexStrings) {
 
 		Pattern codeBlockPattern = Pattern.compile(
@@ -2848,6 +2848,22 @@ public abstract class BaseSourceProcessor implements SourceProcessor {
 				previousPutOrSetParameterName = putOrSetParameterName;
 			}
 		}
+
+		return content;
+	}
+
+	protected String sortMethodCalls(String absolutePath, String content) {
+		if (isExcludedPath(METHOD_CALL_SORT_EXCLUDES, absolutePath)) {
+			return content;
+		}
+
+		content = sortMethodCall(
+			content, "add", "ConcurrentSkipListSet<.*>", "HashSet<.*>",
+			"TreeSet<.*>");
+		content = sortMethodCall(
+			content, "put", "ConcurrentHashMap<.*>", "HashMap<.*>",
+			"JSONObject", "TreeMap<.*>");
+		content = sortMethodCall(content, "setAttribute");
 
 		return content;
 	}
@@ -2980,6 +2996,9 @@ public abstract class BaseSourceProcessor implements SourceProcessor {
 		return line;
 	}
 
+	protected static final String METHOD_CALL_SORT_EXCLUDES =
+		"method.call.sort.excludes";
+
 	protected static final String RUN_OUTSIDE_PORTAL_EXCLUDES =
 		"run.outside.portal.excludes";
 
@@ -3084,9 +3103,29 @@ public abstract class BaseSourceProcessor implements SourceProcessor {
 		if (getFile("portal-impl", PORTAL_MAX_DIR_LEVEL) != null) {
 			return true;
 		}
-		else {
-			return false;
+
+		// Subrepositories should be treated as portal
+
+		String baseDirAbsolutePath = getAbsolutePath(
+			sourceFormatterArgs.getBaseDirName());
+
+		int x = baseDirAbsolutePath.length();
+
+		for (int i = 0; i < 2; i++) {
+			x = baseDirAbsolutePath.lastIndexOf(CharPool.FORWARD_SLASH, x - 1);
+
+			if (x == -1) {
+				return false;
+			}
+
+			String dirName = baseDirAbsolutePath.substring(x + 1);
+
+			if (dirName.startsWith("com-liferay-")) {
+				return true;
+			}
 		}
+
+		return false;
 	}
 
 	private String _normalizePattern(String originalPattern) {
@@ -3165,6 +3204,17 @@ public abstract class BaseSourceProcessor implements SourceProcessor {
 
 			if (matcher.find()) {
 				putOrSetParameterName2 = matcher.replaceAll(StringPool.BLANK);
+			}
+
+			if (putOrSetParameterName1.matches("\".*\"") &&
+				putOrSetParameterName2.matches("\".*\"")) {
+
+				String strippedQuotes1 = putOrSetParameterName1.substring(
+					1, putOrSetParameterName1.length() - 1);
+				String strippedQuotes2 = putOrSetParameterName2.substring(
+					1, putOrSetParameterName2.length() - 1);
+
+				return super.compare(strippedQuotes1, strippedQuotes2);
 			}
 
 			int value = super.compare(

@@ -686,6 +686,22 @@ to version 1.0.54.
 1.0.320.
 - [LPS-69470]: Update the [Liferay Ant BND] dependency to version 2.0.31.
 
+## 3.0.45 - 2016-12-01
+
+### Changed
+- [LPS-66853]: Update the [Liferay Gradle Plugins Source Formatter] dependency
+to version 1.0.55.
+- [LPS-66853]: Update the [Liferay Source Formatter] dependency to version
+1.0.321.
+- [LPS-69492]: Update the [Liferay Gradle Plugins Test Integration] dependency
+to version 1.1.0.
+
+## 3.0.46 - 2016-12-02
+
+### Added
+- [LPS-69518]: Automatically delete the `liferay/logs` dir generated during the
+execution of the `autoUpdateXml` task.
+
 [Gradle Bundle Plugin]: https://github.com/TomDmitriev/gradle-bundle-plugin
 [Liferay Ant BND]: https://github.com/liferay/liferay-portal/tree/master/modules/sdk/ant-bnd
 [Liferay CSS Builder]: https://github.com/liferay/liferay-portal/tree/master/modules/util/css-builder
@@ -696,6 +712,7 @@ to version 1.0.54.
 [Liferay Gradle Plugins Javadoc Formatter]: https://github.com/liferay/liferay-portal/tree/master/modules/sdk/gradle-plugins-javadoc-formatter
 [Liferay Gradle Plugins Service Builder]: https://github.com/liferay/liferay-portal/tree/master/modules/sdk/gradle-plugins-service-builder
 [Liferay Gradle Plugins Source Formatter]: https://github.com/liferay/liferay-portal/tree/master/modules/sdk/gradle-plugins-source-formatter
+[Liferay Gradle Plugins Test Integration]: https://github.com/liferay/liferay-portal/tree/master/modules/sdk/gradle-plugins-test-integration
 [Liferay Gradle Plugins Theme Builder]: https://github.com/liferay/liferay-portal/tree/master/modules/sdk/gradle-plugins-theme-builder
 [Liferay Gradle Plugins Upgrade Table Builder]: https://github.com/liferay/liferay-portal/tree/master/modules/sdk/gradle-plugins-upgrade-table-builder
 [Liferay Jasper JSPC]: https://github.com/liferay/liferay-portal/tree/master/modules/util/jasper-jspc
@@ -755,4 +772,6 @@ to version 1.0.54.
 [LPS-69445]: https://issues.liferay.com/browse/LPS-69445
 [LPS-69470]: https://issues.liferay.com/browse/LPS-69470
 [LPS-69488]: https://issues.liferay.com/browse/LPS-69488
+[LPS-69492]: https://issues.liferay.com/browse/LPS-69492
+[LPS-69518]: https://issues.liferay.com/browse/LPS-69518
 [LRDOCS-3023]: https://issues.liferay.com/browse/LRDOCS-3023
