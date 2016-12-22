@@ -1,7 +1,6 @@
 <definition component-name="portal-legacy">
 	<property name="portal.release" value="true" />
 	<property name="portal.upstream" value="true" />
-	<property name="portlet.plugins.includes" value="wsrp-portlet" />
 	<property name="test.run.environment" value="EE" />
 	<property name="testray.main.component.name" value="WSRP" />
 
@@ -28,7 +27,7 @@
 	</tear-down>
 
 	<command name="AddWSRPUnitConverter" priority="4">
-		<execute macro="ProductMenu#gotoControlPanelApps">
+		<execute macro="ProductMenu#gotoControlPanelConfiguration">
 			<var name="portlet" value="WSRP Admin" />
 		</execute>
 
@@ -37,7 +36,7 @@
 			<var name="producerName" value="Producer Demo" />
 		</execute>
 
-		<execute macro="ProductMenu#gotoControlPanelApps">
+		<execute macro="ProductMenu#gotoControlPanelConfiguration">
 			<var name="portlet" value="WSRP Admin" />
 		</execute>
 
@@ -46,7 +45,7 @@
 			<var name="producerName" value="Producer Demo" />
 		</execute>
 
-		<execute macro="ProductMenu#gotoControlPanelApps">
+		<execute macro="ProductMenu#gotoControlPanelConfiguration">
 			<var name="portlet" value="WSRP Admin" />
 		</execute>
 
