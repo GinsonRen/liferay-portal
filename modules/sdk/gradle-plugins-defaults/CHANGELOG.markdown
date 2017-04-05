@@ -1306,11 +1306,36 @@ version 1.1.4.
 ## 3.5.9 - 2017-03-30
 
 ### Changed
-- [LPS-71558]: Update the [Liferay Gradle Plugins] dependency to version 3.2.30.
+- [LPS-71603]: Update the [Liferay Gradle Plugins] dependency to version 3.2.30.
 
 ### Removed
 - [LPS-70819]: Avoid publishing the JAR file with the compiled JSP classes of an
 OSGi project snapshot with the `install` and `uploadArchives` tasks.
+
+## 3.5.10 - 2017-04-03
+
+### Changed
+- [LPS-71164]: Update the [Liferay Gradle Plugins] dependency to version 3.2.31.
+
+## 3.5.11 - 2017-04-03
+
+### Changed
+- [LPS-53392]: Update the [Liferay Gradle Plugins] dependency to version 3.2.32.
+
+## 3.5.12 - 2017-04-04
+
+### Changed
+- [LPS-71164]: Update the [Liferay Gradle Plugins] dependency to version 3.2.33.
+
+## 3.5.13 - 2017-04-04
+
+### Changed
+- [LPS-71164]: Update the [Liferay Gradle Plugins] dependency to version 3.2.34.
+
+## 3.5.14 - 2017-04-05
+
+### Changed
+- [LPS-71164]: Update the [Liferay Gradle Plugins] dependency to version 3.2.35.
 
 [Liferay CDN]: https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public
 [Liferay Gradle Plugins]: https://github.com/liferay/liferay-portal/tree/master/modules/sdk/gradle-plugins
@@ -1320,6 +1345,7 @@ OSGi project snapshot with the `install` and `uploadArchives` tasks.
 [Liferay Gradle Plugins Node]: https://github.com/liferay/liferay-portal/tree/master/modules/sdk/gradle-plugins-node
 [Liferay Source Formatter]: https://github.com/liferay/liferay-portal/tree/master/modules/util/source-formatter
 [LPS-52675]: https://issues.liferay.com/browse/LPS-52675
+[LPS-53392]: https://issues.liferay.com/browse/LPS-53392
 [LPS-58672]: https://issues.liferay.com/browse/LPS-58672
 [LPS-61099]: https://issues.liferay.com/browse/LPS-61099
 [LPS-61987]: https://issues.liferay.com/browse/LPS-61987
@@ -1444,7 +1470,7 @@ OSGi project snapshot with the `install` and `uploadArchives` tasks.
 [LPS-71354]: https://issues.liferay.com/browse/LPS-71354
 [LPS-71376]: https://issues.liferay.com/browse/LPS-71376
 [LPS-71535]: https://issues.liferay.com/browse/LPS-71535
-[LPS-71558]: https://issues.liferay.com/browse/LPS-71558
+[LPS-71603]: https://issues.liferay.com/browse/LPS-71603
 [LRDOCS-2594]: https://issues.liferay.com/browse/LRDOCS-2594
 [LRDOCS-2841]: https://issues.liferay.com/browse/LRDOCS-2841
 [LRDOCS-2981]: https://issues.liferay.com/browse/LRDOCS-2981
