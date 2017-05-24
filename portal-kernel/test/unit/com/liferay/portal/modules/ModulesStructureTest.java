@@ -330,10 +330,14 @@ public class ModulesStructureTest {
 	}
 
 	private String _getAntPluginLibGitIgnore(Path dirPath) throws IOException {
+		Path liferayLayoutTemplatesXmlPath = dirPath.resolve(
+			"docroot/WEB-INF/liferay-layout-templates.xml");
 		Path liferayPluginPackagePropertiesPath = dirPath.resolve(
 			"docroot/WEB-INF/liferay-plugin-package.properties");
 
-		if (Files.notExists(liferayPluginPackagePropertiesPath)) {
+		if (Files.exists(liferayLayoutTemplatesXmlPath) ||
+			Files.notExists(liferayPluginPackagePropertiesPath)) {
+
 			return null;
 		}
 
@@ -534,6 +538,22 @@ public class ModulesStructureTest {
 					projectPathPrefix, File.separatorChar, CharPool.COLON);
 
 		return projectPathPrefix;
+	}
+
+	private boolean _isGitRepoReadOnly(Path dirPath) throws IOException {
+		Path gitRepoPath = dirPath.resolve(_GIT_REPO_FILE_NAME);
+
+		if (Files.notExists(gitRepoPath)) {
+			return false;
+		}
+
+		String gitRepo = _read(gitRepoPath);
+
+		if (gitRepo.contains("mode = pull")) {
+			return true;
+		}
+
+		return false;
 	}
 
 	private boolean _isInGitRepo(Path dirPath) {
@@ -811,6 +831,10 @@ public class ModulesStructureTest {
 
 	private void _testGitRepoIgnoreFiles(Path dirPath, String gitIgnoreTemplate)
 		throws IOException {
+
+		if (_isGitRepoReadOnly(dirPath)) {
+			return;
+		}
 
 		Path gitIgnorePath = dirPath.resolve(".gitignore");
 

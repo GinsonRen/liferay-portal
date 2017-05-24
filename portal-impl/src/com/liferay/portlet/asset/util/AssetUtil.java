@@ -219,7 +219,7 @@ public class AssetUtil {
 
 			if ((category != null) &&
 				AssetCategoryPermission.contains(
-					permissionChecker, categoryId, ActionKeys.VIEW)) {
+					permissionChecker, category, ActionKeys.VIEW)) {
 
 				viewableCategoryIds.add(categoryId);
 			}
@@ -951,15 +951,12 @@ public class AssetUtil {
 			sortType = Sort.LONG_TYPE;
 		}
 		else if (fieldType.equals(Field.PRIORITY) ||
-				 fieldType.equals(Field.RATINGS) ||
 				 fieldType.equals("ddm-decimal") ||
 				 fieldType.equals("ddm-number")) {
 
 			sortType = Sort.DOUBLE_TYPE;
 		}
-		else if (fieldType.equals(Field.VIEW_COUNT) ||
-				 fieldType.equals("ddm-integer")) {
-
+		else if (fieldType.equals("ddm-integer")) {
 			sortType = Sort.INT_TYPE;
 		}
 

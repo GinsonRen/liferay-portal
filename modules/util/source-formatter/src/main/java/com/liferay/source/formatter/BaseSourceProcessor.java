@@ -30,8 +30,10 @@ import com.liferay.source.formatter.checks.SourceCheck;
 import com.liferay.source.formatter.checks.configuration.ConfigurationLoader;
 import com.liferay.source.formatter.checks.configuration.SourceCheckConfiguration;
 import com.liferay.source.formatter.checks.configuration.SourceFormatterConfiguration;
+import com.liferay.source.formatter.checks.util.JavaSourceUtil;
 import com.liferay.source.formatter.parser.JavaClass;
 import com.liferay.source.formatter.parser.JavaClassParser;
+import com.liferay.source.formatter.parser.ParseException;
 import com.liferay.source.formatter.util.FileUtil;
 import com.liferay.source.formatter.util.SourceFormatterUtil;
 
@@ -46,8 +48,6 @@ import java.net.URI;
 import java.nio.ByteBuffer;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CodingErrorAction;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -282,7 +282,8 @@ public abstract class BaseSourceProcessor implements SourceProcessor {
 			pluginBuildFileName = StringUtil.replace(
 				pluginBuildFileName, CharPool.BACK_SLASH, CharPool.SLASH);
 
-			String absolutePath = _getAbsolutePath(pluginBuildFileName);
+			String absolutePath = JavaSourceUtil.getAbsolutePath(
+				pluginBuildFileName);
 
 			int x = absolutePath.indexOf("/modules/apps/");
 
@@ -386,6 +387,11 @@ public abstract class BaseSourceProcessor implements SourceProcessor {
 		_sourceFormatterMessagesMap.put(fileName, sourceFormatterMessages);
 	}
 
+	protected void processMessage(String fileName, String message) {
+		processMessage(
+			fileName, new SourceFormatterMessage(fileName, message, null, -1));
+	}
+
 	protected String processSourceChecks(
 			File file, String fileName, String absolutePath, String content)
 		throws Exception {
@@ -412,10 +418,17 @@ public abstract class BaseSourceProcessor implements SourceProcessor {
 					 (this instanceof JavaSourceProcessor)) {
 
 				if (javaClass == null) {
-					anonymousClasses = JavaClassParser.parseAnonymousClasses(
-						content);
-					javaClass = JavaClassParser.parseJavaClass(
-						fileName, content);
+					try {
+						anonymousClasses =
+							JavaClassParser.parseAnonymousClasses(content);
+						javaClass = JavaClassParser.parseJavaClass(
+							fileName, content);
+					}
+					catch (ParseException pe) {
+						processMessage(fileName, pe.getMessage());
+
+						continue;
+					}
 				}
 
 				newContent = _processJavaTermCheck(
@@ -449,9 +462,7 @@ public abstract class BaseSourceProcessor implements SourceProcessor {
 			charsetDecoder.decode(ByteBuffer.wrap(bytes));
 		}
 		catch (Exception e) {
-			processMessage(
-				fileName,
-				new SourceFormatterMessage(fileName, "UTF-8", null, -1));
+			processMessage(fileName, "UTF-8");
 		}
 	}
 
@@ -461,7 +472,7 @@ public abstract class BaseSourceProcessor implements SourceProcessor {
 				continue;
 			}
 
-			String absolutePath = _getAbsolutePath(fileName);
+			String absolutePath = JavaSourceUtil.getAbsolutePath(fileName);
 
 			if (_isModulesFile(absolutePath, true)) {
 				return true;
@@ -497,7 +508,7 @@ public abstract class BaseSourceProcessor implements SourceProcessor {
 		fileName = StringUtil.replace(
 			fileName, CharPool.BACK_SLASH, CharPool.SLASH);
 
-		String absolutePath = _getAbsolutePath(fileName);
+		String absolutePath = JavaSourceUtil.getAbsolutePath(fileName);
 
 		File file = new File(absolutePath);
 
@@ -506,17 +517,6 @@ public abstract class BaseSourceProcessor implements SourceProcessor {
 		String newContent = _format(file, fileName, absolutePath, content);
 
 		processFormattedFile(file, fileName, content, newContent);
-	}
-
-	private String _getAbsolutePath(String fileName) {
-		Path filePath = Paths.get(fileName);
-
-		filePath = filePath.toAbsolutePath();
-
-		filePath = filePath.normalize();
-
-		return StringUtil.replace(
-			filePath.toString(), CharPool.BACK_SLASH, CharPool.SLASH);
 	}
 
 	private String[] _getExcludes() {
@@ -702,12 +702,12 @@ public abstract class BaseSourceProcessor implements SourceProcessor {
 	}
 
 	private boolean _isSubrepository() {
-		String baseDirAbsolutePath = _getAbsolutePath(
+		String baseDirAbsolutePath = JavaSourceUtil.getAbsolutePath(
 			sourceFormatterArgs.getBaseDirName());
 
 		int x = baseDirAbsolutePath.length();
 
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < _SUBREPOSITORY_MAX_DIR_LEVEL; i++) {
 			x = baseDirAbsolutePath.lastIndexOf(CharPool.FORWARD_SLASH, x - 1);
 
 			if (x == -1) {
@@ -785,6 +785,8 @@ public abstract class BaseSourceProcessor implements SourceProcessor {
 	private static final String _DOCUMENTATION_URL =
 		"https://github.com/liferay/liferay-portal/blob/master/modules/util" +
 			"/source-formatter/documentation/";
+
+	private static final int _SUBREPOSITORY_MAX_DIR_LEVEL = 3;
 
 	private List<String> _allFileNames;
 	private boolean _browserStarted;
