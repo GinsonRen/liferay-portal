@@ -999,6 +999,22 @@
 		<execute function="AssertElementNotPresent" locator1="MediaGallery#IMAGE_TITLE" value1="${mgDocumentTitle}" />
 	</command>
 
+	<command name="deleteVersionCP">
+		<execute macro="DMNavigator#gotoDocumentVersion" />
+
+		<var name="key_dmDocumentVersionNumber" value="Version ${dmDocumentVersionNumber}" />
+
+		<execute function="Click" locator1="DocumentsAndMedia#DOCUMENT_VERSION_VERTICAL_ELLIPSIS" />
+
+		<execute function="AssertClickNoError" locator1="MenuItem#ANY_MENU_ITEM" value1="Delete Version">
+			<var name="key_menuItem" value="Delete Version" />
+		</execute>
+
+		<execute function="Confirm" value1="Are you sure you want to delete this? It will be deleted immediately." />
+
+		<execute macro="Alert#viewSuccessMessage" />
+	</command>
+
 	<command name="deleteViaActionsPG">
 		<var name="key_dmDocumentTitle" value="${dmDocumentTitle}" />
 
