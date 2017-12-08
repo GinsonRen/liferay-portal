@@ -1490,7 +1490,7 @@
 		</execute>
 	</command>
 
-	<command name="StagingRemoteLiveBlogsPG" priority="5">
+	<command name="StagingRemoteLiveBlogsPG" priority="4">
 		<description message="This is a use case for LPS-72461." />
 
 		<property name="custom.properties" value="tunneling.servlet.shared.secret=1234567890123456${line.separator}auth.verifier.TunnelAuthVerifier.hosts.allowed=" />
@@ -1555,7 +1555,7 @@
 			<var name="entryTitle" value="Blogs Entry Title" />
 		</execute>
 	</command>
-	
+
 	<command name="StagingRemoteLiveWebContent" priority="4">
 		<property name="custom.properties" value="tunneling.servlet.shared.secret=1234567890123456${line.separator}auth.verifier.TunnelAuthVerifier.hosts.allowed=" />
 		<property name="test.name.skip.portal.instance" value="Staging#StagingRemoteLiveWebContent" />
