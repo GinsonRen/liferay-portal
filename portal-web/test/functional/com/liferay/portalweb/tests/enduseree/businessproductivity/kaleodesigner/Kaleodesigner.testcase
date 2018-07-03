@@ -1219,7 +1219,7 @@
 		</execute>
 
 		<execute macro="Workflow#publishInvalidWorkflowDefinition">
-			<var name="errorMessage" value="The workflow has too many start nodes (state nodes StartNode and TestStartNode)." />
+			<var name="errorMessage" value=" The workflow has too many start nodes (state nodes StartNode and TestStartNode)." />
 		</execute>
 	</command>
 
@@ -1239,7 +1239,7 @@
 		</execute>
 
 		<execute macro="Workflow#publishInvalidWorkflowDefinition">
-			<var name="errorMessage" value="The StartNode node must have an outgoing transition." />
+			<var name="errorMessage" value=" The StartNode node must have an outgoing transition." />
 		</execute>
 	</command>
 
@@ -1263,7 +1263,7 @@
 		</execute>
 
 		<execute macro="Workflow#publishInvalidWorkflowDefinition">
-			<var name="errorMessage" value="The StartNode node must have an outgoing transition." />
+			<var name="errorMessage" value=" The StartNode node must have an outgoing transition." />
 		</execute>
 	</command>
 
