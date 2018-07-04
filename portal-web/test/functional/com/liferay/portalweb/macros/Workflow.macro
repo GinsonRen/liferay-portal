@@ -440,7 +440,7 @@
 		<execute function="AssertClickNoError" locator1="Button#PUBLISH" value1="Publish" />
 
 		<execute macro="Alert#viewErrorMessage">
-			<var name="errorMessage" value="${errorMessage}" />
+			<var name="errorMessage" value=" ${errorMessage}" />
 		</execute>
 	</command>
 
