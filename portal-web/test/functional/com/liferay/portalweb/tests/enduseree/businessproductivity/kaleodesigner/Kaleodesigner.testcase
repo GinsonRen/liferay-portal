@@ -1219,7 +1219,7 @@
 		</execute>
 
 		<execute macro="Workflow#publishInvalidWorkflowDefinition">
-			<var name="errorMessage" value="The workflow has too many start nodes (state nodes StartNode and TestStartNode)." />
+			<var name="errorMessage" value=" The workflow has too many start nodes (state nodes StartNode and TestStartNode)." />
 		</execute>
 	</command>
 
@@ -1239,7 +1239,7 @@
 		</execute>
 
 		<execute macro="Workflow#publishInvalidWorkflowDefinition">
-			<var name="errorMessage" value="The StartNode node must have an outgoing transition." />
+			<var name="errorMessage" value=" The StartNode node must have an outgoing transition." />
 		</execute>
 	</command>
 
@@ -1263,7 +1263,7 @@
 		</execute>
 
 		<execute macro="Workflow#publishInvalidWorkflowDefinition">
-			<var name="errorMessage" value="The StartNode node must have an outgoing transition." />
+			<var name="errorMessage" value=" The StartNode node must have an outgoing transition." />
 		</execute>
 	</command>
 
@@ -1303,7 +1303,8 @@
 		</execute>
 
 		<execute macro="Workflow#publishInvalidWorkflowDefinition">
-			<var name="errorMessage" value="An error occurred in the workflow engine." />
+			<var name="errorMessage" value="Please enter valid content." />
+			<var name="republish" value="true" />
 		</execute>
 	</command>
 
@@ -1645,7 +1646,7 @@
 			<var name="workflowDefinitionTitle" value="New Workflow Definition" />
 		</execute>
 
-		<execute macro="KaleoFormsAdmin#updateWorkflow" />
+		<execute macro="PortletEntry#publish" />
 
 		<execute macro="Navigator#openURL" />
 
