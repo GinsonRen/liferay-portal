@@ -518,9 +518,9 @@
 
 		<execute macro="Navigator#gotoStagedView" />
 
-		<execute macro="Page#changeLogoViaPageCP">
+		<execute macro="Page#changeSiteLogoViaPageCP">
 			<var name="logoFile" value="Document_2.png" />
-			<var name="pageName" value="Staging Test Page" />
+			<var name="pageName" value="Public Pages" />
 		</execute>
 
 		<execute macro="Navigator#gotoStagedSitePage">
