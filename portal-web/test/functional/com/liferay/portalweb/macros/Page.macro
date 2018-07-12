@@ -163,48 +163,6 @@
 		<execute macro="PortletEntry#save" />
 	</command>
 
-	<command name="changeLayoutLogo">
-		<execute macro="ProductMenu#gotoPortlet">
-			<var name="category" value="Build" />
-			<var name="panel" value="Site Administration" />
-			<var name="portlet" value="Pages" />
-		</execute>
-
-		<execute macro="SitePages#gotoPageMenuItem">
-			<var name="menuItem" value="Configure" />
-			<var name="pageName" value="${page}" />
-		</execute>
-
-		<execute macro="Navigator#gotoNavTab">
-			<var name="navTab" value="Advanced" />
-		</execute>
-
-		<execute macro="Page#uploadFileForLogo">
-			<var name="logoFile" value="${logoFile}" />
-		</execute>
-	</command>
-
-	<command name="changeLogoViaPageCP">
-		<execute macro="ProductMenu#gotoPortlet">
-			<var name="category" value="Build" />
-			<var name="panel" value="Site Administration" />
-			<var name="portlet" value="Pages" />
-		</execute>
-
-		<execute macro="SitePages#gotoPageMenuItem">
-			<var name="menuItem" value="Configure" />
-			<var name="pageName" value="${pageName}" />
-		</execute>
-
-		<execute macro="Navigator#gotoNavTab">
-			<var name="navTab" value="Advanced" />
-		</execute>
-
-		<execute macro="Page#uploadFileForLogo">
-			<var name="logoFile" value="${logoFile}" />
-		</execute>
-	</command>
-
 	<command name="changeSiteLogoViaPageCP">
 		<execute macro="ProductMenu#gotoPortlet">
 			<var name="category" value="Build" />
