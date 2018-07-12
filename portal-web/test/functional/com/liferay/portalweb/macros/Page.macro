@@ -212,7 +212,9 @@
 			<var name="portlet" value="Pages" />
 		</execute>
 
-		<execute function="Click" locator1="Icon#COG" />
+		<execute function="Click" locator1="Icon#COG" >
+			<var name="key_pageName" value="${pageName}" />
+		</execute>
 
 		<execute macro="Panel#expandPanel">
 			<var name="panel" value="Logo" />
