@@ -456,7 +456,7 @@
 	</command>
 
 	<command name="localizedPG">
-		<execute function="Click" locator1="Link#PAGE_LOCALE">
+		<execute function="Click" locator1="Home#PORTAL_LOCALIZATION_DEFAULT_LANGUAGE_MESSAGE">
 			<var name="key_pageLocale" value="${pageLocale}" />
 		</execute>
 	</command>
@@ -1112,8 +1112,10 @@
 		<execute function="AssertLocation" value1="${sitePageURL}" />
 
 		<execute macro="Alert#viewLocalizationMessage">
-			<var name="defaultLanguageLocalizationMessage" value="${pageLocalizationMessage}" />
-			<var name="preferredLanguageLocalizationMessage" value="${pageLocalizationPreferredLanguage}" />
+			<var name="defaultLanguageLocalizationMessage" value="${defaultLanguageLocalizationMessage}" />
+			<var name="key_pageLocale" value="${defaultLanguageLocalizationMessage}" />
+			<var name="preferredLanguageLocalizationMessage" value="${preferredLanguageLocalizationMessage}" />
+			<var name="translationLanguageLocalizationMessage" value="${translationLanguageLocalizationMessage}" />
 		</execute>
 	</command>
 
