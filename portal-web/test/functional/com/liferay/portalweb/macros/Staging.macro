@@ -776,6 +776,15 @@
 
 		<execute function="AssertClickNoError#assertPartialTextClickAt" locator1="Button#SUBMIT" value1="Publish" />
 
+		<if>
+			<isset var="publicationViaPortletPG" />
+			<then>
+				<execute function="AssertClickNoError" locator1="Staging#STAGING_PUBLISH_TO_LIVE_BUTTON" value1="Publish to Live" />
+
+				<execute function="AssertConfirm" value1="Are you sure you want to publish to live and update the existing application data?" />
+			</then>
+		</if>
+
 		<execute function="Pause" locator1="5000" />
 
 		<if>
@@ -783,6 +792,12 @@
 			<then>
 				<execute function="AssertTextEquals" locator1="Staging#PROCESS_FAILED" value1="Failed" />
 			</then>
+			<elseif>
+				<isset var="publicationViaPortletSuccessful" />
+				<then>
+					<execute function="AssertTextEquals" locator1="Staging#PROCESS_PUBLISH_VIA_PORTLET_SUCCESSFUL" value1="Successful" />
+				</then>
+			</elseif>
 			<else>
 				<execute function="AssertTextEquals" locator1="Staging#PROCESS_SUCCESSFUL" value1="Successful" />
 			</else>
