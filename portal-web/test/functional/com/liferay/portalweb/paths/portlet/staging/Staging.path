@@ -15,6 +15,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>PROCESS_PUBLISH_VIA_PORTLET_SUCCESSFUL</td>
+	<td>//h5[contains(.,'Successful')]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>PROCESS_FAILED</td>
 	<td>//h6[contains(.,'Failed')]</td>
 	<td></td>
@@ -27,6 +32,11 @@
 <tr>
 	<td>LATEST_PROCESS_RESULT</td>
 	<td>xpath=(//span[contains(@data-qa-id,'processResult')])[1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>PROCESS_PUBLISH_PAGE_FIRST</td>
+	<td>//div[@class='portlet-body']/div[2]</td>
 	<td></td>
 </tr>
 <tr>
