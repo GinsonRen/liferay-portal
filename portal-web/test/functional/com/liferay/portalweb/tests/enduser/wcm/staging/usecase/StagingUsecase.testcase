@@ -605,6 +605,7 @@
 	</command>
 
 	<command name="PublishPortlet" priority="5">
+		<description message="This is a use case for LPS-80367." />
 		<property name="portal.acceptance" value="true" />
 		<property name="testray.component.names" value="Training" />
 
@@ -613,6 +614,26 @@
 		</execute>
 
 		<execute macro="Navigator#gotoStagedView" />
+
+		<execute macro="Portlet#addPG">
+			<var name="portletName" value="Web Content Display" />
+		</execute>
+
+		<execute macro="Staging#gotoPublishToLive" />
+
+		<execute macro="Staging#publishToLive" />
+
+		<execute macro="ProductMenu#gotoLiveSite" />
+
+		<var name="key_portletTitleName" value="Web Content Display" />
+
+		<execute function="AssertElementPresent" locator1="Portlet#SPECIFIC_TITLE" />
+
+		<execute macro="Navigator#gotoStagedView" />
+
+		<var name="key_portletTitleName" value="Web Content Display" />
+
+		<execute function="AssertElementPresent" locator1="Portlet#SPECIFIC_TITLE" />
 
 		<execute macro="ProductMenu#gotoPortlet">
 			<var name="category" value="Content" />
