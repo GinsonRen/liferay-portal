@@ -47,6 +47,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>RULE_BUILDER_DELETE_RULE_BUTTON</td>
+	<td>//button[contains(@class,'condition-card-delete')]</td>
+	<td></td>
+</tr>
+<tr>
 	<td></td>
 	<td></td>
 	<td></td>
@@ -174,6 +179,11 @@
 <tr>
 	<td>FILTER_CATEGORIZATION_SELECT</td>
 	<td>//select[contains(@class,'asset-query')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FILTER_QUERY_CONTAINS</td>
+	<td>//select[contains(@id,'queryContains')]</td>
 	<td></td>
 </tr>
 <tr>

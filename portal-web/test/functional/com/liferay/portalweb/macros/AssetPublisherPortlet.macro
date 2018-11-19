@@ -632,6 +632,45 @@
 		</execute>
 	</command>
 
+	<command name="editConfiguredFilterByCategories">
+		<execute macro="AssetPublisherPortlet#gotoConfigurationPG" />
+
+		<execute macro="Panel#expandPanel">
+			<var name="panel" value="Filter" />
+		</execute>
+
+		<execute function="Click#mouseOverClick" locator1="APConfiguration#RULE_BUILDER_DELETE_RULE_BUTTON" />
+
+		<execute function="Click" locator1="APConfiguration#RULE_BUILDER_ADD_CONDITION" />
+
+		<if>
+			<equals arg1="${doesNotContain}" arg2="true" />
+			<then>
+				<execute function="Select" locator1="APConfiguration#FILTER_QUERY_CONTAINS" value1="Does not Contain" />
+			</then>
+		</if>
+
+		<execute function="Select" locator1="APConfiguration#FILTER_CATEGORIZATION_SELECT" value1="Categories" />
+
+		<execute function="Click" locator1="Button#SELECT_CATEGORIES" />
+
+		<execute macro="AssetCategorization#gotoSelectCategory" />
+
+		<for list="${categoryNames}" param="categoryName">
+			<execute macro="Portlet#selectTreeNode">
+				<var name="nodeName" value="${categoryName}" />
+			</execute>
+		</for>
+
+		<execute function="SelectFrame" value1="relative=top" />
+
+		<execute function="AssertClick" locator1="Button#DONE" value1="Done" />
+
+		<execute function="SelectFrame" locator1="IFrame#DIALOG" />
+
+		<execute macro="PortletEntry#save" />
+	</command>
+
 	<command name="enableRSSSubscription">
 		<execute function="SelectFrame" locator1="IFrame#DIALOG" />
 
