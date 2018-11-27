@@ -282,7 +282,7 @@
 			<var name="key_entryTitle" value="Blogs Entry Title" />
 		</execute>
 
-		<execute function="AssertClick" locator1="NavBar#NAV_BAR_GENERAL" value1="Images">
+		<execute function="AssertClick" locator1="NavBar#ANY_NAV_BAR" value1="Images">
 			<var name="key_navItem" value="Images" />
 		</execute>
 

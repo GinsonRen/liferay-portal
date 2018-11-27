@@ -29,6 +29,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>ANY_NAV_BAR</td>
+	<td>//ul[contains(@class,'navbar-nav')]/li/a[contains(.,'${key_navItem}')]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>APPLICATION_SEARCH_FIELD</td>
 	<td>//input[contains(@id,'searchApplication')]</td>
 	<td>Application Search Field</td>
@@ -91,11 +96,6 @@
 <tr>
 	<td>METADATA_SETS</td>
 	<td>//ul[contains(@class,'navbar-nav')]/li/a[contains(.,'Metadata Sets')]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>NAV_BAR_GENERAL</td>
-	<td>//ul[contains(@class,'navbar-nav')]/li/a[contains(.,'${key_navItem}')]</td>
 	<td></td>
 </tr>
 <tr>
