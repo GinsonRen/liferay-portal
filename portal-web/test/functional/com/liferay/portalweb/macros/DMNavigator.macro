@@ -65,7 +65,9 @@
 	</command>
 
 	<command name="gotoDocumentType">
-		<execute function="AssertClick" locator1="NavBar#DOCUMENT_TYPES" value1="Document Types" />
+		<execute function="AssertClick" locator1="NavBar#ANY_NAV_BAR" value1="Document Types">
+			<var name="key_navItem" value="Document Types" />
+		</execute>
 	</command>
 
 	<command name="gotoDocumentVersion">
@@ -107,7 +109,9 @@
 	</command>
 
 	<command name="gotoMetadataSets">
-		<execute function="AssertClick" locator1="NavBar#METADATA_SETS" value1="Metadata Sets" />
+		<execute function="AssertClick" locator1="NavBar#ANY_NAV_BAR" value1="Metadata Sets">
+			<var name="key_navItem" value="Metadata Sets" />
+		</execute>
 	</command>
 
 	<command name="gotoRelatedAssetPG">

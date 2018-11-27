@@ -49,7 +49,9 @@
 	</command>
 
 	<command name="gotoConfigurationScopePG">
-		<execute function="AssertClick" locator1="NavBar#SCOPE" value1="Scope" />
+		<execute function="AssertClick" locator1="NavBar#ANY_NAV_BAR" value1="Scope">
+			<var name="key_navItem" value="Scope" />
+		</execute>
 	</command>
 
 	<command name="gotoConfigurationSetupPG">

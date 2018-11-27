@@ -199,7 +199,9 @@
 	</command>
 
 	<command name="gotoResources">
-		<execute function="AssertClick" locator1="NavBar#RESOURCES" value1="Resources" />
+		<execute function="AssertClick" locator1="NavBar#ANY_NAV_BAR" value1="Resources">
+			<var name="key_navItem" value="Resources" />
+		</execute>
 	</command>
 
 	<command name="gotoSpecificBusyDayViaSmallCalendar">

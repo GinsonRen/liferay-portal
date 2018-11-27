@@ -2612,7 +2612,9 @@
 
 		<execute function="SelectFrame" locator1="IFrame#CONFIGURATION" />
 
-		<execute function="AssertClick" locator1="NavBar#SETUP" value1="Setup" />
+		<execute function="AssertClick" locator1="NavBar#ANY_NAV_BAR" value1="Setup">
+			<var name="key_navItem" value="Setup" />
+		</execute>
 
 		<execute function="AssertClick" locator1="Button#SELECT" value1="Select" />
 
