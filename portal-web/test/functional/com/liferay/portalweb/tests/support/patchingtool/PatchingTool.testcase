@@ -20,6 +20,8 @@
 
 		<execute macro="SignOut#signOut" />
 
+		<execute function="AssertConsoleTextPresent" value1="Declarative Service Soft Circular Dependency Checker check result: No issues were found." />
+
 		<execute macro="Portlet#shutdownServer" />
 
 		<execute macro="PatchingTool#installPatch">
@@ -50,7 +52,6 @@
 
 		<execute macro="SignIn#signIn" />
 
-		<execute function="AssertConsoleTextPresent" value1="Declarative Service Soft Circular Dependency Checker check result: No issues were found." />
 		<execute function="AssertConsoleTextPresent" value1="Declarative Service Unsatisfied Component Checker check result: No issues were found." />
 		<execute function="AssertConsoleTextPresent" value1="Spring Extender Unavailable Component Checker check result: No issues were found." />
 	</command>
