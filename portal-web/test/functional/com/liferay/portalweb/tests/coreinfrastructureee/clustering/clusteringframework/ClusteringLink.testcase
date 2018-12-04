@@ -27,6 +27,7 @@
 
 	<command name="ClusteringLinkPortalProperties" priority="5">
 		<property name="custom.properties" value="cluster.link.enabled=false" />
+		<property name="portal.acceptance" value="ginson" />
 		<property name="test.name.skip.portal.instance" value="ClusteringLink#ClusteringLinkPortalProperties" />
 
 		<execute function="AssertConsoleTextNotPresent" value1="Create a new JGroups channel" />
