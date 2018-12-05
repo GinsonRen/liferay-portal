@@ -1002,6 +1002,174 @@
 		</execute>
 	</command>
 
+	<command name="ExportImportWebcontentWithRepeatField" priority="3">
+		<description message="This is a use case for LPS-86608." />
+
+		<execute macro="ProductMenu#gotoPortlet">
+			<var name="category" value="Sites" />
+			<var name="panel" value="Control Panel" />
+			<var name="portlet" value="Sites" />
+		</execute>
+
+		<execute macro="Site#addBlankCP">
+			<var name="siteName" value="Exported Site" />
+		</execute>
+
+		<execute macro="ProductMenu#gotoPortlet">
+			<var name="category" value="Content" />
+			<var name="panel" value="Site Administration" />
+			<var name="portlet" value="Web Content" />
+		</execute>
+
+		<execute macro="NavItem#gotoStructures" />
+
+		<execute macro="WebContentStructures#addCP">
+			<var name="structureDescription" value="Exported Structure Description" />
+			<var name="structureName" value="Exported Structure" />
+		</execute>
+
+		<execute macro="DynamicDataMapping#addField">
+			<var name="field" value="Separator" />
+			<var name="fieldFieldLabel" value="SeparatorField" />
+			<var name="fieldName" value="Separator" />
+		</execute>
+
+		<execute macro="DynamicDataMapping#editFieldRepeatable">
+			<var name="fieldFieldLabel" value="SeparatorField" />
+		</execute>
+
+		<execute macro="DynamicDataMapping#addFieldNested">
+			<var name="field" value="Text" />
+			<var name="fieldFieldLabel" value="Text" />
+			<var name="fieldName" value="Text" />
+		</execute>
+
+		<execute macro="WebContentStructures#saveCP">
+			<var name="structureName" value="Exported Structure" />
+		</execute>
+
+		<execute macro="WebContent#openWebContentAdmin">
+			<var name="siteURLKey" value="exported-site" />
+		</execute>
+
+		<execute macro="NavItem#gotoTemplates" />
+
+		<execute macro="WebContentTemplates#addCP">
+			<var name="structureName" value="Exported Structure" />
+			<var name="templateDescription" value="Exported Template Description" />
+			<var name="templateFieldNames" value="Text" />
+			<var name="templateName" value="Exported Template" />
+		</execute>
+
+		<execute macro="WebContent#openWebContentAdmin">
+			<var name="siteURLKey" value="exported-site" />
+		</execute>
+
+		<execute macro="WebContentNavigator#gotoAddWithStructureCP">
+			<var name="structureName" value="Exported Structure" />
+		</execute>
+
+		<execute macro="WebContent#addWithStructureCP">
+			<var name="structureName" value="Exported Structure" />
+			<var name="templateName" value="Exported Template" />
+			<var name="webContentTitle" value="Exported Article" />
+		</execute>
+
+		<execute macro="DDLRecord#addRepeatableField">
+			<var name="fieldName" value="Separator" />
+		</execute>
+
+		<execute macro="DDLRecord#populateFieldText">
+			<var name="ddlRecordFieldData" value="LuAn" />
+			<var name="fieldName" value="Separator" />
+		</execute>
+
+		<execute macro="PortletEntry#publish" />
+
+		<execute macro="WebContent#viewTitle">
+			<var name="webContentTitle" value="Exported Article" />
+		</execute>
+
+		<execute macro="WebContent#openWebContentAdmin">
+			<var name="siteURLKey" value="exported-site" />
+		</execute>
+
+		<execute macro="LAR#exportPortlet">
+			<var name="larFileName" value="WebContent_portlet.lar" />
+		</execute>
+
+		<execute macro="ProductMenu#gotoPortlet">
+			<var name="category" value="Sites" />
+			<var name="panel" value="Control Panel" />
+			<var name="portlet" value="Sites" />
+		</execute>
+
+		<execute macro="Site#addBlankCP">
+			<var name="siteName" value="Imported Site" />
+		</execute>
+
+		<execute macro="ProductMenu#gotoPortlet">
+			<var name="category" value="Content" />
+			<var name="panel" value="Site Administration" />
+			<var name="portlet" value="Web Content" />
+		</execute>
+
+		<execute macro="LAR#importPortlet">
+			<var name="larFileName" value="WebContent_portlet.lar" />
+		</execute>
+
+		<execute macro="WebContent#openWebContentAdmin">
+			<var name="siteURLKey" value="imported-site" />
+		</execute>
+
+		<execute macro="WebContent#viewWithStructureCP">
+			<var name="webContentTitle" value="Exported Article" />
+		</execute>
+
+		<execute macro="WebContent#viewFieldRepeated">
+			<var name="ddlRecordFieldData1" value="LuAn" />
+			<var name="ddlRecordFieldData2" value="LuAn 2" />
+			<var name="fieldName" value="Separator" />
+		</execute>
+
+		<execute macro="WebContent#openWebContentAdmin">
+			<var name="siteURLKey" value="imported-site" />
+		</execute>
+
+		<execute macro="NavItem#gotoStructures" />
+
+		<execute macro="WebContentStructures#viewCP">
+			<var name="structureDescription" value="Exported Structure Description" />
+			<var name="structureName" value="Exported Structure" />
+		</execute>
+
+		<execute macro="LexiconEntry#gotoEntry">
+			<var name="rowEntry" value="Exported Structure" />
+		</execute>
+
+		<execute macro="DynamicDataMapping#viewField">
+			<var name="fieldFieldLabel" value="SeparatorField" />
+			<var name="fieldName" value="Separator" />
+		</execute>
+
+		<execute macro="DynamicDataMapping#viewField">
+			<var name="fieldFieldLabel" value="Text" />
+			<var name="fieldName" value="Text" />
+		</execute>
+
+		<execute macro="WebContent#openWebContentAdmin">
+			<var name="siteURLKey" value="imported-site" />
+		</execute>
+
+		<execute macro="NavItem#gotoTemplates" />
+
+		<execute macro="WebContentTemplates#viewCP">
+			<var name="structureName" value="Exported Structure" />
+			<var name="templateDescription" value="Exported Template Description" />
+			<var name="templateName" value="Exported Template" />
+		</execute>
+	</command>
+
 	<command name="ExportImportWithExportTemplate" priority="4">
 		<property name="test.name.skip.portal.instance" value="ExportImport#ExportImportWithExportTemplate" />
 
