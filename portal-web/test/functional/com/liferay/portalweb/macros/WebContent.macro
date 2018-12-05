@@ -1778,6 +1778,25 @@
 		<execute function="AssertTextEquals" locator1="TextInput#EXPIRATION_DATE" value1="${expirationDate}" />
 	</command>
 
+	<command name="viewFieldRepeated">
+		<var name="i" value="1" />
+		<var name="key_fieldName" value="${fieldName}" />
+
+		<while>
+			<condition function="IsElementPresent" locator1="xpath=(//div[@data-fieldname='${key_fieldName}'])[i]" />
+			<then>
+				<var method="MathUtil#sum('${i}', '1')" name="i" />
+
+				<if>
+					<condition function="IsElementPresent" locator1="xpath=(//div[@data-fieldname='${key_fieldName}'][i]" />
+					<then>
+						<execute function="AssertTextEquals" locator1="xpath=(//div[@data-fieldname='${key_fieldName}'][i]//a[contains(@class,'ddm-repeatable-add-button')]/../div//input)" value1="${ddlRecordFieldData} ${i}" />
+					</then>
+				</if>
+			</then>
+		</while>
+	</command>
+
 	<command name="viewLinkedAssetPGViaAP">
 		<execute function="AssertClick#assertPartialTextClickAt" locator1="APAsset#ASSET_TITLE" value1="${webContentTitle}">
 			<var name="key_assetTitle" value="${webContentTitle}" />
