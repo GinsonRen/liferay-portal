@@ -26,6 +26,7 @@ definition {
 	@priority = "5"
 	test ClusteringLinkPortalProperties {
 		property custom.properties = "cluster.link.enabled=false";
+		property portal.acceptance = "ginson";
 		property test.name.skip.portal.instance = "ClusteringEE#AddAndDeleteBlogEntriesOnSeparateNodes";
 
 		AssertConsoleTextNotPresent(value1 = "channelName: liferay-channel-control");
