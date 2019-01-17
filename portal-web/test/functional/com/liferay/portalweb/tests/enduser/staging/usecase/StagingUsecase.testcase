@@ -44,6 +44,48 @@ definition {
 	}
 
 	@priority = "5"
+	test ContentCannotBeEditedOnLive {
+		Navigator.gotoStagedSitePage(
+			pageName = "Staging Test Page",
+			siteName = "Site Name"
+		);
+
+		Portlet.addPG(portletName = "Web Content Display");
+
+		Navigator.gotoStagedSitePage(
+			pageName = "Staging Test Page",
+			siteName = "Site Name"
+		);
+
+		Portlet.addPG(portletName = "Asset Publisher");
+
+		WebContent.addPGViaWCD(
+			webContentContent = "Web Content Content",
+			webContentTitle = "Web Content Title"
+		);
+
+		Staging.gotoPublishToLive();
+
+		Staging.publishToLive();
+
+		Navigator.gotoSitePage(pageName = "Staging Test Page", siteName = "Site Name");
+
+		ProductMenu.gotoPortlet(
+			category = "Content",
+			panel = "Site Administration",
+			portlet = "Web Content"
+		);
+
+		WebContent.viewNoEditWCViaCP(webContentTitle = "Web Content Title");
+
+		Navigator.gotoSitePage(pageName = "Staging Test Page", siteName = "Site Name");
+
+		WebContent.viewNoEditWCViaWCD(webContentContent = "Web Content Content");
+
+		WebContent.viewNoEditWCViaAP(assetTitle = "Web Content Title");
+	}
+
+	@priority = "5"
 	test ContentCannotBeCreatedOnLive {
 		ProductMenu.gotoSite(site = "Site Name");
 
