@@ -1,4 +1,11 @@
 definition {
+	macro assertFacetChecked {
+		AssertChecked(
+			locator1 = "Checkbox#ANY_CHECKBOX",
+			checkboxName = "${facetValueName}"
+		);
+	}
+	
 	macro checkFacet {
 		Check(locator1 = "Checkbox#ANY_CHECKBOX", checkboxName = "${facetValueName}");
 
