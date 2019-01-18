@@ -624,7 +624,7 @@ definition {
 			searchAssetType = "User"
 		);
 
-		SearchFacetPortlet.assertFacetChecked(facetValueName = "${siteName}");
+		AssertChecked(locator1 = "Checkbox#ANY_CHECKBOX", checkboxName = "${siteName}");
 	}
 
 	@priority = "4"
