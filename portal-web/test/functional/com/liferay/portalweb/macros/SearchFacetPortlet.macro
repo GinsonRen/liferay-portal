@@ -5,7 +5,7 @@ definition {
 			checkboxName = "${facetValueName}"
 		);
 	}
-	
+
 	macro checkFacet {
 		Check(locator1 = "Checkbox#ANY_CHECKBOX", checkboxName = "${facetValueName}");
 
