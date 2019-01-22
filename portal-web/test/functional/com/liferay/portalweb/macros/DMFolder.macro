@@ -314,6 +314,7 @@ definition {
 
 		MenuItem.click(menuItem = "Edit");
 
+
 		PortletEntry.inputName(name = "${dmFolderNameEdit}");
 
 		PortletEntry.inputDescription(description = "${dmFolderDescriptionEdit}");
