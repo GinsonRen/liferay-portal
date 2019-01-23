@@ -9,8 +9,8 @@
 </thead>
 <tbody>
 <tr>
-	<td>THE_TERM_OF_USE_BUTTON</td>
-	<td>//button[@type='submit']</td>
+	<td>I_AGREE_BUTTON</td>
+	<td>//button[contains(@class, 'btn btn-primary btn-default')]//span[contains(.,'I Agree')]</td>
 	<td></td>
 </tr>
 </tbody>

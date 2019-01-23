@@ -1,0 +1,39 @@
+definition {
+	macro login {
+		Open(locator1 = "http://localhost:8080");
+
+		AssertClick(locator1="LRLogin#SIGN_IN_LINK", value1="${userSign}");
+
+		Type(locator1="LRLogin#EMAIL_ADDRESS_FIELD", value1="${userEmilAddress}");
+		Type(locator1="LRLogin#PASSWORD_FIELD", value1="${userPassword}");
+
+		AssertClick(locator1="LRLogin#SIGN_IN_BUTTON", value1="${userSign}");
+
+		AssertClick(locator1="LRTermsOfUse#I_AGREE_BUTTON", value1="${userIAgree}");
+
+		AssertClick(locator1="LRPasswordReminder#CLICK_PASSWORD_REMINDER_BUTTON", value1="${userPasswordReminderButton}");
+
+		Select(locator1="LRPasswordReminder#SELECT_PASSWORD_REMINDER_OPTION", value1="${userPasswordReminderOption}");
+
+		Type(locator1="LRPasswordReminder#ANSWER_FIELD", value1="${userAnswer}");
+
+		AssertClick(locator1="LRPasswordReminder#SAVE_BUTTON", value1="${userSave}");
+
+		var userEmailAddress = "test@liferay.com"
+
+		MyFirstMacro.login(
+			userSign = "Sign In",
+			userPassword = "test",
+			userEmailAddress = "test@liferay.com",
+			userPasswordReminderButton = "What is your father's middle name?",
+			userPasswordReminderOption = "What is your library card number?",
+			userAnswer = "1",
+			userIAgree = "I Agree",
+			userSave = "Save"
+		);
+	}
+
+	macro viewLogin {
+		AssertTextEquals(locator1="LRWelcome#SIGN_IN_PORTLET_TEXT", value1="Test Test");
+	}
+}

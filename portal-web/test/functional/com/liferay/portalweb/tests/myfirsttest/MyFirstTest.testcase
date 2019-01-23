@@ -2,28 +2,10 @@
 definition {
 	property testray.main.component.name = "Smoke";
 
-   @description = "Ensure that the super admin can login successful."
+	@description = "Ensure that the super admin can login successful."
 	@priority = "5"
 	test SuperAdminLogin{
-      Open(locator1 = "http://localhost:8080");
-   
-      AssertClick(locator1="LRLogin#LOGIN_IN_BUTTON", value1="Sign In");
-
-      Type(locator1="LRLogin#EMAIL_ADDRESS_FIELD", value1="test@liferay.com");
-      Type(locator1="LRLogin#PASSWORD_FIELD", value1="test");
-  
-      AssertClick(locator1="LRLogin#SIGN_IN_BUTTON", value1="Sign In");
-
-      AssertClick(locator1="LRTermsOfUse#THE_TERM_OF_USE_BUTTON", value1="I Agree");
-
-      AssertClick(locator1="LRPasswordReminder#CLICK_PASSWORD_REMINDER_BUTTON", value1="What is your father's middle name?");
-      
-      Select(locator1="LRPasswordReminder#SELECT_PASSWORD_REMINDER_OPTION", value1="What is your library card number?");
-
-      Type(locator1="LRPasswordReminder#PASSWORD_REMINDER_FIELD", value1="1");
-
-      AssertClick(locator1="LRPasswordReminder#LRPasswordReminder#", value1="Save");
-
-      AssertTextEquals(locator1="LRWelcome#CHECK_THE_LOGIN", value1=" Test Test")；
+		MyFirstMacro.login();
+		MyFirstMacro.viewLogin();
 	}
 }

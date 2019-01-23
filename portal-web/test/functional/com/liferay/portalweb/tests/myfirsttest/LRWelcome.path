@@ -9,7 +9,7 @@
 </thead>
 <tbody>
 <tr>
-	<td>CHECK_THE_LOGIN</td>
+	<td>SIGN_IN_PORTLET_TEXT</td>
 	<td>//span[@class='user-full-name']</td>
 	<td></td>
 </tr>
