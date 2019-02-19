@@ -4735,6 +4735,16 @@ war.path=${app.server.portal.dir}/</echo>
 		</sequential>
 	</macrodef>
 
+	<target name="bnd-file-update">
+		<get-testcase-property property.name="osgi.modules.includes" />
+
+		<replace
+			file="${project.dir}/${module.base.dir}/${osgi.modules.includes}/bnd.bnd"
+			token="${update.properties.original}"
+			value="${update.properties}"
+		/>
+	</target>
+
 	<target name="build-sql-file">
 		<get-testcase-property property.name="portal.version" />
 
@@ -6023,7 +6033,15 @@ go</echo>
 
 				<local name="osgi.module.pattern" />
 
-				<property name="osgi.module.pattern" value="**/apps/**" />
+				<if>
+					<equals arg1="${osgi.modules.includes}" arg2="revert-schema-version" />
+					<then>
+						<property name="osgi.module.pattern" value="**/test/**" />
+					</then>
+					<else>
+						<property name="osgi.module.pattern" value="**/apps/**" />
+					</else>
+				</if>
 
 				<antelope:stringutil property="osgi.modules.includes.pattern" string="${osgi.module.pattern}/${osgi.modules.includes}">
 					<antelope:replace regex="," replacement=",${osgi.module.pattern}/" />
