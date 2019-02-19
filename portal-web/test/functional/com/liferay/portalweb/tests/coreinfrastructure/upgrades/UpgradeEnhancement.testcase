@@ -46,6 +46,7 @@ definition {
 	@priority = "5"
 	test RemoveModulesWithSchemaVersionChange {
 		property osgi.modules.includes = "revert-schema-version";
+		property portal.acceptance = "ginson";
 
 		User.firstLoginPG();
 
