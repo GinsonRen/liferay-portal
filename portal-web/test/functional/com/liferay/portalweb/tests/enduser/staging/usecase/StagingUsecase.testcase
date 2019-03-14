@@ -888,7 +888,6 @@ definition {
 		Page.viewNoPG(pageName = "Page 1");
 
 		Page.viewNoPG(pageName = "Page 3");
-
 	}
 
 	@description = "This is a use case for LPS-91017, LPS-89646."
@@ -896,7 +895,7 @@ definition {
 	test StagingPublishAPWCWithWebContentField {
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
+			siteName = "Site Name"		
 		);
 
 		Portlet.addPG(portletName = "Asset Publisher");
