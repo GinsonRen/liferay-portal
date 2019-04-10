@@ -489,7 +489,7 @@ definition {
 					key_configuration = "metadataContent"
 				);
 
-				AssertTextEquals(
+				AssertTextEquals.assertPartialText(
 					locator1 = "APConfigurationDisplaysettings#SHOW_METADATA_CURRENT_FIELD_SELECT",
 					value1 = "${metadataField}"
 				);
