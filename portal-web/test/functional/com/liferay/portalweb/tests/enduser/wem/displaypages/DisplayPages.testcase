@@ -44,6 +44,8 @@ definition {
 	@description = "User can add a display page."
 	@priority = "3"
 	test AddBlankDisplayPage {
+		Pause(locator1 = "3000");
+
 		task ("Publish the display page") {
 			Button.clickPublish();
 
