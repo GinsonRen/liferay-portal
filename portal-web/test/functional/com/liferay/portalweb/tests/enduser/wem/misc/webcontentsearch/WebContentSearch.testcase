@@ -478,4 +478,74 @@ definition {
 
 		WebContentSearchPortlet.viewNoResults(webContentSearchTerm = "&quot;name1&quot;");
 	}
+
+	@priority = "3"
+	test SearchWebContentWithDeletedCategory {
+		property testray.component.names = "Categories,Web Content Search";
+
+		Navigator.openURL();
+
+		ProductMenu.gotoPortlet(
+			category = "Categorization",
+			panel = "Site Administration",
+			portlet = "Categories");
+
+		Vocabulary.addCP(vocabularyName = "Vocabulary Name");
+
+		Category.addCP(
+			categoryName = "Category Name",
+			vocabularyName = "Vocabulary Name");
+
+		ProductMenu.gotoPortlet(
+			category = "Site Builder",
+			panel = "Site Administration",
+			portlet = "Pages");
+
+		SitePages.addPublicPage(pageName = "Web Content Display Page");
+
+		Navigator.gotoPage(pageName = "Web Content Display Page");
+
+		Portlet.addPG(portletName = "Web Content Display");
+
+		WebContent.addPGViaWCD(
+			webContentContent = "WC WebContent Content",
+			webContentTitle = "WC WebContent Title");
+
+		WebContent.viewPGViaWCD(webContentContent = "WC WebContent Content");
+
+		Navigator.gotoPage(pageName = "Web Content Display Page");
+
+		WebContentNavigator.gotoEditPGViaWCD(
+			menuItem = "Edit Web Content",
+			webContentTitle = "WC WebContent Title");
+
+		WebContent.selectCategory(
+			categoryName = "Category Name",
+			vocabularyName = "Vocabulary Name");
+
+		Button.clickPublish();
+
+		Navigator.gotoPage(pageName = "Web Content Search Page");
+
+		WebContentSearchPortlet.search(webContentSearchTerm = "Category Name");
+
+		WebContentSearchPortlet.viewResultsEntry(
+			webContentContent = "WC WebContent Content",
+			webContentTitle = "WC WebContent Title");
+
+		Navigator.openURL();
+
+		ProductMenu.gotoPortlet(
+			category = "Categorization",
+			panel = "Site Administration",
+			portlet = "Categories");
+
+		Vocabulary.deleteByIconCP(vocabularyName = "Vocabulary Name");
+
+		Navigator.gotoPage(pageName = "Web Content Search Page");
+
+		WebContentSearchPortlet.search(webContentSearchTerm = "Category Name");
+
+		WebContentSearchPortlet.viewNoResults(webContentSearchTerm = "Category Name");
+	}
 }
