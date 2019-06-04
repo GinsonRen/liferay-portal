@@ -1,0 +1,29 @@
+@component-name = "portal-web-smoke"
+definition {
+	
+	property testray.main.component.name = "Smoke";
+
+	@description = "Ensure that the super admin can login successful."
+	@priority = "5"
+	test SuperAdminLogin{
+		Open(locator1 = "http://localhost:8080");
+
+		Click(locator1 = "//a[@class="sign-in text-default"]/span" );
+
+		Type(locator1 = "//input[@class="field clearable form-control"]", value1 = "test@liferay.com");
+		Type(locator1 = "//input[@class="field form-control"]", value="test");
+
+		Click(locator1 = "//button[@class="btn  btn-primary btn-default"]/span");
+//button[ccontains(., 'Sign In')]
+		Click(locator1 = "//button[@class="btn  btn-primary btn-default"]/span");
+
+		Type(locator1 = "//input[@class="field reminder-query-answer form-control error-field"]", value1 = "test");
+
+		Click(locator1 = "//button[@class="btn  btn-primary btn-default"]/span");
+
+		AssertElementPresent(locator1 = "//div[@class="personal-menu-dropdown"]/div/button/span/span/span/span/svg");
+	}
+}
+
+
+
