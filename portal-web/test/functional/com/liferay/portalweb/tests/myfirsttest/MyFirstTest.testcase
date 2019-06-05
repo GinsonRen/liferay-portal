@@ -1,0 +1,26 @@
+@component-name = "portal-web-smoke"
+definition {
+
+	property testray.main.component.name = "Smoke";
+
+	@description = "Ensure that the super admin can login successful."
+	@priority = "5"
+	test SuperAdminLogin {
+		Open(locator1 = "http://localhost:8080");
+
+		AssertClick(locator1 = "JCLogin#USER_LOGIN_PAGE_FIELD", value1 = "Sign In");
+
+		Type(locator1 = "JCLogin#EMAIL_ADDRESS_FIELD", value1 = "test@liferay.com");
+		Type(locator1 = "JCLogin#PASSWORD_FIELD", value1 = "test");
+
+		AssertClick(locator1 = "JCLogin#USER_LOGIN_PORTLET_BUTTON_FIELD", value1 = "Sign In");
+
+		AssertClick(locator1 = "JCTermsOfUse#TERMS_AGREE_FIELD", value1 = "I Agree");
+
+		Type(locator1 = "JCPasswordReminder#PASSWORD_REMINDER_FIELD", value1 = "test");
+
+		AssertClick(locator1 = "JCPasswordReminder#PASSWORD_REMINDER_SAVE_FIELD", value1 = "Save");
+
+		AssertElementPresent(locator1 = "JCWelcome#USER_ICON");
+	}
+}

@@ -1,0 +1,33 @@
+<html>
+<head>
+<title>JCLogin</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">JCLogin</td></tr>
+</thead>
+<tbody>
+<tr>
+	<td>USER_LOGIN_PAGE_FIELD</td>
+	<td>//span[contains(.,'Sign In')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>EMAIL_ADDRESS_FIELD</td>
+	<td>//input[@name='_com_liferay_login_web_portlet_LoginPortlet_login']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>PASSWORD_FIELD</td>
+	<td>//input[@name='_com_liferay_login_web_portlet_LoginPortlet_password']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>USER_LOGIN_PORTLET_BUTTON_FIELD</td>
+	<td>//button[@id='_com_liferay_login_web_portlet_LoginPortlet_dvnv']/span</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>
