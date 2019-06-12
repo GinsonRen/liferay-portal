@@ -1,0 +1,19 @@
+<html>
+<head>
+<title>JCTermsOfUse</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">JCTermsOfUse</td></tr>
+</thead>
+<tbody>
+<tr>
+	<td>I_AGREE_BUTTON</td>
+	<td>//button[contains(.,"I Agree")]</td>
+	<td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>
