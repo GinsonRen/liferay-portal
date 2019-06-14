@@ -1,0 +1,50 @@
+definition {
+
+	macro login {
+		Open(locator1 = "http://localhost:8080");
+
+		AssertClick(
+			locator1 = "JCLogin#USER_LOGIN_PORTLET_LINK",
+			value1 = "Sign In");
+
+		Type(
+			locator1 = "JCLogin#EMAIL_ADDRESS_FIELD",
+			value1 = "${userEmailAddress}");
+		Type(
+			locator1 = "JCLogin#PASSWORD_FIELD",
+			value1 = "${userPassWord}");
+
+		AssertClick(
+			key_buttonName = "Sign In",
+			locator1 = "JCLogin#SIGN_IN_BUTTON",
+			value1 = "Sign In");
+
+		var key_buttonName = "I Agree";
+
+		if (IsElementPresent(locator1 = "JCLogin#SIGN_IN_BUTTON")) {
+			AssertClick(
+				key_buttonName = "I Agree",
+				locator1 = "JCLogin#SIGN_IN_BUTTON",
+				value1 = "I Agree");
+		}
+
+		if (IsElementPresent(locator1 = "JCPasswordReminder#ANSWER_FIELD")) {
+			Select(
+				locator1 = "JCPasswordReminder#QUESTION_FIELD",
+				value1 = "${questionOption}");
+
+			Type(
+				locator1 = "JCPasswordReminder#ANSWER_FIELD",
+				value1 = "${userPassWordReminder}");
+
+			AssertClick(
+				key_buttonName = "Save"
+				locator1 = "JCLogin#SIGN_IN_BUTTON",
+				value1 = "Save");
+		}
+	}
+
+	macro viewLogin {
+		AssertElementPresent(locator1 = "JCWelcome#USER_ICON");
+	}
+}
