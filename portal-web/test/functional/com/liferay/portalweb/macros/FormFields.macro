@@ -769,9 +769,9 @@ definition {
 		var key_fieldLabel = "${fieldLabel}";
 		var key_fieldName = "${fieldName}";
 
-		AssertNotVisible(locator1 = "FormFields#LABEL");
+		AssertElementNotPresent(locator1 = "FormFields#LABEL");
 
-		AssertNotVisible(locator1 = "FormFields#TEXT_FIELD");
+		AssertElementNotPresent(locator1 = "FormFields#TEXT_FIELD");
 	}
 
 	macro viewTextLabel {
