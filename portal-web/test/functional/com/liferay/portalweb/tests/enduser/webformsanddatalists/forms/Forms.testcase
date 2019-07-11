@@ -2410,8 +2410,8 @@ definition {
 		Form.editFieldLabelMetal(fieldValue = "Checkbox");
 
 		FormFields.editOptionsRow(
-			optionName = "Checkbox1",
-			optionValue = "Checkbox 1",
+			optionName = "Checkbox",
+			optionValue = "Checkbox",
 			rowNumber = "1");
 
 		Form.closeSidebar();
@@ -2574,7 +2574,7 @@ definition {
 			fieldValue = "05/02/2016");
 
 		FormFields.selectCheckboxOption(
-			checkboxOption = "Checkbox 1",
+			checkboxOption = "Checkbox",
 			fieldName = "Checkbox");
 
 		FormPortlet.submitSuccessfully();
@@ -3260,11 +3260,11 @@ definition {
 
 		Form.gotoAddField(fieldType = "Multiple Selection");
 
-		Form.editFieldLabelMetal(fieldValue = "Checkbox Field");
+		Form.editFieldLabelMetal(fieldValue = "Checkbox");
 
 		FormFields.editOptionsRow(
-			optionName = "Checkbox1",
-			optionValue = "Checkbox 1",
+			optionName = "Checkbox",
+			optionValue = "Checkbox",
 			rowNumber = "1");
 
 		Form.closeSidebar();
@@ -3331,12 +3331,12 @@ definition {
 			fieldValue = "Text Field Value");
 
 		FormFields.viewCheckboxLabel(
-			fieldLabel = "Checkbox Field",
-			fieldName = "CheckboxField");
+			fieldLabel = "Checkbox",
+			fieldName = "Checkbox");
 
 		FormFields.selectCheckboxOption(
-			checkboxOption = "Checkbox 1",
-			fieldName = "CheckboxField");
+			checkboxOption = "Checkbox",
+			fieldName = "Checkbox");
 
 		FormFields.viewRadioLabel(
 			fieldLabel = "Radio Field",
@@ -3372,8 +3372,8 @@ definition {
 			fieldValue = "Text Field Value");
 
 		FormsAdmin.viewFormTableEntry(
-			fieldLabel = "Checkbox Field",
-			fieldValue = "Checkbox 1");
+			fieldLabel = "Checkbox",
+			fieldValue = "Checkbox");
 
 		FormsAdmin.viewFormTableEntry(
 			fieldLabel = "Radio Field",
@@ -3391,8 +3391,8 @@ definition {
 			fieldValue = "Text Field Value");
 
 		FormsAdmin.viewCheckboxEntry(
-			fieldLabel = "Checkbox Field",
-			fieldName = "CheckboxField");
+			fieldLabel = "Checkbox",
+			fieldName = "Checkbox");
 
 		FormsAdmin.viewRadioEntry(
 			fieldLabel = "Radio Field",
@@ -3424,13 +3424,13 @@ definition {
 
 		Form.gotoAddField(fieldType = "Multiple Selection");
 
-		Form.editFieldLabelMetal(fieldValue = "Checkbox Field");
+		Form.editFieldLabelMetal(fieldValue = "Checkbox");
 
 		FormFields.enableSwitcher(fieldName = "Required");
 
 		FormFields.editOptionsRow(
-			optionName = "Checkbox1",
-			optionValue = "Checkbox 1",
+			optionName = "Checkbox",
+			optionValue = "Checkbox",
 			rowNumber = "1");
 
 		Form.closeSidebar();
@@ -3459,16 +3459,16 @@ definition {
 		Navigator.gotoPage(pageName = "Form Page");
 
 		FormFields.viewCheckboxLabel(
-			fieldLabel = "Checkbox Field",
-			fieldName = "CheckboxField");
+			fieldLabel = "Checkbox",
+			fieldName = "Checkbox");
 
 		FormFields.viewRequiredAsterisk();
 
 		FormPortlet.submitWithValidationError();
 
 		FormFields.selectCheckboxOption(
-			checkboxOption = "Checkbox 1",
-			fieldName = "CheckboxField");
+			checkboxOption = "Checkbox",
+			fieldName = "Checkbox");
 
 		FormPortlet.submit();
 
@@ -3482,8 +3482,8 @@ definition {
 		FormsAdminNavigator.gotoViewEntries();
 
 		FormsAdmin.viewFormTableEntry(
-			fieldLabel = "Checkbox Field",
-			fieldValue = "Checkbox 1");
+			fieldLabel = "Checkbox",
+			fieldValue = "Checkbox");
 	}
 
 	@description = "This is a use case for LPS-59997."
