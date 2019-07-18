@@ -765,13 +765,22 @@ definition {
 			locator1 = "FormFields#TEXT_FIELD");
 	}
 
-	macro viewTextFieldNotVisible {
+	macro viewTextFieldNotPresent {
 		var key_fieldLabel = "${fieldLabel}";
 		var key_fieldName = "${fieldName}";
 
 		AssertElementNotPresent(locator1 = "FormFields#LABEL");
 
 		AssertElementNotPresent(locator1 = "FormFields#TEXT_FIELD");
+	}
+
+	macro viewTextFieldNotVisible {
+		var key_fieldLabel = "${fieldLabel}";
+		var key_fieldName = "${fieldName}";
+
+		AssertNotVisible(locator1 = "FormFields#LABEL");
+
+		AssertNotVisible(locator1 = "FormFields#TEXT_FIELD");
 	}
 
 	macro viewTextLabel {
