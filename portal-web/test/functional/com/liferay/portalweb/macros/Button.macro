@@ -93,7 +93,7 @@ definition {
 	}
 
 	macro clickSubmitForPublication {
-		Button.click(button = "Submit for Publication");
+		Button.click(button = "Submit");
 	}
 
 	macro clickUpdate {
