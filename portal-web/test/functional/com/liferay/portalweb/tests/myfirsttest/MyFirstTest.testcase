@@ -8,6 +8,8 @@ definition {
 
     	Open(locator1 = "http://localhost:8080");
 
+
+
 		AssertClick(locator1 = "//span[contains(@class,'sign-in')]/a",
 			value1 = "http://localhost:8080/c/portal/login?p l id=2");
 
