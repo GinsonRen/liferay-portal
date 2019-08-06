@@ -1,5 +1,6 @@
 definition {
 
+
 	var entryAuthorFullName = "Test Test";
 
 	macro addContent {
