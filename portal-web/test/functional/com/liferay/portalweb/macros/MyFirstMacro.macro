@@ -1,0 +1,48 @@
+definition{
+	var key_buttonName = "${buttonName}";
+	var key_passwordReminderQuestion = "${passwordReminderQuestion}";
+
+	macro agreeToTermsOfUse {
+		AssertClick(
+			locator1 = "LRButton#I_AGREE",
+			value1 = "${buttonName}");
+	}
+
+	macro login {
+		Open(locator1 = "http://localhost:8080");
+
+		AssertClick(
+			locator1 = "LRLogin#SIGN_IN_LINK",
+			value1 = "Sign In");
+
+		Type(
+			locator1 = "LRLogin#EMAIL_ADDRESS_FIELD",
+			value1 = "${userEmailAddress}");
+		Type(
+			locator1 = "LRLogin#PASSWORD_FIELD",
+			value1 = "${password}");
+
+		AssertClick(
+			locator1 = "LRButton#SIGN_IN",
+			value1 = "${buttonName}");
+	}
+
+	macro setPasswordReminder {
+		Select(
+			locator1 = "LRPasswordReminder#QUESTION_SELECT",
+			value1 = "${passwordReminderQuestion}");
+
+		Type(
+			locator1 = "LRPasswordReminder#ANSWER_FIELD",
+			value1 = "${passwordReminderAnswer}");
+
+		AssertClick(
+			locator1 = "LRButton#SAVE",
+			value1 = "${buttonName}");
+	}
+
+	macro viewLogin {
+		AssertElementPresent(locator1 = "LRWelcome#USER_AVATAR_IMAGE");
+	}
+
+}

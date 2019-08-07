@@ -11,7 +11,7 @@
 <tbody>
 <tr>
 	<td>USER_AVATAR_LINK</td>
-	<td>//span[contains(@class,'user-avatar-link')]</td>
+	<td>//image[contains(@class,'user-avatar-image')]</td>
 	<td></td>
 </tr>	
 </tbody>	
