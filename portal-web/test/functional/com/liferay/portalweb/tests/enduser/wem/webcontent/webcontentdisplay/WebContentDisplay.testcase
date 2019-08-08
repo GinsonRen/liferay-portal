@@ -621,6 +621,78 @@ definition {
 		WebContent.viewPGViaWCD(webContentContent = "WC WebContent Content");
 	}
 
+	@description = "This is a Training case for LRQA-51231."
+	@priority = "5"
+	test ChangeWebContentArticle {
+		property testray.component.names = "Web Content Display";
+
+		ProductMenu.gotoPortlet(
+			category = "Sites",
+			panel = "Control Panel",
+			portlet = "Sites");
+
+		Site.addBlankCP(siteName = "Training site");
+
+		ProductMenu.gotoPortlet(
+			category = "Site Builder",
+			panel = "Site Administration",
+			portlet = "Pages");
+
+		SitePages.addPublicPage(pageName = "Training Page");
+
+		Navigator.gotoSitePage(
+			pageName = "Training Page",
+			siteName = "Training site");
+
+		Portlet.addPG(portletName = "Web Content Display");
+
+		ProductMenu.gotoPortlet(
+			category = "Content &amp; Data",
+			panel = "Site Administration",
+			portlet = "Web Content");
+
+		WebContentNavigator.gotoAddCP();
+
+		WebContent.addCP(
+			webContentContent = "Training Web Content 1",
+			webContentTitle = "Training Web Content 1");
+
+		PortletEntry.publish();
+
+		WebContentNavigator.gotoAddCP();
+
+		WebContent.addCP(
+			webContentContent = "Training Web Content 2",
+			webContentTitle = "Training Web Content 2");
+
+		PortletEntry.publish();
+
+		Navigator.gotoSitePage(
+			pageName = "Training Page",
+			siteName = "Training site");
+
+		WebContentDisplayPortlet.selectWebContent(
+			portletName = "Web Content Display",
+			webContentTitle = "Training Web Content 1");
+
+		Navigator.gotoSitePage(
+			pageName = "Training Page",
+			siteName = "Training site");
+
+		WebContent.viewPGViaWCD(webContentContent = "Training Web Content 1");
+
+		WebContentDisplayPortlet.changeWebContent(
+			portletName = "Web Content Display",
+			webContentTitle = "Training Web Content 2");
+
+		Navigator.gotoSitePage(
+			pageName = "Training Page",
+			siteName = "Training site");
+
+		WebContent.viewPGViaWCD(webContentContent = "Training Web Content 2");
+
+	}
+
 	@priority = "4"
 	test EditWebContent {
 		property testray.component.names = "Web Content Display";
