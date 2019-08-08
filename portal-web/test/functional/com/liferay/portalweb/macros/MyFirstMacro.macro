@@ -1,0 +1,50 @@
+definition{
+
+	macro login {
+		Open(locator1 = "http://localhost:8080");
+
+		AssertClick(
+			locator1 = "LRLogin#SIGN_IN_LINK",
+			value1 = "Sign In");
+
+		Type(
+			locator1 = "LRLogin#EMAIL_ADDRESS_FIELD",
+			value1 = "${userEmailAddress}");
+		Type(
+			locator1 = "LRLogin#PASSWORD_FIELD",
+			value1 = "${password}");
+
+		var key_buttonName = "Sign In";
+
+		AssertClick(
+			locator1 = "LRLogin#BUTTON",
+			value1 = "Sign In");
+
+		var key_buttonName = "I Agree";
+
+		if (IsElementPresent(locator1 = "LRLogin#BUTTON")) {
+			Click(locator1 = "LRLogin#BUTTON");
+
+			Type(
+				locator1 = "LRPasswordReminder#ANSWER_FIELD",
+				value1 = "${passwordReminderAnswer}");
+
+			var key_buttonName = "Save";
+
+			AssertClick(
+				locator1 = "LRLogin#BUTTON",
+				value1 = "Save");
+		}
+	}
+
+	macro viewLogin {
+		Click(locator1 = "LRWelcome#USER_AVATAR_LINK");
+
+		var key_userFullName = "${userFullName}";
+
+		AssertTextEquals(
+			locator1 = "LRWelcome#USER_FULL_NAME",
+			value1 = "${userFullName}");
+	}
+
+}
