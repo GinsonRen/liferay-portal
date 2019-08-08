@@ -558,7 +558,7 @@ definition {
 
 		Staging.publishToLive();
 
-		Navigator.gotoSitePage(
+		Navigator.gotoStagedSitePage(
 			pageName = "Blogs Page 2",
 			siteName = "Site Name");
 
