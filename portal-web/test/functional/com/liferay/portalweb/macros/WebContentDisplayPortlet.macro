@@ -1,5 +1,42 @@
 definition {
 
+	macro changeWebContent {
+		Portlet.gotoPortletOptions(
+			portletName = "${portletName}",
+			portletOption = "Configuration");
+
+		SelectFrame(locator1 = "IFrame#DIALOG");
+
+		Click(locator1 = "Button#CHANGE");
+
+		SelectFrame(value1 = "relative=top");
+
+		SelectFrame.selectSecondFrame(locator1 = "IFrame#DIALOG");
+
+		Search.searchCP(searchTerm = "${webContentTitle}");
+
+		var key_webContentTitle = "${webContentTitle}";
+
+		AssertClick(
+			locator1 = "Link#WEB_CONTENT_ARTICLE",
+			value1 = "${webContentTitle}");
+
+		SelectFrame(value1 = "relative=top");
+
+		SelectFrame(locator1 = "IFrame#DIALOG");
+
+		AssertTextEquals(
+			key_cardName = "${webContentTitle}",
+			locator1 = "Card#SPECIFIC_CARD_TITLE",
+			value1 = "${webContentTitle}");
+
+		IFrame.saveConfiguration();
+
+		if ("${contentPage}" == "true") {
+			Click(locator1 = "Icon#CLOSE");
+		}
+	}
+
 	macro configureScopePG {
 		Portlet.gotoPortletOptions(
 			portletName = "${portletName}",
