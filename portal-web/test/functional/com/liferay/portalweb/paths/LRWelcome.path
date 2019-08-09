@@ -1,0 +1,24 @@
+<html>
+<head>
+<title>LRWelcome</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">LRWelcome</td></tr>
+</thead>
+<tbody>
+<tr>
+	<td>AVATAR_BUTTON</td>
+	<td>//span[contains(@class,'sticker-circle')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>CURRENT_USER</td>
+	<td>//*[@id='clay_dropdown_portal']/div/ul/li[1]</td>
+	<td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>
