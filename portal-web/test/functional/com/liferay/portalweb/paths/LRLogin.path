@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>LRLogin</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">LRLogin</td></tr>	
+</thead>
+<tbody>
+<tr>
+	<td>EMAIL_ADDRESS_FIELD</td>
+	<td>//input[contains(@id,'LoginPortlet_login')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>PASSWORD_FIELD</td>
+	<td>//input[contains(@id,'LoginPortlet_password')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SIGN_IN_LINK</td>
+	<td>//span[contains(@class,'sign-in')]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>NEW_PASSWORD</td>
+	<td>//input[contains(@id,'password1')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>ENTER_AGAIN</td>
+	<td>//input[contains(@id,'password2')]</td>
+	<td></td>
+</tr>
+</tbody>	
+</table>
+</body>
+</html>
