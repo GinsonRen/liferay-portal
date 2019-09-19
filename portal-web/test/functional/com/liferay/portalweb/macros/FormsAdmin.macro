@@ -97,7 +97,7 @@ definition {
 	}
 
 	macro viewCannotEditFormEntries {
-		AssertElementNotPresent(locator1 = "Button#SUBMIT");
+		AssertElementNotPresent(locator1 = "Button#SUBMIT_FOR_Present");
 
 		AssertElementNotPresent(locator1 = "FormFields#FIELD_ADD");
 	}
