@@ -97,6 +97,10 @@ definition {
 	}
 
 	macro viewCannotEditFormEntries {
+		if ("${onSitePage}" == "true") {
+			AssertElementNotPresent(locator1 = "FormFields#FIELD_ADD");
+		}
+
 		AssertElementNotPresent(locator1 = "Button#SUBMIT");
 
 		AssertElementNotPresent(locator1 = "FormFields#FIELD_ADD");
@@ -201,7 +205,7 @@ definition {
 	}
 
 	macro viewRadioEntry {
-		FormsAdmin.viewCannotEditFormEntries();
+		FormsAdmin.viewCannotEditFormEntries(onSitePage = "${onSitePage}");
 
 		FormFields.viewRadioLabel(
 			fieldLabel = "${fieldLabel}",
@@ -213,7 +217,7 @@ definition {
 	}
 
 	macro viewSelectEntry {
-		FormsAdmin.viewCannotEditFormEntries();
+		FormsAdmin.viewCannotEditFormEntries(onSitePage = "${onSitePage}");
 
 		FormFields.viewSelectLabel(
 			fieldLabel = "${fieldLabel}",
@@ -230,7 +234,7 @@ definition {
 	}
 
 	macro viewTextEntry {
-		FormsAdmin.viewCannotEditFormEntries();
+		FormsAdmin.viewCannotEditFormEntries(onSitePage = "${onSitePage}");
 
 		FormFields.viewTextLabel(
 			fieldLabel = "${fieldLabel}",
