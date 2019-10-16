@@ -507,6 +507,13 @@ definition {
 				uploadFileName = "${webContentImage}");
 		}
 
+		if (isSet(webContentImageDescription)) {
+			Type(
+				key_fieldName = "Image Description",
+				locator1 = "WCEditWebContent#IMAGE_DESCRIPTION_INPUT",
+				value1 = "${webContentImageDescription}");
+		}
+
 		if (isSet(webContentImageUnderDocumentsAndMedia)) {
 			Click(locator1 = "WCEditWebContent#IMAGE_FIELD_SELECT");
 
