@@ -94,6 +94,127 @@ definition {
 			webContentTitle = "WC WebContent Title");
 	}
 
+	@description = "Staging publish a web content article with an image and the apostrophe character in the image description field via WebContentDisplayPortlet"
+	test StagingPublishWCWithImageFieldAndImageDescriptionFieldContainingApostropheCharacter {
+		task ("Add a public page") {
+			JSONLayout.addPublicLayout(
+				groupName = "Test Site Name",
+				layoutName = "Staging Test Page");
+		}
+
+		task ("Activate the site local staging") {
+			Navigator.gotoSitePage(
+				pageName = "Staging Test Page",
+				siteName = "Test Site Name");
+
+			Staging.openStagingAdmin(siteURLKey = "test-site-name");
+
+			Staging.activateStagingCP(siteName = "Test Site Name");
+		}
+
+		task ("Create a web content structure with required image and image description field ") {
+			Navigator.gotoStagedSitePage(
+				pageName = "Staging Test Page",
+				siteName = "Test Site Name");
+
+			Staging.viewStagingLocalLivePG();
+
+			ProductMenu.gotoPortlet(
+				category = "Content &amp; Data",
+				panel = "Site Administration",
+				portlet = "Web Content");
+
+			NavItem.gotoStructures();
+
+			WebContentStructures.addCP(
+				structureDescription = "WC Structure Description",
+				structureName = "WC Structure Name");
+
+			DynamicDataMapping.addField(
+				field = "Image",
+				fieldFieldLabel = "Image",
+				fieldName = "Image");
+
+			DynamicDataMapping.editFieldRequired(fieldFieldLabel = "Image");
+
+			WebContentStructures.saveCP(structureName = "WC Structure Name");
+		}
+
+		task ("Create a template for created structure") {
+			ProductMenu.gotoPortlet(
+				category = "Content &amp; Data",
+				panel = "Site Administration",
+				portlet = "Web Content");
+
+			NavItem.gotoTemplates();
+
+			WebContentTemplates.addCP(
+				structureName = "WC Structure Name",
+				templateDescription = "WC Template Description",
+				templateFieldNames = "Image",
+				templateName = "WC Template Name");
+		}
+
+		task ("Create a web content article with created structure") {
+			ProductMenu.gotoPortlet(
+				category = "Content &amp; Data",
+				panel = "Site Administration",
+				portlet = "Web Content");
+
+			WebContentNavigator.gotoAddWithStructureCP(structureName = "WC Structure Name");
+		}
+
+		task ("Publish that web content article with image and image description field containing the apostrophe character") {
+			WebContent.addWithStructureCP(
+				structureName = "WC Structure Name",
+				templateName = "WC Template Name",
+				webContentImage = "Document_2.jpeg",
+				webContentImageDescription = "Image Description with the apostrophe character ' ",
+				webContentTitle = "WC WebContent Title");
+
+			PortletEntry.publish();
+		}
+
+		task ("View the web content article publication") {
+			WebContent.viewTitle(webContentTitle = "WC WebContent Title");
+		}
+
+		task ("Display the web content articleto via WCD on staging site page") {
+			ProductMenu.gotoPortlet(
+				category = "Content &amp; Data",
+				panel = "Site Administration",
+				portlet = "Web Content");
+
+			Navigator.gotoStagedSitePage(
+				pageName = "Staging Test Page",
+				siteName = "Test Site Name");
+
+			Portlet.addPG(portletName = "Web Content Display");
+
+			WebContentDisplayPortlet.selectWebContent(webContentTitle = "WC WebContent Title");
+		}
+
+		task ("View image via WCD on the staging site") {
+			Navigator.gotoStagedSitePage(
+				pageName = "Staging Test Page",
+				siteName = "Test Site Name");
+
+			WebContentDisplayPortlet.viewImageFieldViaWCD();
+		}
+
+		task ("Pulish to live") {
+			Staging.gotoPublishToLive();
+
+			Staging.publishToLive();
+		}
+
+		task ("View image via WCD on the live site") {
+			ProductMenu.gotoLiveSite();
+
+			WebContentDisplayPortlet.viewImageFieldViaWCD();
+		}
+	}
+
 	@description = "This is a use case for LPS-77769."
 	@priority = "5"
 	test StagingPublishWCWithImageFieldEdit {
