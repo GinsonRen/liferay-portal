@@ -34,6 +34,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>IMAGE_DESCRIPTION_INPUT</td>
+	<td>//div[contains(@class,'form-group') and label[contains(.,'Image Description')]]/input[contains(@type,'text')]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>PREVIEW_TEMPLATE</td>
 	<td>//button[contains(@id,'previewWithTemplate')]</td>
 	<td></td>
