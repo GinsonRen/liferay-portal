@@ -478,6 +478,46 @@ definition {
 		Portlet.viewApplicationDecorator(decorator = "Barebone");
 	}
 
+	@description = "This is a use case for LPS-88893."
+	@priority = "3"
+	test ImportWebContentWithSameTitle {
+		WebContentNavigator.openWebContentAdmin(siteURLKey = "test-site-name");
+
+		WebContentNavigator.gotoAddCP();
+
+		WebContent.addCP(
+			webContentContent = "WC WebContent Content",
+			webContentTitle = "WC WebContent Title");
+
+		PortletEntry.publish();
+
+		WebContent.viewTitle(webContentTitle = "WC WebContent Title");
+
+		WebContentNavigator.openWebContentAdmin(siteURLKey = "test-site-name");
+
+		LAR.exportPortlet(larFileName = "WebContent_portlet.lar");
+
+		JSONGroup.addGroup(groupName = "Test Site Name1");
+
+		WebContentNavigator.openWebContentAdmin(siteURLKey = "test-site-name1");
+
+		WebContentNavigator.gotoAddCP();
+
+		WebContent.addCP(
+			webContentContent = "WC WebContent Content",
+			webContentTitle = "WC WebContent Title");
+
+		PortletEntry.publish();
+
+		WebContent.viewTitle(webContentTitle = "WC WebContent Title");
+
+		LAR.importPortlet(larFileName = "WebContent_portlet.lar");
+
+		LexiconEntry.changeDisplayStyle(displayStyle = "table");
+
+		RecycleBin.viewDuplicateNames(assetName = "WC WebContent Title");
+	}
+
 	@priority = "5"
 	test MoveImportedWebContentArticlesToFolders {
 		property testray.component.names = "Training,Web Content Administration";
