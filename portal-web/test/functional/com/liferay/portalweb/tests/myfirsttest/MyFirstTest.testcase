@@ -1,0 +1,33 @@
+@component-name = "portal-web-smoke"
+definition {
+	property testray.main.component.name = "Smoke";
+@description = "Ensure that the super admin can login successful."
+	@priority = "5"
+	test SuperAdminLogin{
+	
+	Open(locator1 = "http://192.168.132.178:8080");
+	
+	AssertClick(locator1 = "//span[@class='sign-in text-default']/a/span", value1 = "Sign in");
+
+	Type(locator1 = "//input[@id='_com_liferay_login_web_portlet_LoginPortlet_login']", value1 = "test@liferay.com");
+	Type(locator1 = "//input[@id='_com_liferay_login_web_portlet_LoginPortlet_password']", value1 = "test");
+	Click(locator1 = "//button[@id='_com_liferay_login_web_portlet_LoginPortlet_xgdv']");
+
+    
+    AssertTextEquals(locator1 = "//div[@class='autofit-col autofit-col-expand']/h2", value1 = "Terms of Use");
+    AssertClick(locator1 = "//button[@id='hvub']/span",value1 = "I Agree");
+    
+
+    AssertTextEquals(locator1 = "//div[@class='autofit-col autofit-col-expand']/h2", value1 = "Password Reminder");
+	Type(locator1 = "//input[@id='reminderQueryAnswer']",value1 = "test");
+    AssertClick(locator1 = "//button[@id='dwht']/span",value1 = "Save");
+
+
+    Click(locator1 = "//button[@class='dropdown-toggle btn btn-unstyled']");
+    AssertTextEquals(locator1 = "//div[@class='dropdown-menu dropdown-menu-personal-menu dropdown-menu-indicator-end show']/ul/li", value1 = "Test Test");
+
+
+
+
+	}
+}
