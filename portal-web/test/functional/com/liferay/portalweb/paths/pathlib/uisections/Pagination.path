@@ -79,6 +79,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>TWENTY_ITEMS_PER_PAGE</td>
+	<td>//a[contains(.,'20')]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>VARIABLE_ITEMS_PER_PAGE</td>
 	<td>//div[@class='clearfix lfr-pagination']/div/div[contains(.,'${key_paginationNumber} Items per Page')]</td>
 	<td></td>
