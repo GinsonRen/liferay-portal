@@ -2877,6 +2877,12 @@ definition {
 
 		KaleoFormsAdmin.viewSelectedFieldSet(kfFieldSetName = "Field5");
 
+		AssertClick.assertPartialTextClickAt(
+			locator1 = "Pagination#ITEMS_PER_PAGE_SELECT",
+			value1 = "5 Entries");
+
+		Click(locator1 = "Pagination#TWENTY_ITEMS_PER_PAGE");
+
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "Field4",
 			kfProcessName = "Kaleo Forms Process");
