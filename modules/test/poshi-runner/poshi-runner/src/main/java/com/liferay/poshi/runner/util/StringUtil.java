@@ -724,7 +724,8 @@ public class StringUtil {
 		return sb.toString();
 	}
 
-	public static String substring(String s, String startString, String endString) {
+	public static String substring(
+			String s, String startString, String endString) {
 
 		if (s == null) {
 			s = StringPool.BLANK;
