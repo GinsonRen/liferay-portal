@@ -725,8 +725,8 @@ public class StringUtil {
 	}
 
 	public static String substring(String s, String startString, String endString) {
-		if (s == null) {
 
+		if (s == null) {
 			s = StringPool.BLANK;
 		}
 
