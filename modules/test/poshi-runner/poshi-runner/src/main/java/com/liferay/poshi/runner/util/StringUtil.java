@@ -724,6 +724,30 @@ public class StringUtil {
 		return sb.toString();
 	}
 
+	public static String substring(String s, String startString, String endString) {
+		if (s == null) {
+			s = StringPool.BLANK;
+		}
+
+		int start = 0;
+
+		try {
+			start = Integer.parseInt(startString);
+		}
+		catch (NumberFormatException nfe) {
+		}
+
+		int end = 0;
+
+		try {
+			end = Integer.parseInt(endString);
+		}
+		catch (NumberFormatException nfe) {
+		}
+
+		return s.substring(start, end);
+	}
+
 	public static String toLowerCase(String s) {
 		if (s == null) {
 			return null;
