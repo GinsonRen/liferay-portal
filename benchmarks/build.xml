@@ -23,7 +23,15 @@
 			/>
 			<fileset
 				dir="${sdk.dir}/dist"
+				includes="com.liferay.asset.display.page.*.jar"
+			/>
+			<fileset
+				dir="${sdk.dir}/dist"
 				includes="com.liferay.blogs.*.jar"
+			/>
+			<fileset
+				dir="${sdk.dir}/dist"
+				includes="com.liferay.change.tracking.*.jar"
 			/>
 			<fileset
 				dir="${sdk.dir}/dist"

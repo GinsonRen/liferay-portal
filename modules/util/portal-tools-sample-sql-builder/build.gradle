@@ -26,9 +26,12 @@ classes {
 dependencies {
 	compile group: "com.liferay.portal", name: "com.liferay.util.java", version: "default"
 	compile group: "javax.portlet", name: "portlet-api", transitive: false, version: "3.0.1"
+	compile project(":apps:asset:asset-display-page-api")
 	compile project(":apps:asset:asset-entry-rel-service")
 	compile project(":apps:blogs:blogs-api")
 	compile project(":apps:blogs:blogs-service")
+	compile project(":apps:change-tracking:change-tracking-api")
+	compile project(":apps:change-tracking:change-tracking-service")
 	compile project(":apps:document-library:document-library-api")
 	compile project(":apps:dynamic-data-lists:dynamic-data-lists-api")
 	compile project(":apps:dynamic-data-lists:dynamic-data-lists-service")
@@ -48,6 +51,7 @@ dependencies {
 	compile project(":apps:login:login-web-api")
 	compile project(":apps:message-boards:message-boards-api")
 	compile project(":apps:message-boards:message-boards-service")
+	compile project(":apps:product-navigation:product-navigation-product-menu-api")
 	compile project(":apps:subscription:subscription-api")
 	compile project(":apps:subscription:subscription-service")
 	compile project(":apps:view-count:view-count-api")
