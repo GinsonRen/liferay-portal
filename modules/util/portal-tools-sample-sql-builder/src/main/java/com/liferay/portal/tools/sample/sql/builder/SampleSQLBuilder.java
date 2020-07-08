@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.io.OutputStreamWriter;
 import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
 import com.liferay.portal.kernel.io.unsync.UnsyncBufferedWriter;
 import com.liferay.portal.kernel.util.FileUtil;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.tools.ToolDependencies;
 import com.liferay.portal.tools.sample.sql.builder.io.CharPipe;
 import com.liferay.portal.tools.sample.sql.builder.io.UnsyncTeeWriter;
@@ -41,7 +42,6 @@ import java.nio.channels.FileChannel;
 import java.sql.SQLException;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -117,6 +117,44 @@ public class SampleSQLBuilder {
 				BenchmarksPropsValues.OUTPUT_DIR,
 				"benchmarks-actual.properties"),
 			BenchmarksPropsValues.ACTUAL_PROPERTIES_CONTENT);
+	}
+
+	public class CSVWriterHolder implements AutoCloseable {
+
+		public CSVWriterHolder() throws IOException {
+			File outputDir = new File(BenchmarksPropsValues.OUTPUT_DIR);
+
+			outputDir.mkdirs();
+
+			for (String csvFileName :
+					BenchmarksPropsValues.OUTPUT_CSV_FILE_NAMES) {
+
+				_csvWriters.put(
+					csvFileName,
+					createFileWriter(
+						new File(outputDir, csvFileName.concat(".csv"))));
+			}
+		}
+
+		public void close() throws IOException {
+			for (Writer writer : _csvWriters.values()) {
+				writer.close();
+			}
+		}
+
+		public Writer getCSVWriter(String csvFileName) {
+			Writer writer = _csvWriters.get(csvFileName);
+
+			if (writer == null) {
+				throw new IllegalArgumentException(
+					"Unknown CSV file name: " + csvFileName);
+			}
+
+			return writer;
+		}
+
+		private Map<String, Writer> _csvWriters = new HashMap<>();
+
 	}
 
 	protected void compressSQL(
@@ -251,50 +289,32 @@ public class SampleSQLBuilder {
 	protected Reader generateSQL() {
 		final CharPipe charPipe = new CharPipe(_PIPE_BUFFER_SIZE);
 
-		Thread thread = new Thread() {
-
-			@Override
-			public void run() {
-				Writer sampleSQLWriter = null;
-
-				try {
-					sampleSQLWriter = new UnsyncTeeWriter(
+		Thread thread = new Thread(
+			() -> {
+				try (CSVWriterHolder csvWriterHolder = new CSVWriterHolder();
+					Writer sampleSQLWriter = new UnsyncTeeWriter(
 						createUnsyncBufferedWriter(charPipe.getWriter()),
 						createFileWriter(
 							new File(
 								BenchmarksPropsValues.OUTPUT_DIR,
-								"sample.sql")));
+								"sample.sql")))) {
 
 					FreeMarkerUtil.process(
 						BenchmarksPropsValues.SCRIPT,
-						Collections.singletonMap("dataFactory", _dataFactory),
+						HashMapBuilder.<String, Object>put(
+							"csvWriterHolder", csvWriterHolder
+						).put(
+							"dataFactory", _dataFactory
+						).build(),
 						sampleSQLWriter);
 				}
 				catch (Throwable t) {
 					_freeMarkerThrowable = t;
 				}
 				finally {
-					try {
-						_dataFactory.closeCSVWriters();
-					}
-					catch (IOException ioException) {
-						ioException.printStackTrace();
-					}
-
-					if (sampleSQLWriter != null) {
-						try {
-							sampleSQLWriter.close();
-						}
-						catch (IOException ioException) {
-							ioException.printStackTrace();
-						}
-					}
-
 					charPipe.close();
 				}
-			}
-
-		};
+			});
 
 		thread.start();
 
