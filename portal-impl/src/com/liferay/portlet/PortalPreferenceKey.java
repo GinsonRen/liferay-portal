@@ -31,13 +31,7 @@ public class PortalPreferenceKey {
 			throw new NullPointerException("Key is null");
 		}
 
-		if (Validator.isNull(namespace)) {
-			_namespace = null;
-		}
-		else {
-			_namespace = namespace;
-		}
-
+		_namespace = namespace;
 		_key = key;
 	}
 
@@ -53,7 +47,9 @@ public class PortalPreferenceKey {
 
 		PortalPreferenceKey portalPreferenceKey = (PortalPreferenceKey)object;
 
-		if (Objects.equals(portalPreferenceKey._namespace, _namespace) &&
+		if ((Objects.equals(portalPreferenceKey._namespace, _namespace) ||
+			 (Validator.isNull(portalPreferenceKey._namespace) &&
+			  Validator.isNull(_namespace))) &&
 			Objects.equals(portalPreferenceKey._key, _key)) {
 
 			return true;
@@ -72,7 +68,11 @@ public class PortalPreferenceKey {
 
 	@Override
 	public int hashCode() {
-		int hash = HashUtil.hash(0, _namespace);
+		int hash = 0;
+
+		if (Validator.isNotNull(_namespace)) {
+			hash = HashUtil.hash(0, _namespace);
+		}
 
 		return HashUtil.hash(hash, _key);
 	}
