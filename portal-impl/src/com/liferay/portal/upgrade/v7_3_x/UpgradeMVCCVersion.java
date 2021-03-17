@@ -23,11 +23,10 @@ public class UpgradeMVCCVersion
 	@Override
 	protected String[] getExcludedTableNames() {
 		return new String[] {
-			"CompanyInfo", "CountryLocalization", "PortalPreferenceValue",
-			"PortletPreferenceValue", "RegionLocalization", "SocialActivity",
-			"SocialActivityAchievement", "SocialActivityCounter",
-			"SocialActivityLimit", "SocialActivitySet", "SocialActivitySetting",
-			"SocialRelation", "SocialRequest"
+			"CompanyInfo", "PortalPreferenceValue", "PortletPreferenceValue",
+			"SocialActivity", "SocialActivityAchievement",
+			"SocialActivityCounter", "SocialActivityLimit", "SocialActivitySet",
+			"SocialActivitySetting", "SocialRelation", "SocialRequest"
 		};
 	}
 
