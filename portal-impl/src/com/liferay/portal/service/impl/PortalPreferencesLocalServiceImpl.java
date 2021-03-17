@@ -30,6 +30,7 @@ import com.liferay.portal.service.base.PortalPreferencesLocalServiceBaseImpl;
 import com.liferay.portlet.PortalPreferenceKey;
 import com.liferay.portlet.PortalPreferencesImpl;
 import com.liferay.portlet.PortalPreferencesWrapper;
+import com.liferay.portlet.PortalPreferencesWrapperCacheUtil;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -58,6 +59,8 @@ public class PortalPreferencesLocalServiceImpl
 				"Duplicate owner ID and owner type exists in " +
 					previousPortalPreferences);
 		}
+
+		PortalPreferencesWrapperCacheUtil.remove(ownerId, ownerType);
 
 		long portalPreferencesId = counterLocalService.increment();
 
@@ -144,6 +147,13 @@ public class PortalPreferencesLocalServiceImpl
 	public PortletPreferences getPreferences(
 		long ownerId, int ownerType, String defaultPreferences) {
 
+		PortalPreferencesWrapper portalPreferencesWrapper =
+			PortalPreferencesWrapperCacheUtil.get(ownerId, ownerType);
+
+		if (portalPreferencesWrapper != null) {
+			return portalPreferencesWrapper.clone();
+		}
+
 		PortalPreferences portalPreferences =
 			portalPreferencesPersistence.fetchByO_O(ownerId, ownerType);
 
@@ -158,7 +168,13 @@ public class PortalPreferencesLocalServiceImpl
 				portalPreferenceValueLocalService.getPortalPreferences(
 					portalPreferences, false);
 
-		return new PortalPreferencesWrapper(portalPreferencesImpl);
+		portalPreferencesWrapper = new PortalPreferencesWrapper(
+			portalPreferencesImpl);
+
+		PortalPreferencesWrapperCacheUtil.put(
+			ownerId, ownerType, portalPreferencesWrapper);
+
+		return portalPreferencesWrapper.clone();
 	}
 
 	@Override
@@ -188,6 +204,8 @@ public class PortalPreferencesLocalServiceImpl
 	private PortalPreferences _updatePortalPreferences(
 		long ownerId, int ownerType,
 		Map<PortalPreferenceKey, String[]> preferencesMap) {
+
+		PortalPreferencesWrapperCacheUtil.remove(ownerId, ownerType);
 
 		PortalPreferences portalPreferencesModel =
 			portalPreferencesPersistence.fetchByO_O(ownerId, ownerType);
