@@ -17,16 +17,16 @@ package com.liferay.portal.service.impl;
 import com.liferay.exportimport.kernel.staging.MergeLayoutPrototypesThreadLocal;
 import com.liferay.layout.admin.kernel.model.LayoutTypePortletConstants;
 import com.liferay.petra.lang.CentralizedThreadLocal;
-import com.liferay.petra.sql.dsl.DSLQueryFactoryUtil;
-import com.liferay.petra.sql.dsl.query.DSLQuery;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.change.tracking.CTTransactionException;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.Property;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.NoSuchLayoutException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.RequiredLayoutException;
@@ -49,9 +49,7 @@ import com.liferay.portal.kernel.model.LayoutSet;
 import com.liferay.portal.kernel.model.LayoutSetPrototype;
 import com.liferay.portal.kernel.model.LayoutType;
 import com.liferay.portal.kernel.model.LayoutTypePortlet;
-import com.liferay.portal.kernel.model.PortalPreferenceValueTable;
 import com.liferay.portal.kernel.model.PortalPreferences;
-import com.liferay.portal.kernel.model.PortalPreferencesTable;
 import com.liferay.portal.kernel.model.PortletConstants;
 import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.ResourcePermission;
@@ -91,6 +89,7 @@ import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.kernel.workflow.WorkflowThreadLocal;
 import com.liferay.portal.service.base.LayoutLocalServiceBaseImpl;
 import com.liferay.portal.util.PropsValues;
+import com.liferay.portlet.PortalPreferencesImpl;
 import com.liferay.sites.kernel.util.Sites;
 import com.liferay.sites.kernel.util.SitesUtil;
 
@@ -3718,34 +3717,26 @@ public class LayoutLocalServiceImpl extends LayoutLocalServiceBaseImpl {
 	}
 
 	private void _resetPortalPreferences(Layout layout) {
-		String namespace = CustomizedPages.namespacePlid(layout.getPlid());
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+			PortalPreferences.class, getClassLoader());
 
-		DSLQuery dslQuery = DSLQueryFactoryUtil.select(
-			PortalPreferencesTable.INSTANCE
-		).from(
-			PortalPreferencesTable.INSTANCE
-		).innerJoinON(
-			PortalPreferenceValueTable.INSTANCE,
-			PortalPreferenceValueTable.INSTANCE.portalPreferencesId.eq(
-				PortalPreferencesTable.INSTANCE.portalPreferencesId)
-		).where(
-			PortalPreferencesTable.INSTANCE.ownerType.eq(
-				ResourceConstants.SCOPE_INDIVIDUAL
-			).and(
-				PortalPreferenceValueTable.INSTANCE.namespace.eq(namespace)
-			)
-		);
+		dynamicQuery.add(
+			RestrictionsFactoryUtil.eq(
+				"ownerType", ResourceConstants.SCOPE_INDIVIDUAL));
+		dynamicQuery.add(
+			RestrictionsFactoryUtil.like(
+				"preferences",
+				"%" + CustomizedPages.namespacePlid(layout.getPlid()) + "%"));
 
-		for (PortalPreferences portalPreferencesModel :
-				portalPreferencesPersistence.<List<PortalPreferences>>dslQuery(
-					dslQuery)) {
+		List<PortalPreferences> portalPreferenceses =
+			portalPreferencesLocalService.dynamicQuery(dynamicQuery);
 
-			com.liferay.portal.kernel.portlet.PortalPreferences
-				portalPreferences =
-					portalPreferenceValueLocalService.getPortalPreferences(
-						portalPreferencesModel, false);
+		for (PortalPreferences portalPreferences : portalPreferenceses) {
+			PortalPreferencesImpl portalPreferencesImpl =
+				new PortalPreferencesImpl(portalPreferences, false);
 
-			portalPreferences.resetValues(namespace);
+			portalPreferencesImpl.resetValues(
+				CustomizedPages.namespacePlid(layout.getPlid()));
 		}
 	}
 
