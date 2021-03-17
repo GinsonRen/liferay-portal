@@ -980,7 +980,8 @@ create table PortalPreferences (
 	mvccVersion LONG default 0 not null,
 	portalPreferencesId LONG not null primary key,
 	ownerId LONG,
-	ownerType INTEGER
+	ownerType INTEGER,
+	preferences TEXT null
 );
 
 create table Portlet (

@@ -44,6 +44,7 @@ public class PortalPreferencesWrapper
 		attributes.put("portalPreferencesId", getPortalPreferencesId());
 		attributes.put("ownerId", getOwnerId());
 		attributes.put("ownerType", getOwnerType());
+		attributes.put("preferences", getPreferences());
 
 		return attributes;
 	}
@@ -72,6 +73,12 @@ public class PortalPreferencesWrapper
 
 		if (ownerType != null) {
 			setOwnerType(ownerType);
+		}
+
+		String preferences = (String)attributes.get("preferences");
+
+		if (preferences != null) {
+			setPreferences(preferences);
 		}
 	}
 
@@ -113,6 +120,16 @@ public class PortalPreferencesWrapper
 	@Override
 	public long getPortalPreferencesId() {
 		return model.getPortalPreferencesId();
+	}
+
+	/**
+	 * Returns the preferences of this portal preferences.
+	 *
+	 * @return the preferences of this portal preferences
+	 */
+	@Override
+	public String getPreferences() {
+		return model.getPreferences();
 	}
 
 	/**
@@ -168,6 +185,16 @@ public class PortalPreferencesWrapper
 	@Override
 	public void setPortalPreferencesId(long portalPreferencesId) {
 		model.setPortalPreferencesId(portalPreferencesId);
+	}
+
+	/**
+	 * Sets the preferences of this portal preferences.
+	 *
+	 * @param preferences the preferences of this portal preferences
+	 */
+	@Override
+	public void setPreferences(String preferences) {
+		model.setPreferences(preferences);
 	}
 
 	/**
