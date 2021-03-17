@@ -428,7 +428,7 @@ public class PortalPreferencesImpl
 				"preference");
 
 			preferenceElement.addElement(
-				"name", portalPreferenceKey.getNamespacedKey());
+				"name", portalPreferenceKey.toString());
 
 			for (String value : entry.getValue()) {
 				preferenceElement.addElement("value", value);
