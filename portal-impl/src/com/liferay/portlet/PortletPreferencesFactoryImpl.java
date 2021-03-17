@@ -223,7 +223,7 @@ public class PortletPreferencesFactoryImpl
 		}
 
 		return new PortalPreferencesImpl(
-			ownerId, ownerType, preferences, false);
+			ownerId, ownerType, null, preferences, false);
 	}
 
 	@Override
