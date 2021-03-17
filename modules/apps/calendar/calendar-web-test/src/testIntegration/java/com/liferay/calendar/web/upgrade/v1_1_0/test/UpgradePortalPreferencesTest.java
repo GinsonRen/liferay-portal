@@ -17,18 +17,23 @@ package com.liferay.calendar.web.upgrade.v1_1_0.test;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.calendar.test.util.CalendarUpgradeTestUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.PortalPreferences;
 import com.liferay.portal.kernel.model.User;
-import com.liferay.portal.kernel.service.PortalPreferenceValueLocalService;
-import com.liferay.portal.kernel.service.PortalPreferencesLocalService;
+import com.liferay.portal.kernel.service.PortalPreferencesLocalServiceUtil;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.portal.kernel.util.PortletKeys;
-import com.liferay.portal.model.impl.PortalPreferenceValueImpl;
-import com.liferay.portal.test.rule.Inject;
+import com.liferay.portal.kernel.xml.Document;
+import com.liferay.portal.kernel.xml.DocumentException;
+import com.liferay.portal.kernel.xml.Element;
+import com.liferay.portal.kernel.xml.SAXReaderUtil;
+import com.liferay.portal.model.impl.PortalPreferencesImpl;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
+
+import java.util.Iterator;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -53,7 +58,7 @@ public class UpgradePortalPreferencesTest {
 		_user = UserTestUtil.addUser();
 
 		_portalPreferences =
-			_portalPreferencesLocalService.addPortalPreferences(
+			PortalPreferencesLocalServiceUtil.addPortalPreferences(
 				_user.getUserId(), PortletKeys.PREFS_OWNER_TYPE_USER, "");
 
 		setUpUpgradePortalPreferences();
@@ -64,24 +69,25 @@ public class UpgradePortalPreferencesTest {
 		long calendarId = RandomTestUtil.randomLong();
 		long color = RandomTestUtil.randomLong();
 
-		com.liferay.portal.kernel.portlet.PortalPreferences portalPreferences =
-			_portalPreferenceValueLocalService.getPortalPreferences(
-				_portalPreferences, true);
-
-		portalPreferences.setValue(
+		String preferencesXML = getPreferences(
 			_NAMESPACE_OLD_SESSION_CLICKS,
-			"calendar-portlet-calendar-" + calendarId + "-color",
-			String.valueOf(color));
+			"calendar-portlet-calendar-" + calendarId + "-color", color);
+
+		_portalPreferences.setPreferences(preferencesXML);
+
+		PortalPreferencesLocalServiceUtil.updatePortalPreferences(
+			_portalPreferences);
 
 		_upgradeProcess.upgrade();
 
-		portalPreferences = reloadPortalPreferences();
+		PortalPreferences portalPreferences = reloadPortalPreferences(
+			_portalPreferences);
 
-		Assert.assertEquals(
-			String.valueOf(color),
-			portalPreferences.getValue(
-				_NAMESPACE_NEW_SESSION_CLICKS,
-				"com.liferay.calendar.web_calendar" + calendarId + "Color"));
+		String value = getPreference(
+			portalPreferences.getPreferences(), _NAMESPACE_NEW_SESSION_CLICKS,
+			"com.liferay.calendar.web_calendar" + calendarId + "Color");
+
+		Assert.assertEquals(String.valueOf(color), value);
 	}
 
 	@Test
@@ -89,47 +95,50 @@ public class UpgradePortalPreferencesTest {
 		long calendarId = RandomTestUtil.randomLong();
 		boolean visible = RandomTestUtil.randomBoolean();
 
-		com.liferay.portal.kernel.portlet.PortalPreferences portalPreferences =
-			_portalPreferenceValueLocalService.getPortalPreferences(
-				_portalPreferences, true);
-
-		portalPreferences.setValue(
+		String preferencesXML = getPreferences(
 			_NAMESPACE_OLD_SESSION_CLICKS,
-			"calendar-portlet-calendar-" + calendarId + "-visible",
-			String.valueOf(visible));
+			"calendar-portlet-calendar-" + calendarId + "-visible", visible);
+
+		_portalPreferences.setPreferences(preferencesXML);
+
+		PortalPreferencesLocalServiceUtil.updatePortalPreferences(
+			_portalPreferences);
 
 		_upgradeProcess.upgrade();
 
-		portalPreferences = reloadPortalPreferences();
+		PortalPreferences portalPreferences = reloadPortalPreferences(
+			_portalPreferences);
 
-		Assert.assertEquals(
-			String.valueOf(visible),
-			portalPreferences.getValue(
-				_NAMESPACE_NEW_SESSION_CLICKS,
-				"com.liferay.calendar.web_calendar" + calendarId + "Visible"));
+		String value = getPreference(
+			portalPreferences.getPreferences(), _NAMESPACE_NEW_SESSION_CLICKS,
+			"com.liferay.calendar.web_calendar" + calendarId + "Visible");
+
+		Assert.assertEquals(String.valueOf(visible), value);
 	}
 
 	@Test
 	public void testUpgradeColumnOptionsVisiblePreferences() throws Exception {
 		boolean visible = RandomTestUtil.randomBoolean();
 
-		com.liferay.portal.kernel.portlet.PortalPreferences portalPreferences =
-			_portalPreferenceValueLocalService.getPortalPreferences(
-				_portalPreferences, true);
-
-		portalPreferences.setValue(
+		String preferencesXML = getPreferences(
 			_NAMESPACE_OLD_SESSION_CLICKS,
-			"calendar-portlet-column-options-visible", String.valueOf(visible));
+			"calendar-portlet-column-options-visible", visible);
+
+		_portalPreferences.setPreferences(preferencesXML);
+
+		PortalPreferencesLocalServiceUtil.updatePortalPreferences(
+			_portalPreferences);
 
 		_upgradeProcess.upgrade();
 
-		portalPreferences = reloadPortalPreferences();
+		PortalPreferences portalPreferences = reloadPortalPreferences(
+			_portalPreferences);
 
-		Assert.assertEquals(
-			String.valueOf(visible),
-			portalPreferences.getValue(
-				_NAMESPACE_NEW_SESSION_CLICKS,
-				"com.liferay.calendar.web_columnOptionsVisible"));
+		String value = getPreference(
+			portalPreferences.getPreferences(), _NAMESPACE_NEW_SESSION_CLICKS,
+			"com.liferay.calendar.web_columnOptionsVisible");
+
+		Assert.assertEquals(String.valueOf(visible), value);
 	}
 
 	@Test
@@ -138,55 +147,105 @@ public class UpgradePortalPreferencesTest {
 
 		String view = views[RandomTestUtil.randomInt(0, views.length - 1)];
 
-		com.liferay.portal.kernel.portlet.PortalPreferences portalPreferences =
-			_portalPreferenceValueLocalService.getPortalPreferences(
-				_portalPreferences, true);
-
-		portalPreferences.setValue(
+		String preferencesXML = getPreferences(
 			_NAMESPACE_OLD_SESSION_CLICKS, "calendar-portlet-default-view",
 			view);
 
+		_portalPreferences.setPreferences(preferencesXML);
+
+		PortalPreferencesLocalServiceUtil.updatePortalPreferences(
+			_portalPreferences);
+
 		_upgradeProcess.upgrade();
 
-		portalPreferences = reloadPortalPreferences();
+		PortalPreferences portalPreferences = reloadPortalPreferences(
+			_portalPreferences);
 
-		Assert.assertEquals(
-			view,
-			portalPreferences.getValue(
-				_NAMESPACE_NEW_SESSION_CLICKS,
-				"com.liferay.calendar.web_defaultView"));
+		String value = getPreference(
+			portalPreferences.getPreferences(), _NAMESPACE_NEW_SESSION_CLICKS,
+			"com.liferay.calendar.web_defaultView");
+
+		Assert.assertEquals(view, value);
 	}
 
 	@Test
 	public void testUpgradeOtherCalendarsPreferences() throws Exception {
 		long otherCalendarId = RandomTestUtil.randomLong();
 
-		com.liferay.portal.kernel.portlet.PortalPreferences portalPreferences =
-			_portalPreferenceValueLocalService.getPortalPreferences(
-				_portalPreferences, true);
-
-		portalPreferences.setValue(
+		String preferencesXML = getPreferences(
 			_NAMESPACE_OLD_SESSION_CLICKS, "calendar-portlet-other-calendars",
-			String.valueOf(otherCalendarId));
+			otherCalendarId);
+
+		_portalPreferences.setPreferences(preferencesXML);
+
+		PortalPreferencesLocalServiceUtil.updatePortalPreferences(
+			_portalPreferences);
 
 		_upgradeProcess.upgrade();
 
-		portalPreferences = reloadPortalPreferences();
+		PortalPreferences portalPreferences = reloadPortalPreferences(
+			_portalPreferences);
 
-		Assert.assertEquals(
-			String.valueOf(otherCalendarId),
-			portalPreferences.getValue(
-				_NAMESPACE_NEW_SESSION_CLICKS,
-				"com.liferay.calendar.web_otherCalendars"));
+		String value = getPreference(
+			portalPreferences.getPreferences(), _NAMESPACE_NEW_SESSION_CLICKS,
+			"com.liferay.calendar.web_otherCalendars");
+
+		Assert.assertEquals(String.valueOf(otherCalendarId), value);
 	}
 
-	protected com.liferay.portal.kernel.portlet.PortalPreferences
-		reloadPortalPreferences() {
+	protected String getPreference(
+			String preferencesXML, String namespace, String name)
+		throws DocumentException {
 
-		EntityCacheUtil.clearCache(PortalPreferenceValueImpl.class);
+		String value = null;
 
-		return _portalPreferenceValueLocalService.getPortalPreferences(
-			_portalPreferences, true);
+		Document document = SAXReaderUtil.read(preferencesXML);
+
+		Element rootElement = document.getRootElement();
+
+		Iterator<Element> iterator = rootElement.elementIterator();
+
+		while (iterator.hasNext()) {
+			Element preferenceElement = iterator.next();
+
+			String preferenceName = preferenceElement.elementText("name");
+
+			if (preferenceName.equals(namespace + "#" + name)) {
+				value = preferenceElement.elementText("value");
+			}
+		}
+
+		return value;
+	}
+
+	protected String getPreferences(
+		String namespace, String name, Object value) {
+
+		Document document = SAXReaderUtil.createDocument();
+
+		Element rootElement = document.addElement("portlet-preferences");
+
+		Element preferenceElement = rootElement.addElement("preference");
+
+		Element nameElement = preferenceElement.addElement("name");
+
+		nameElement.setText(namespace + "#" + name);
+
+		Element valueElement = preferenceElement.addElement("value");
+
+		valueElement.setText(String.valueOf(value));
+
+		return document.asXML();
+	}
+
+	protected PortalPreferences reloadPortalPreferences(
+			PortalPreferences portalPreferences)
+		throws PortalException {
+
+		EntityCacheUtil.clearCache(PortalPreferencesImpl.class);
+
+		return PortalPreferencesLocalServiceUtil.getPortalPreferences(
+			portalPreferences.getPortalPreferencesId());
 	}
 
 	protected void setUpUpgradePortalPreferences() {
@@ -199,13 +258,6 @@ public class UpgradePortalPreferencesTest {
 
 	private static final String _NAMESPACE_OLD_SESSION_CLICKS =
 		"com.liferay.portal.util.SessionClicks";
-
-	@Inject
-	private static PortalPreferencesLocalService _portalPreferencesLocalService;
-
-	@Inject
-	private static PortalPreferenceValueLocalService
-		_portalPreferenceValueLocalService;
 
 	@DeleteAfterTestRun
 	private PortalPreferences _portalPreferences;
