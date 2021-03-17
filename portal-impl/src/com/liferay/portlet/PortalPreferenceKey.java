@@ -87,15 +87,11 @@ public class PortalPreferenceKey {
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(5);
+		if (Validator.isNull(_namespace)) {
+			return _key;
+		}
 
-		sb.append("{namespace=");
-		sb.append(_namespace);
-		sb.append(", key=");
-		sb.append(_key);
-		sb.append("}");
-
-		return sb.toString();
+		return StringBundler.concat(_namespace, StringPool.POUND, _key);
 	}
 
 	private final String _key;
