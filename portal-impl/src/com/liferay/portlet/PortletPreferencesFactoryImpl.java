@@ -339,16 +339,30 @@ public class PortletPreferencesFactoryImpl
 	public PortalPreferences getPortalPreferences(
 		HttpSession session, long userId, boolean signedIn) {
 
+		long ownerId = userId;
+		int ownerType = PortletKeys.PREFS_OWNER_TYPE_USER;
+
 		PortalPreferences portalPreferences = null;
 
-		PortalPreferencesWrapper portalPreferencesWrapper =
-			(PortalPreferencesWrapper)
-				PortalPreferencesLocalServiceUtil.getPreferences(
-					userId, PortletKeys.PREFS_OWNER_TYPE_USER);
-
 		if (signedIn) {
-			portalPreferences =
-				portalPreferencesWrapper.getPortalPreferencesImpl();
+			PortalPreferencesWrapper portalPreferencesWrapper =
+				PortalPreferencesWrapperCacheUtil.get(ownerId, ownerType);
+
+			if (portalPreferencesWrapper == null) {
+				portalPreferencesWrapper =
+					(PortalPreferencesWrapper)
+						PortalPreferencesLocalServiceUtil.getPreferences(
+							ownerId, ownerType);
+
+				portalPreferences =
+					portalPreferencesWrapper.getPortalPreferencesImpl();
+			}
+			else {
+				PortalPreferencesImpl portalPreferencesImpl =
+					portalPreferencesWrapper.getPortalPreferencesImpl();
+
+				portalPreferences = portalPreferencesImpl.clone();
+			}
 		}
 		else {
 			if (session != null) {
@@ -357,8 +371,24 @@ public class PortletPreferencesFactoryImpl
 			}
 
 			if (portalPreferences == null) {
-				portalPreferences =
-					portalPreferencesWrapper.getPortalPreferencesImpl();
+				PortalPreferencesWrapper portalPreferencesWrapper =
+					PortalPreferencesWrapperCacheUtil.get(ownerId, ownerType);
+
+				if (portalPreferencesWrapper == null) {
+					portalPreferencesWrapper =
+						(PortalPreferencesWrapper)
+							PortalPreferencesLocalServiceUtil.getPreferences(
+								ownerId, ownerType);
+
+					portalPreferences =
+						portalPreferencesWrapper.getPortalPreferencesImpl();
+				}
+				else {
+					PortalPreferencesImpl portalPreferencesImpl =
+						portalPreferencesWrapper.getPortalPreferencesImpl();
+
+					portalPreferences = portalPreferencesImpl.clone();
+				}
 
 				if (session != null) {
 					session.setAttribute(
