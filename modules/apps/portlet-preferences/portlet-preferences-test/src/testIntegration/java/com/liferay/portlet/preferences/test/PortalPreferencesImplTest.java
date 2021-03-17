@@ -35,8 +35,8 @@ import com.liferay.portal.spring.transaction.DefaultTransactionExecutor;
 import com.liferay.portal.spring.transaction.TransactionAttributeAdapter;
 import com.liferay.portal.spring.transaction.TransactionInterceptor;
 import com.liferay.portal.spring.transaction.TransactionStatusAdapter;
-import com.liferay.portal.test.log.LogCapture;
-import com.liferay.portal.test.log.LoggerTestUtil;
+import com.liferay.portal.test.log.CaptureAppender;
+import com.liferay.portal.test.log.Log4JLoggerTestUtil;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portlet.PortalPreferencesWrapperCacheUtil;
@@ -184,8 +184,10 @@ public class PortalPreferencesImplTest {
 				return null;
 			});
 
-		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				JDBCExceptionReporter.class.getName(), LoggerTestUtil.OFF)) {
+		try (CaptureAppender captureAppender =
+				Log4JLoggerTestUtil.configureLog4JLogger(
+					JDBCExceptionReporter.class.getName(),
+					Log4JLoggerTestUtil.OFF)) {
 
 			updateSynchronously(futureTask1, futureTask2);
 
@@ -258,8 +260,10 @@ public class PortalPreferencesImplTest {
 				return null;
 			});
 
-		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				JDBCExceptionReporter.class.getName(), LoggerTestUtil.OFF)) {
+		try (CaptureAppender captureAppender =
+				Log4JLoggerTestUtil.configureLog4JLogger(
+					JDBCExceptionReporter.class.getName(),
+					Log4JLoggerTestUtil.OFF)) {
 
 			updateSynchronously(futureTask1, futureTask2);
 
@@ -332,8 +336,10 @@ public class PortalPreferencesImplTest {
 				return null;
 			});
 
-		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				JDBCExceptionReporter.class.getName(), LoggerTestUtil.OFF)) {
+		try (CaptureAppender captureAppender =
+				Log4JLoggerTestUtil.configureLog4JLogger(
+					JDBCExceptionReporter.class.getName(),
+					Log4JLoggerTestUtil.OFF)) {
 
 			updateSynchronously(futureTask1, futureTask2);
 
