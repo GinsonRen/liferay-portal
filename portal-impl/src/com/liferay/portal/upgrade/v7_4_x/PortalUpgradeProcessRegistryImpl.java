@@ -46,12 +46,6 @@ public class PortalUpgradeProcessRegistryImpl
 		upgradeProcesses.put(new Version(11, 0, 0), new UpgradeAssetEntry());
 
 		upgradeProcesses.put(new Version(11, 0, 1), new UpgradeLayout());
-
-		upgradeProcesses.put(
-			new Version(12, 0, 0), new UpgradePortalPreferences());
-
-		upgradeProcesses.put(
-			new Version(12, 0, 1), new UpgradeResourceAction());
 	}
 
 }
