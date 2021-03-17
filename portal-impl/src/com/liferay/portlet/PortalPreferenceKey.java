@@ -99,10 +99,10 @@ public class PortalPreferenceKey {
 	public String toString() {
 		StringBundler sb = new StringBundler(5);
 
-		sb.append("{key=");
-		sb.append(_key);
-		sb.append(", namespace=");
+		sb.append("{namespace=");
 		sb.append(_namespace);
+		sb.append(", key=");
+		sb.append(_key);
 		sb.append("}");
 
 		return sb.toString();
