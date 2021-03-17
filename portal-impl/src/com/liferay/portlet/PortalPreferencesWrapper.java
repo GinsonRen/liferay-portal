@@ -14,6 +14,8 @@
 
 package com.liferay.portlet;
 
+import com.liferay.portal.kernel.model.MVCCModel;
+
 import java.io.IOException;
 import java.io.Serializable;
 
@@ -26,7 +28,7 @@ import javax.portlet.PortletPreferences;
  * @author Alexander Chow
  */
 public class PortalPreferencesWrapper
-	implements Cloneable, PortletPreferences, Serializable {
+	implements Cloneable, MVCCModel, PortletPreferences, Serializable {
 
 	public PortalPreferencesWrapper(
 		PortalPreferencesImpl portalPreferencesImpl) {
@@ -42,6 +44,11 @@ public class PortalPreferencesWrapper
 	@Override
 	public Map<String, String[]> getMap() {
 		return _portalPreferencesImpl.getMap(null);
+	}
+
+	@Override
+	public long getMvccVersion() {
+		return _portalPreferencesImpl.getMvccVersion();
 	}
 
 	@Override
@@ -71,6 +78,11 @@ public class PortalPreferencesWrapper
 	@Override
 	public void reset(String key) {
 		_portalPreferencesImpl.reset(null, key);
+	}
+
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
