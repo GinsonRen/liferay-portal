@@ -59,8 +59,4 @@ public interface PortalPreferenceValue
 
 			};
 
-	public String getValue();
-
-	public void setValue(String value);
-
 }

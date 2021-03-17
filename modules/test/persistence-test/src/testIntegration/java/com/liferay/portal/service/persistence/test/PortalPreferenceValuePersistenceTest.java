@@ -249,7 +249,8 @@ public class PortalPreferenceValuePersistenceTest {
 		return OrderByComparatorFactoryUtil.create(
 			"PortalPreferenceValue", "mvccVersion", true,
 			"portalPreferenceValueId", true, "portalPreferencesId", true,
-			"index", true, "key", true, "namespace", true, "smallValue", true);
+			"index", true, "key", true, "largeValue", true, "namespace", true,
+			"smallValue", true);
 	}
 
 	@Test

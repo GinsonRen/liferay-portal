@@ -144,9 +144,7 @@ public class PortalPreferenceValueCacheModel
 	}
 
 	@Override
-	public void readExternal(ObjectInput objectInput)
-		throws ClassNotFoundException, IOException {
-
+	public void readExternal(ObjectInput objectInput) throws IOException {
 		mvccVersion = objectInput.readLong();
 
 		portalPreferenceValueId = objectInput.readLong();
@@ -155,7 +153,7 @@ public class PortalPreferenceValueCacheModel
 
 		index = objectInput.readInt();
 		key = objectInput.readUTF();
-		largeValue = (String)objectInput.readObject();
+		largeValue = objectInput.readUTF();
 		namespace = objectInput.readUTF();
 		smallValue = objectInput.readUTF();
 	}
@@ -178,10 +176,10 @@ public class PortalPreferenceValueCacheModel
 		}
 
 		if (largeValue == null) {
-			objectOutput.writeObject("");
+			objectOutput.writeUTF("");
 		}
 		else {
-			objectOutput.writeObject(largeValue);
+			objectOutput.writeUTF(largeValue);
 		}
 
 		if (namespace == null) {
