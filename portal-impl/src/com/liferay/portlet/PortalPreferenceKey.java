@@ -70,14 +70,6 @@ public class PortalPreferenceKey {
 		return _namespace;
 	}
 
-	public String getNamespacedKey() {
-		if (_namespace == null) {
-			return _key;
-		}
-
-		return StringBundler.concat(_namespace, StringPool.POUND, _key);
-	}
-
 	@Override
 	public int hashCode() {
 		int hash = HashUtil.hash(0, _namespace);
