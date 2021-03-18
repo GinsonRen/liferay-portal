@@ -17,15 +17,22 @@ package com.liferay.portal.service.impl;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.model.PortalPreferenceValue;
 import com.liferay.portal.kernel.model.PortalPreferences;
+import com.liferay.portal.kernel.service.SQLStateAcceptor;
 import com.liferay.portal.kernel.service.persistence.PortalPreferenceValuePersistence;
+import com.liferay.portal.kernel.spring.aop.Property;
+import com.liferay.portal.kernel.spring.aop.Retry;
 import com.liferay.portal.service.base.PortalPreferenceValueLocalServiceBaseImpl;
 import com.liferay.portlet.PortalPreferenceKey;
 import com.liferay.portlet.PortalPreferencesImpl;
+import com.liferay.portlet.internal.PreferenceUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
 
 /**
  * @author Preston Crary
@@ -79,6 +86,133 @@ public class PortalPreferenceValueLocalServiceImpl
 			preferenceMap, signedIn);
 	}
 
+	@Override
+	public String[] getPreferenceValues(
+		long ownerId, int ownerType, String namespace, String key,
+		String[] defaultValues) {
+
+		PortalPreferences portalPreferences =
+			portalPreferencesPersistence.fetchByO_O(ownerId, ownerType);
+
+		if (portalPreferences == null) {
+			return defaultValues;
+		}
+
+		List<PortalPreferenceValue> portalPreferenceValues =
+			portalPreferenceValuePersistence.findByP_K_N(
+				portalPreferences.getPortalPreferencesId(), key, namespace);
+
+		String[] values = _getActualValues(portalPreferenceValues);
+
+		if (values == null) {
+			return defaultValues;
+		}
+
+		return values;
+	}
+
+	@Override
+	@Retry(
+		acceptor = SQLStateAcceptor.class,
+		properties = {
+			@Property(
+				name = SQLStateAcceptor.SQLSTATE,
+				value = SQLStateAcceptor.SQLSTATE_INTEGRITY_CONSTRAINT_VIOLATION + "," + SQLStateAcceptor.SQLSTATE_TRANSACTION_ROLLBACK
+			)
+		}
+	)
+	public void updatePreferenceValues(
+		long ownerId, int ownerType, String namespace, String key,
+		Function<String[], String[]> valuesFunction) {
+
+		PortalPreferences portalPreferences =
+			portalPreferencesPersistence.fetchByO_O(ownerId, ownerType);
+
+		if (portalPreferences == null) {
+			long portalPreferencesId = counterLocalService.increment();
+
+			portalPreferences = portalPreferencesPersistence.create(
+				portalPreferencesId);
+
+			portalPreferences.setOwnerId(ownerId);
+			portalPreferences.setOwnerType(ownerType);
+
+			portalPreferences = portalPreferencesPersistence.update(
+				portalPreferences);
+		}
+
+		List<PortalPreferenceValue> portalPreferenceValues =
+			portalPreferenceValuePersistence.findByP_K_N(
+				portalPreferences.getPortalPreferencesId(), key, namespace);
+
+		String[] originalValues = _getActualValues(portalPreferenceValues);
+
+		String[] newValues = valuesFunction.apply(originalValues);
+
+		if (newValues == null) {
+			for (PortalPreferenceValue portalPreferenceValue :
+					portalPreferenceValues) {
+
+				portalPreferenceValuePersistence.remove(portalPreferenceValue);
+			}
+
+			return;
+		}
+
+		if (Arrays.equals(originalValues, newValues)) {
+			return;
+		}
+
+		newValues = PreferenceUtil.getXMLSafeValues(newValues);
+
+		long batchCounter = 0;
+
+		if (newValues.length > portalPreferenceValues.size()) {
+			int newCount = newValues.length - portalPreferenceValues.size();
+
+			batchCounter = counterLocalService.increment(
+				PortalPreferenceValue.class.getName(), newCount);
+
+			batchCounter -= newCount;
+		}
+
+		for (int i = 0; i < newValues.length; i++) {
+			String value = newValues[i];
+
+			if (portalPreferenceValues.size() > i) {
+				PortalPreferenceValue portalPreferenceValue =
+					portalPreferenceValues.get(i);
+
+				if (!Objects.equals(
+						newValues[i], portalPreferenceValue.getValue())) {
+
+					portalPreferenceValue.setValue(value);
+
+					portalPreferenceValuePersistence.update(
+						portalPreferenceValue);
+				}
+			}
+			else {
+				PortalPreferenceValue portalPreferenceValue =
+					portalPreferenceValuePersistence.create(++batchCounter);
+
+				portalPreferenceValue.setPortalPreferencesId(
+					portalPreferences.getPortalPreferencesId());
+				portalPreferenceValue.setIndex(i);
+				portalPreferenceValue.setKey(key);
+				portalPreferenceValue.setNamespace(namespace);
+				portalPreferenceValue.setValue(value);
+
+				portalPreferenceValuePersistence.update(portalPreferenceValue);
+			}
+		}
+
+		for (int i = newValues.length; i < portalPreferenceValues.size(); i++) {
+			portalPreferenceValuePersistence.remove(
+				portalPreferenceValues.get(i));
+		}
+	}
+
 	protected static Map<PortalPreferenceKey, List<PortalPreferenceValue>>
 		getPortalPreferenceValuesMap(
 			PortalPreferenceValuePersistence portalPreferenceValuePersistence,
@@ -103,6 +237,25 @@ public class PortalPreferenceValueLocalServiceImpl
 		}
 
 		return portalPreferenceValuesMap;
+	}
+
+	private String[] _getActualValues(
+		List<PortalPreferenceValue> portalPreferenceValues) {
+
+		if (portalPreferenceValues.isEmpty()) {
+			return null;
+		}
+
+		String[] values = new String[portalPreferenceValues.size()];
+
+		for (int i = 0; i < portalPreferenceValues.size(); i++) {
+			PortalPreferenceValue portalPreferenceValue =
+				portalPreferenceValues.get(i);
+
+			values[i] = portalPreferenceValue.getValue();
+		}
+
+		return PreferenceUtil.getActualValues(values);
 	}
 
 }
