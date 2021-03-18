@@ -327,6 +327,15 @@ public class PortalPreferenceValueLocalServiceWrapper
 			getPortalPreferenceValuesCount();
 	}
 
+	@Override
+	public java.lang.String[] getPreferenceValues(
+		long ownerId, int ownerType, java.lang.String namespace,
+		java.lang.String key, java.lang.String[] defaultValues) {
+
+		return _portalPreferenceValueLocalService.getPreferenceValues(
+			ownerId, ownerType, namespace, key, defaultValues);
+	}
+
 	/**
 	 * Updates the portal preference value in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
@@ -345,6 +354,17 @@ public class PortalPreferenceValueLocalServiceWrapper
 
 		return _portalPreferenceValueLocalService.updatePortalPreferenceValue(
 			portalPreferenceValue);
+	}
+
+	@Override
+	public void updatePreferenceValues(
+		long ownerId, int ownerType, java.lang.String namespace,
+		java.lang.String key,
+		java.util.function.Function<java.lang.String[], java.lang.String[]>
+			valuesFunction) {
+
+		_portalPreferenceValueLocalService.updatePreferenceValues(
+			ownerId, ownerType, namespace, key, valuesFunction);
 	}
 
 	@Override
