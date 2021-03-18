@@ -1830,6 +1830,10 @@
 			<finder-column name="namespace" />
 			<finder-column name="smallValue" />
 		</finder>
+
+		<!-- References -->
+
+		<reference entity="PortalPreferences" package-path="com.liferay.portal" />
 	</entity>
 	<entity local-service="true" name="Portlet" remote-service="true">
 
