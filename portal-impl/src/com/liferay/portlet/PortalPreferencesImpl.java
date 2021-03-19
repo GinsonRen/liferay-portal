@@ -34,7 +34,6 @@ import com.liferay.portal.kernel.xml.simple.Element;
 import com.liferay.portal.service.impl.PortalPreferenceValueLocalServiceImpl;
 import com.liferay.portlet.internal.PreferenceUtil;
 
-import java.io.IOException;
 import java.io.Serializable;
 
 import java.util.Arrays;
@@ -393,16 +392,6 @@ public class PortalPreferencesImpl
 		return preferences.size();
 	}
 
-	public void store() throws IOException {
-		try {
-			PortalPreferencesLocalServiceUtil.updatePreferences(
-				getOwnerId(), getOwnerType(), this);
-		}
-		catch (Throwable throwable) {
-			throw new IOException(throwable);
-		}
-	}
-
 	protected String toXML() {
 		Map<PortalPreferenceKey, String[]> preferences = getPreferences();
 
@@ -512,7 +501,8 @@ public class PortalPreferencesImpl
 			try {
 				runnable.run();
 
-				store();
+				PortalPreferencesLocalServiceUtil.updatePreferences(
+					getOwnerId(), getOwnerType(), this);
 
 				return;
 			}
