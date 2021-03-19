@@ -20,8 +20,9 @@ import com.liferay.portal.kernel.dao.orm.EntityCache;
 import com.liferay.portal.kernel.dao.orm.FinderCache;
 import com.liferay.portal.kernel.portlet.PortalPreferences;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactory;
+import com.liferay.portal.kernel.service.PortalPreferenceValueLocalService;
+import com.liferay.portal.kernel.service.PortalPreferenceValueLocalServiceUtil;
 import com.liferay.portal.kernel.service.PortalPreferencesLocalService;
-import com.liferay.portal.kernel.service.PortalPreferencesLocalServiceUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.SynchronousInvocationHandler;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
@@ -46,6 +47,7 @@ import java.util.ConcurrentModificationException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.FutureTask;
+import java.util.function.Function;
 
 import org.hibernate.util.JDBCExceptionReporter;
 
@@ -74,13 +76,13 @@ public class PortalPreferencesImplTest {
 
 	@BeforeClass
 	public static void setUpClass() throws NoSuchMethodException {
-		_updatePreferencesMethod =
-			PortalPreferencesLocalService.class.getMethod(
-				"updatePreferences", long.class, int.class,
-				PortalPreferences.class);
+		_updatePreferenceValuesMethod =
+			PortalPreferenceValueLocalService.class.getMethod(
+				"updatePreferenceValues", long.class, int.class, String.class,
+				String.class, Function.class);
 
 		_aopInvocationHandler = ProxyUtil.fetchInvocationHandler(
-			_portalPreferencesLocalService, AopInvocationHandler.class);
+			_portalPreferenceValueLocalService, AopInvocationHandler.class);
 
 		_transactionInterceptor = ReflectionTestUtil.getFieldValue(
 			_aopInvocationHandler, "_transactionInterceptor");
@@ -349,10 +351,10 @@ public class PortalPreferencesImplTest {
 		throws Exception {
 
 		ReflectionTestUtil.setFieldValue(
-			PortalPreferencesLocalServiceUtil.class, "_service",
+			PortalPreferenceValueLocalServiceUtil.class, "_service",
 			ProxyUtil.newProxyInstance(
-				PortalPreferencesLocalService.class.getClassLoader(),
-				new Class<?>[] {PortalPreferencesLocalService.class},
+				PortalPreferenceValueLocalService.class.getClassLoader(),
+				new Class<?>[] {PortalPreferenceValueLocalService.class},
 				new SynchronousInvocationHandler(
 					2,
 					() -> {
@@ -364,10 +366,11 @@ public class PortalPreferencesImplTest {
 							_aopInvocationHandler.getTarget());
 
 						ReflectionTestUtil.setFieldValue(
-							PortalPreferencesLocalServiceUtil.class, "_service",
-							_portalPreferencesLocalService);
+							PortalPreferenceValueLocalServiceUtil.class,
+							"_service", _portalPreferenceValueLocalService);
 					},
-					_updatePreferencesMethod, _portalPreferencesLocalService)));
+					_updatePreferenceValuesMethod,
+					_portalPreferenceValueLocalService)));
 
 		Thread thread1 = new Thread(futureTask1, "Update Thread 1");
 
@@ -458,9 +461,13 @@ public class PortalPreferencesImplTest {
 	@Inject
 	private static PortalPreferencesLocalService _portalPreferencesLocalService;
 
+	@Inject
+	private static PortalPreferenceValueLocalService
+		_portalPreferenceValueLocalService;
+
 	private static ThreadLocal<Boolean> _synchronizeThreadLocal;
 	private static TransactionInterceptor _transactionInterceptor;
-	private static Method _updatePreferencesMethod;
+	private static Method _updatePreferenceValuesMethod;
 
 	@Inject
 	private EntityCache _entityCache;
