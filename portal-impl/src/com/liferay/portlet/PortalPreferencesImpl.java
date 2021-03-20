@@ -19,7 +19,6 @@ import com.liferay.portal.kernel.model.PortletConstants;
 import com.liferay.portal.kernel.portlet.PortalPreferences;
 import com.liferay.portal.kernel.service.PortalPreferenceValueLocalServiceUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
-import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.simple.Element;
 import com.liferay.portlet.internal.PreferenceUtil;
@@ -33,7 +32,6 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.hibernate.StaleObjectStateException;
@@ -289,13 +287,8 @@ public class PortalPreferencesImpl
 
 		String[] oldValues = _getValues(keyEntry, null);
 
-		if (oldValues != null) {
-			Set<String> valuesSet = SetUtil.fromArray(values);
-			Set<String> oldValuesSet = SetUtil.fromArray(oldValues);
-
-			if (valuesSet.equals(oldValuesSet)) {
-				return;
-			}
+		if (Arrays.equals(oldValues, values)) {
+			return;
 		}
 
 		Map<PortalPreferenceKey, String[]> modifiedPreferences =
