@@ -15,6 +15,7 @@
 package com.liferay.portal.kernel.test;
 
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import java.util.concurrent.CyclicBarrier;
@@ -53,7 +54,12 @@ public class SynchronousInvocationHandler implements InvocationHandler {
 			_cyclicBarrier.await();
 		}
 
-		return method.invoke(_target, args);
+		try {
+			return method.invoke(_target, args);
+		}
+		catch (InvocationTargetException invocationTargetException) {
+			throw invocationTargetException.getTargetException();
+		}
 	}
 
 	private static final ThreadLocal<Boolean> _synchronizeThreadLocal =

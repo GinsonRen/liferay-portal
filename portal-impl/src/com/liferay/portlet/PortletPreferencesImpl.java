@@ -15,7 +15,6 @@
 package com.liferay.portlet;
 
 import com.liferay.petra.lang.HashUtil;
-import com.liferay.petra.xml.XMLUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -26,6 +25,7 @@ import com.liferay.portal.kernel.service.PortletPreferencesLocalServiceUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.xml.simple.Element;
+import com.liferay.portlet.internal.PreferenceUtil;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -123,7 +123,8 @@ public class PortletPreferencesImpl
 
 			Preference preference = entry.getValue();
 
-			map.put(key, _getActualValues(preference.getValues()));
+			map.put(
+				key, PreferenceUtil.getActualValues(preference.getValues()));
 		}
 
 		return map;
@@ -176,7 +177,7 @@ public class PortletPreferencesImpl
 			return def;
 		}
 
-		return _getActualValue(values[0]);
+		return PreferenceUtil.getActualValue(values[0]);
 	}
 
 	@Override
@@ -199,7 +200,7 @@ public class PortletPreferencesImpl
 			return def;
 		}
 
-		return _getActualValues(values);
+		return PreferenceUtil.getActualValues(values);
 	}
 
 	@Override
@@ -278,7 +279,7 @@ public class PortletPreferencesImpl
 			throw new IllegalArgumentException();
 		}
 
-		value = _getXMLSafeValue(value);
+		value = PreferenceUtil.getXMLSafeValue(value);
 
 		Map<String, Preference> modifiedPreferences = getModifiedPreferences();
 
@@ -299,7 +300,7 @@ public class PortletPreferencesImpl
 			throw new IllegalArgumentException();
 		}
 
-		values = _getXMLSafeValues(values);
+		values = PreferenceUtil.getXMLSafeValues(values);
 
 		Map<String, Preference> modifiedPreferences = getModifiedPreferences();
 
@@ -404,81 +405,16 @@ public class PortletPreferencesImpl
 		return portletPreferencesElement.toXMLString();
 	}
 
-	private String _getActualValue(String value) {
-		if ((value == null) || value.equals(_NULL_VALUE)) {
-			return null;
-		}
-
-		return XMLUtil.fromCompactSafe(value);
-	}
-
-	private String[] _getActualValues(String[] values) {
-		if (values == null) {
-			return null;
-		}
-
-		if (values.length == 1) {
-			String actualValue = _getActualValue(values[0]);
-
-			if (actualValue == null) {
-				return null;
-			}
-			else if (actualValue.equals(_NULL_ELEMENT)) {
-				return new String[] {null};
-			}
-			else {
-				return new String[] {actualValue};
-			}
-		}
-
-		String[] actualValues = new String[values.length];
-
-		for (int i = 0; i < actualValues.length; i++) {
-			actualValues[i] = _getActualValue(values[i]);
-		}
-
-		return actualValues;
-	}
-
-	private String _getXMLSafeValue(String value) {
-		if (value == null) {
-			return _NULL_VALUE;
-		}
-
-		return XMLUtil.toCompactSafe(value);
-	}
-
-	private String[] _getXMLSafeValues(String[] values) {
-		if (values == null) {
-			return new String[] {_NULL_VALUE};
-		}
-
-		if ((values.length == 1) && (values[0] == null)) {
-			return new String[] {_NULL_ELEMENT};
-		}
-
-		String[] xmlSafeValues = new String[values.length];
-
-		for (int i = 0; i < xmlSafeValues.length; i++) {
-			xmlSafeValues[i] = _getXMLSafeValue(values[i]);
-		}
-
-		return xmlSafeValues;
-	}
-
 	private boolean _isNull(String[] values) {
 		if (ArrayUtil.isEmpty(values) ||
-			((values.length == 1) && (_getActualValue(values[0]) == null))) {
+			((values.length == 1) &&
+			 (PreferenceUtil.getActualValue(values[0]) == null))) {
 
 			return true;
 		}
 
 		return false;
 	}
-
-	private static final String _NULL_ELEMENT = "NULL_ELEMENT";
-
-	private static final String _NULL_VALUE = "NULL_VALUE";
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		PortletPreferencesImpl.class);

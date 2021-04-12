@@ -14,6 +14,8 @@
 
 package com.liferay.portlet;
 
+import com.liferay.portal.kernel.service.PortalPreferencesLocalServiceUtil;
+
 import java.io.IOException;
 import java.io.Serializable;
 
@@ -85,7 +87,14 @@ public class PortalPreferencesWrapper
 
 	@Override
 	public void store() throws IOException {
-		_portalPreferencesImpl.store();
+		try {
+			PortalPreferencesLocalServiceUtil.updatePreferences(
+				_portalPreferencesImpl.getOwnerId(),
+				_portalPreferencesImpl.getOwnerType(), _portalPreferencesImpl);
+		}
+		catch (Throwable throwable) {
+			throw new IOException(throwable);
+		}
 	}
 
 	private final PortalPreferencesImpl _portalPreferencesImpl;

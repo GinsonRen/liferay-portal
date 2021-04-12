@@ -26,6 +26,8 @@ import com.liferay.portal.kernel.model.PortalPreferenceValue;
 import com.liferay.portal.kernel.model.PortalPreferences;
 import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
+import com.liferay.portal.kernel.spring.aop.Property;
+import com.liferay.portal.kernel.spring.aop.Retry;
 import com.liferay.portal.kernel.transaction.Isolation;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
@@ -34,6 +36,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import java.io.Serializable;
 
 import java.util.List;
+import java.util.function.Function;
 
 import org.osgi.annotation.versioning.ProviderType;
 
@@ -262,6 +265,11 @@ public interface PortalPreferenceValueLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getPortalPreferenceValuesCount();
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public String[] getPreferenceValues(
+		long ownerId, int ownerType, String namespace, String key,
+		String[] defaultValues);
+
 	/**
 	 * Updates the portal preference value in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
@@ -275,5 +283,18 @@ public interface PortalPreferenceValueLocalService
 	@Indexable(type = IndexableType.REINDEX)
 	public PortalPreferenceValue updatePortalPreferenceValue(
 		PortalPreferenceValue portalPreferenceValue);
+
+	@Retry(
+		acceptor = SQLStateAcceptor.class,
+		properties = {
+			@Property(
+				name = SQLStateAcceptor.SQLSTATE,
+				value = SQLStateAcceptor.SQLSTATE_INTEGRITY_CONSTRAINT_VIOLATION + "," + SQLStateAcceptor.SQLSTATE_TRANSACTION_ROLLBACK
+			)
+		}
+	)
+	public void updatePreferenceValues(
+		long ownerId, int ownerType, String namespace, String key,
+		Function<String[], String[]> valuesFunction);
 
 }
