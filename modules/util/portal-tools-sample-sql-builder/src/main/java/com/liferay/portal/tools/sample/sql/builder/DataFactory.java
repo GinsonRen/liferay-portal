@@ -6460,6 +6460,7 @@ public class DataFactory {
 
 		layoutModel.setLayoutId(simpleCounter.get());
 		layoutModel.setParentLayoutId(parentLayoutId);
+		layoutModel.setPrivateLayout(privateLayout);
 		layoutModel.setName(
 			"<?xml version=\"1.0\"?><root><name>" + name + "</name></root>");
 		layoutModel.setType(LayoutConstants.TYPE_PORTLET);
@@ -6481,7 +6482,6 @@ public class DataFactory {
 		if (privateLayout) {
 			typeSettingsUnicodeProperties.setProperty(
 				"privateLayout", String.valueOf(privateLayout));
-			layoutModel.setPrivateLayout(true);
 		}
 
 		layoutModel.setTypeSettings(
