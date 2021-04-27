@@ -2326,7 +2326,23 @@ public class DataFactory {
 			_newCounterModel(
 				SocialActivity.class.getName(), _socialActivityCounter.get()));
 
-		counterModels.addAll(_newLayoutCounterModels());
+		long totalLayoutId = 0;
+
+		for (Map.Entry<String, SimpleCounter> entry :
+				_layoutCounters.entrySet()) {
+
+			SimpleCounter simpleCounter = entry.getValue();
+
+			long currentLayoutId = simpleCounter.get();
+
+			counterModels.add(
+				_newCounterModel(entry.getKey(), currentLayoutId));
+
+			totalLayoutId += currentLayoutId;
+		}
+
+		counterModels.add(
+			_newCounterModel(Layout.class.getName(), totalLayoutId + 1));
 
 		return counterModels;
 	}
@@ -7284,30 +7300,6 @@ public class DataFactory {
 		counterModel.setCurrentId(currentId);
 
 		return counterModel;
-	}
-
-	private List<CounterModel> _newLayoutCounterModels() {
-		List<CounterModel> layoutCounterModels = new ArrayList<>();
-
-		long totalLayoutId = 0;
-
-		for (Map.Entry<String, SimpleCounter> entry :
-				_layoutCounters.entrySet()) {
-
-			SimpleCounter simpleCounter = entry.getValue();
-
-			long currentLayoutId = simpleCounter.get();
-
-			layoutCounterModels.add(
-				_newCounterModel(entry.getKey(), currentLayoutId));
-
-			totalLayoutId += currentLayoutId;
-		}
-
-		layoutCounterModels.add(
-			_newCounterModel(Layout.class.getName(), totalLayoutId + 1));
-
-		return layoutCounterModels;
 	}
 
 	private String _readFile(InputStream inputStream) throws Exception {
