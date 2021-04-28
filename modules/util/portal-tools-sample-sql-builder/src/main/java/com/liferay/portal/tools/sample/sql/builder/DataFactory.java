@@ -355,6 +355,8 @@ import java.lang.reflect.Method;
 
 import java.math.BigDecimal;
 
+import java.net.URL;
+
 import java.sql.Types;
 
 import java.text.Format;
@@ -6979,6 +6981,22 @@ public class DataFactory {
 		catch (ReflectiveOperationException reflectiveOperationException) {
 			ReflectionUtil.throwException(reflectiveOperationException);
 		}
+	}
+
+	private InputStream _getFragmentComponentInputStream(
+			String fragmentName, String suffix)
+		throws Exception {
+
+		Class<?> clazz = getClass();
+
+		ClassLoader classLoader = clazz.getClassLoader();
+
+		URL url = classLoader.getResource(
+			StringBundler.concat(
+				"com/liferay/fragment/collection/contributor/basic/component",
+				"/dependencies/", fragmentName, "/index.", suffix));
+
+		return url.openStream();
 	}
 
 	private String _getMBDiscussionCombinedClassName(Class<?> clazz) {
