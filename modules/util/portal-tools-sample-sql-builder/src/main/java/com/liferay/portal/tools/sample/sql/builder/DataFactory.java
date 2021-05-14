@@ -4457,6 +4457,8 @@ public class DataFactory {
 		// Other fields
 
 		layoutFriendlyURLEntryModel.setPlid(layoutModel.getPlid());
+		layoutFriendlyURLEntryModel.setPrivateLayout(
+			layoutModel.getPrivateLayout());
 		layoutFriendlyURLEntryModel.setFriendlyURL(
 			layoutModel.getFriendlyURL());
 		layoutFriendlyURLEntryModel.setLanguageId("en_US");
