@@ -2816,8 +2816,8 @@ public class DataFactory {
 			StringBundler.concat(
 				"<?xml version=\"1.0\" encoding=\"UTF-8\"?><root",
 				"available-locales=\"en_US\" default-locale=\"en_US\">",
-				"<Title language-id=\"en_US\">Option Name ", index,
-				"</Title></root>"));
+				"<Name language-id=\"en_US\">Option Name ", index,
+				"</Name></root>"));
 		cpOptionModel.setDescription("Option Description");
 		cpOptionModel.setDDMFormFieldTypeName(ddmFormFieldTypeName);
 		cpOptionModel.setFacetable(true);
@@ -5036,15 +5036,6 @@ public class DataFactory {
 	}
 
 	public List<ResourcePermissionModel> newResourcePermissionModels(
-		AccountEntryUserRelModel accountEntryUserRelModel) {
-
-		return newResourcePermissionModels(
-			AccountEntryUserRel.class.getName(),
-			String.valueOf(accountEntryUserRelModel.getAccountEntryUserRelId()),
-			_sampleUserId);
-	}
-
-	public List<ResourcePermissionModel> newResourcePermissionModels(
 		AssetCategoryModel assetCategoryModel) {
 
 		return newResourcePermissionModels(
@@ -5094,15 +5085,6 @@ public class DataFactory {
 			String.valueOf(
 				commerceInventoryWarehouseModel.
 					getCommerceInventoryWarehouseId()),
-			_sampleUserId);
-	}
-
-	public List<ResourcePermissionModel> newResourcePermissionModels(
-		CommerceOrderModel commerceOrderModel) {
-
-		return newResourcePermissionModels(
-			CommerceOrder.class.getName(),
-			String.valueOf(commerceOrderModel.getCommerceOrderId()),
 			_sampleUserId);
 	}
 
