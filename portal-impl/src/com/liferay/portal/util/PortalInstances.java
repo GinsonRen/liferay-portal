@@ -270,7 +270,7 @@ public class PortalInstances {
 			CompanyThreadLocal.setCompanyId(companyId);
 
 			try {
-				CompanyLocalServiceUtil.checkCompany(webId);
+				CompanyLocalServiceUtil.checkCompany(webId, webId, false);
 			}
 			catch (Exception exception) {
 				_log.error(exception, exception);

@@ -24,6 +24,7 @@ import com.liferay.petra.sql.dsl.DSLQueryFactoryUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.db.partition.DBPartitionUtil;
+import com.liferay.portal.events.StartupHelperUtil;
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.Property;
@@ -252,7 +253,7 @@ public class CompanyLocalServiceImpl extends CompanyLocalServiceBaseImpl {
 				return company;
 			}
 
-			company = _checkCompany(company, mx);
+			company = _checkCompany(company, mx, true);
 
 			TransactionCommitCallbackUtil.registerCallback(
 				new Callable<Void>() {
@@ -338,7 +339,31 @@ public class CompanyLocalServiceImpl extends CompanyLocalServiceBaseImpl {
 
 		Company company = getCompanyByWebId(webId);
 
-		return _checkCompany(company, mx);
+		return _checkCompany(company, mx, true);
+	}
+
+	/**
+	 * Returns the company with the web domain and mail domain.
+	 *
+	 * The method goes through a series of checks to ensure that the company
+	 * contains default users, groups, etc.
+	 *
+	 * @param  webId the company's web domain
+	 * @param  mx the company's mail domain
+	 * @param  checkPortlet whether need to check Portlet
+	 * @return the company with the web domain and mail domain
+	 */
+	@Override
+	@Transactional(
+		isolation = Isolation.PORTAL,
+		rollbackFor = {PortalException.class, SystemException.class}
+	)
+	public Company checkCompany(String webId, String mx, boolean checkPortlet)
+		throws PortalException {
+
+		Company company = getCompanyByWebId(webId);
+
+		return _checkCompany(company, mx, checkPortlet);
 	}
 
 	/**
@@ -1917,7 +1942,8 @@ public class CompanyLocalServiceImpl extends CompanyLocalServiceBaseImpl {
 		}
 	}
 
-	private Company _checkCompany(Company company, String mx)
+	private Company _checkCompany(
+			Company company, String mx, boolean checkPortlet)
 		throws PortalException {
 
 		Locale localeThreadLocalDefaultLocale =
@@ -1997,7 +2023,9 @@ public class CompanyLocalServiceImpl extends CompanyLocalServiceBaseImpl {
 
 			// Portlets
 
-			portletLocalService.checkPortlets(company.getCompanyId());
+			if (checkPortlet || StartupHelperUtil.isDBNew()) {
+				portletLocalService.checkPortlets(company.getCompanyId());
+			}
 
 			final Company finalCompany = company;
 
