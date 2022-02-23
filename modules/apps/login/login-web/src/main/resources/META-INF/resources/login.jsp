@@ -30,6 +30,14 @@
 		%>
 
 		<liferay-ui:message arguments="<%= signedInAs %>" key="you-are-signed-in-as-x" translateArguments="<%= false %>" />
+
+		<%
+		try {
+			Thread.sleep(2000);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		%>
 	</c:when>
 	<c:otherwise>
 
