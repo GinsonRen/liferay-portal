@@ -225,6 +225,10 @@ public class AnalyticsReportsProductNavigationControlMenuEntry
 			(ThemeDisplay)httpServletRequest.getAttribute(
 				WebKeys.THEME_DISPLAY);
 
+		if (themeDisplay.isSignedIn()) {
+			return false;
+		}
+
 		if (!AnalyticsReportsUtil.isShowAnalyticsReportsPanel(
 				themeDisplay.getCompanyId(), httpServletRequest)) {
 
