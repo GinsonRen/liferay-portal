@@ -17,7 +17,6 @@ package com.liferay.portal.kernel.security.pwd;
 import com.liferay.portal.kernel.exception.PwdEncryptorException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.ServiceProxyFactory;
 
 /**
  * @author Brian Wing Shun Chan
@@ -91,12 +90,17 @@ public class PasswordEncryptorUtil {
 		return _passwordEncryptor.getDefaultPasswordAlgorithmType();
 	}
 
+	public PasswordEncryptor getPasswordEncryptor() {
+		return _passwordEncryptor;
+	}
+
+	public void setPasswordEncryptor(PasswordEncryptor passwordEncryptor) {
+		_passwordEncryptor = passwordEncryptor;
+	}
+
 	private static final Log _log = LogFactoryUtil.getLog(
 		PasswordEncryptorUtil.class);
 
-	private static volatile PasswordEncryptor _passwordEncryptor =
-		ServiceProxyFactory.newServiceTrackedInstance(
-			PasswordEncryptor.class, PasswordEncryptorUtil.class,
-			"_passwordEncryptor", "(composite=true)", true);
+	private static PasswordEncryptor _passwordEncryptor;
 
 }

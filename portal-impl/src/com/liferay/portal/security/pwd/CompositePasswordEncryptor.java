@@ -12,10 +12,8 @@
  * details.
  */
 
-package com.liferay.portal.security.password.encryptor.internal;
+package com.liferay.portal.security.pwd;
 
-import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
-import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapFactory;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
@@ -28,15 +26,13 @@ import com.liferay.portal.kernel.util.ClassUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.util.PropsValues;
 
-import org.osgi.framework.BundleContext;
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Michael C. Han
  */
-@Component(property = "composite=true", service = PasswordEncryptor.class)
 public class CompositePasswordEncryptor
 	extends BasePasswordEncryptor implements PasswordEncryptor {
 
@@ -131,15 +127,17 @@ public class CompositePasswordEncryptor
 		throw new UnsupportedOperationException();
 	}
 
-	@Activate
-	protected void activate(BundleContext bundleContext) {
-		_passwordEncryptors = ServiceTrackerMapFactory.openSingleValueMap(
-			bundleContext, PasswordEncryptor.class, "type");
-	}
+	public void setPasswordEncryptors(
+		List<PasswordEncryptor> passwordEncryptors) {
 
-	@Deactivate
-	protected void deactivate() {
-		_passwordEncryptors.close();
+		for (PasswordEncryptor passwordEncryptor : passwordEncryptors) {
+			if (_log.isDebugEnabled()) {
+				_log.debug("Registering " + passwordEncryptor);
+			}
+
+			_passwordEncryptors.put(
+				passwordEncryptor.getAlgorithmType(), passwordEncryptor);
+		}
 	}
 
 	private String _getAlgorithmName(String algorithm) {
@@ -160,15 +158,15 @@ public class CompositePasswordEncryptor
 		PasswordEncryptor passwordEncryptor = null;
 
 		if (algorithm.startsWith(PasswordEncryptorUtil.TYPE_BCRYPT)) {
-			passwordEncryptor = _passwordEncryptors.getService(
+			passwordEncryptor = _passwordEncryptors.get(
 				PasswordEncryptorUtil.TYPE_BCRYPT);
 		}
 		else if (algorithm.startsWith(PasswordEncryptorUtil.TYPE_PBKDF2)) {
-			passwordEncryptor = _passwordEncryptors.getService(
+			passwordEncryptor = _passwordEncryptors.get(
 				PasswordEncryptorUtil.TYPE_PBKDF2);
 		}
 		else {
-			passwordEncryptor = _passwordEncryptors.getService(algorithm);
+			passwordEncryptor = _passwordEncryptors.get(algorithm);
 		}
 
 		if (passwordEncryptor == null) {
@@ -176,7 +174,7 @@ public class CompositePasswordEncryptor
 				_log.debug("No password encryptor found for " + algorithm);
 			}
 
-			passwordEncryptor = _passwordEncryptors.getService(
+			passwordEncryptor = _passwordEncryptors.get(
 				PasswordEncryptorUtil.TYPE_DEFAULT);
 		}
 
@@ -193,6 +191,7 @@ public class CompositePasswordEncryptor
 	private static final Log _log = LogFactoryUtil.getLog(
 		CompositePasswordEncryptor.class);
 
-	private ServiceTrackerMap<String, PasswordEncryptor> _passwordEncryptors;
+	private final Map<String, PasswordEncryptor> _passwordEncryptors =
+		new HashMap<>();
 
 }
