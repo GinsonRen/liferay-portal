@@ -60,6 +60,11 @@ public class CryptPasswordEncryptor
 		}
 	}
 
+	@Override
+	public String getAlgorithmType() {
+		return PasswordEncryptorUtil.TYPE_UFC_CRYPT;
+	}
+
 	protected byte[] getSalt(String encryptedPassword)
 		throws PwdEncryptorException {
 

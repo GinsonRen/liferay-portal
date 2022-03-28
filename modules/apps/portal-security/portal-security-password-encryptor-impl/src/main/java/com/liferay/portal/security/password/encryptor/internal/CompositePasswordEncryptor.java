@@ -126,6 +126,11 @@ public class CompositePasswordEncryptor
 			StringPool.CLOSE_CURLY_BRACE, newEncryptedPassword);
 	}
 
+	@Override
+	public String getAlgorithmType() {
+		throw new UnsupportedOperationException();
+	}
+
 	@Activate
 	protected void activate(BundleContext bundleContext) {
 		_passwordEncryptors = ServiceTrackerMapFactory.openSingleValueMap(

@@ -29,6 +29,8 @@ public interface PasswordEncryptor {
 			String encryptedPassword)
 		throws PwdEncryptorException;
 
+	public String getAlgorithmType();
+
 	public String getDefaultPasswordAlgorithmType();
 
 }
