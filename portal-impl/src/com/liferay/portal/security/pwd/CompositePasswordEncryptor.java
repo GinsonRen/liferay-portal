@@ -37,6 +37,13 @@ import java.util.Map;
 public class CompositePasswordEncryptor
 	extends BasePasswordEncryptor implements PasswordEncryptor {
 
+	public void afterPropertiesSet() {
+		if (_defaultAlgorithmPasswordEncryptor == null) {
+			_defaultAlgorithmPasswordEncryptor = _select(
+				getDefaultPasswordAlgorithmType());
+		}
+	}
+
 	@Override
 	public String encrypt(
 			String algorithm, String plainTextPassword,
@@ -212,6 +219,7 @@ public class CompositePasswordEncryptor
 	private static final Log _log = LogFactoryUtil.getLog(
 		CompositePasswordEncryptor.class);
 
+	private PasswordEncryptor _defaultAlgorithmPasswordEncryptor;
 	private PasswordEncryptor _defaultPasswordEncryptor;
 	private final Map<String, PasswordEncryptor> _passwordEncryptors =
 		new HashMap<>();
