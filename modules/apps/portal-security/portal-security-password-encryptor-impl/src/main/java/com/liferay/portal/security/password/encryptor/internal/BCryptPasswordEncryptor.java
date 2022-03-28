@@ -15,6 +15,7 @@
 package com.liferay.portal.security.password.encryptor.internal;
 
 import com.liferay.portal.kernel.security.pwd.PasswordEncryptor;
+import com.liferay.portal.kernel.security.pwd.PasswordEncryptorUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -30,7 +31,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Tomas Polesovsky
  */
 @Component(
-	property = "type=" + PasswordEncryptor.TYPE_BCRYPT,
+	property = "type=" + PasswordEncryptorUtil.TYPE_BCRYPT,
 	service = PasswordEncryptor.class
 )
 public class BCryptPasswordEncryptor

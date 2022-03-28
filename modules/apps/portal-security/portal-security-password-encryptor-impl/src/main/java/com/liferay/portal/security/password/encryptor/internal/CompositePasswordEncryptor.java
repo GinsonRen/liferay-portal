@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.exception.PwdEncryptorException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.pwd.PasswordEncryptor;
+import com.liferay.portal.kernel.security.pwd.PasswordEncryptorUtil;
 import com.liferay.portal.kernel.util.ClassUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.util.PropsValues;
@@ -153,11 +154,13 @@ public class CompositePasswordEncryptor
 
 		PasswordEncryptor passwordEncryptor = null;
 
-		if (algorithm.startsWith(TYPE_BCRYPT)) {
-			passwordEncryptor = _passwordEncryptors.getService(TYPE_BCRYPT);
+		if (algorithm.startsWith(PasswordEncryptorUtil.TYPE_BCRYPT)) {
+			passwordEncryptor = _passwordEncryptors.getService(
+				PasswordEncryptorUtil.TYPE_BCRYPT);
 		}
-		else if (algorithm.startsWith(TYPE_PBKDF2)) {
-			passwordEncryptor = _passwordEncryptors.getService(TYPE_PBKDF2);
+		else if (algorithm.startsWith(PasswordEncryptorUtil.TYPE_PBKDF2)) {
+			passwordEncryptor = _passwordEncryptors.getService(
+				PasswordEncryptorUtil.TYPE_PBKDF2);
 		}
 		else {
 			passwordEncryptor = _passwordEncryptors.getService(algorithm);
@@ -168,7 +171,8 @@ public class CompositePasswordEncryptor
 				_log.debug("No password encryptor found for " + algorithm);
 			}
 
-			passwordEncryptor = _passwordEncryptors.getService(TYPE_DEFAULT);
+			passwordEncryptor = _passwordEncryptors.getService(
+				PasswordEncryptorUtil.TYPE_DEFAULT);
 		}
 
 		if (_log.isDebugEnabled()) {

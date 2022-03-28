@@ -17,6 +17,7 @@ package com.liferay.portal.security.password.encryptor.internal;
 import com.liferay.portal.kernel.exception.PwdEncryptorException;
 import com.liferay.portal.kernel.security.SecureRandom;
 import com.liferay.portal.kernel.security.pwd.PasswordEncryptor;
+import com.liferay.portal.kernel.security.pwd.PasswordEncryptorUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.Digester;
 import com.liferay.portal.kernel.util.Validator;
@@ -34,7 +35,7 @@ import org.vps.crypt.Crypt;
  * @author Tomas Polesovsky
  */
 @Component(
-	property = "type=" + PasswordEncryptor.TYPE_UFC_CRYPT,
+	property = "type=" + PasswordEncryptorUtil.TYPE_UFC_CRYPT,
 	service = PasswordEncryptor.class
 )
 public class CryptPasswordEncryptor
