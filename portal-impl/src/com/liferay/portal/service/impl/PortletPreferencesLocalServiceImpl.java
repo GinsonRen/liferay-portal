@@ -20,6 +20,7 @@ import com.liferay.exportimport.kernel.staging.StagingUtil;
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.sql.dsl.DSLQueryFactoryUtil;
 import com.liferay.petra.sql.dsl.expression.Predicate;
+import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -60,6 +61,7 @@ import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.kernel.util.CopyLayoutThreadLocal;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortletKeys;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.service.base.PortletPreferencesLocalServiceBaseImpl;
@@ -653,11 +655,17 @@ public class PortletPreferencesLocalServiceImpl
 		if (portletPreferences == null) {
 			String defaultPreferences = PortletConstants.DEFAULT_PREFERENCES;
 
-			Portlet portlet = _portletLocalService.fetchPortletById(
-				companyId, portletId);
+			int pos = StringUtil.indexOfAny(
+				portletId,
+				new char[] {CharPool.PERIOD, CharPool.DASH, CharPool.SPACE});
 
-			if (portlet != null) {
-				defaultPreferences = portlet.getDefaultPreferences();
+			if (pos == -1) {
+				Portlet portlet = _portletLocalService.fetchPortletById(
+					companyId, portletId);
+
+				if (portlet != null) {
+					defaultPreferences = portlet.getDefaultPreferences();
+				}
 			}
 
 			return PortletPreferencesFactoryUtil.strictFromXML(
