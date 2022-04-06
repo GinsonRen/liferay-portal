@@ -27,9 +27,11 @@ import com.liferay.portal.language.override.service.PLOEntryLocalService;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -80,13 +82,19 @@ public class PLOLanguageOverrideProvider implements LanguageOverrideProvider {
 	}
 
 	protected void clear(long companyId, String languageId) {
+		String key = _encodeKey(companyId, languageId);
+
 		_portalCache.remove(_encodeKey(companyId, languageId));
+
+		_keysWithNoEntries.remove(key);
 	}
 
 	@Deactivate
 	protected void deactivate() {
 		_multiVMPool.removePortalCache(
 			PLOLanguageOverrideProvider.class.getName());
+
+		_keysWithNoEntries.clear();
 	}
 
 	private String _encodeKey(long companyId, String languageId) {
@@ -98,15 +106,25 @@ public class PLOLanguageOverrideProvider implements LanguageOverrideProvider {
 
 		String key = _encodeKey(companyId, languageId);
 
+		if (_keysWithNoEntries.contains(key)) {
+			return Collections.emptyMap();
+		}
+
 		HashMap<String, String> overrideMap = _portalCache.get(key);
 
 		if (overrideMap == null) {
+			List<PLOEntry> ploEntries = _ploEntryLocalService.getPLOEntries(
+				companyId, languageId);
+
+			if (ploEntries.isEmpty()) {
+				_keysWithNoEntries.add(key);
+
+				return Collections.emptyMap();
+			}
+
 			overrideMap = new HashMap<>();
 
-			for (PLOEntry ploEntry :
-					_ploEntryLocalService.getPLOEntries(
-						companyId, languageId)) {
-
+			for (PLOEntry ploEntry : ploEntries) {
 				overrideMap.put(ploEntry.getKey(), ploEntry.getValue());
 			}
 
@@ -123,5 +141,6 @@ public class PLOLanguageOverrideProvider implements LanguageOverrideProvider {
 	private PLOEntryLocalService _ploEntryLocalService;
 
 	private PortalCache<String, HashMap<String, String>> _portalCache;
+	private final Set<String> _keysWithNoEntries = new CopyOnWriteArraySet<>();
 
 }
