@@ -16,6 +16,7 @@ package com.liferay.layout.page.template.model.impl;
 
 import com.liferay.layout.page.template.model.LayoutPageTemplateStructureRel;
 import com.liferay.layout.page.template.service.LayoutPageTemplateStructureRelLocalServiceUtil;
+import com.liferay.layout.util.structure.LayoutStructure;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.util.PortalUtil;
@@ -63,7 +64,7 @@ public class LayoutPageTemplateStructureImpl
 	}
 
 	@Override
-	public String getDefaultSegmentsExperienceData() {
+	public LayoutStructure getDefaultSegmentsExperienceLayoutStructure() {
 		LayoutPageTemplateStructureRel layoutPageTemplateStructureRel =
 			LayoutPageTemplateStructureRelLocalServiceUtil.
 				fetchLayoutPageTemplateStructureRel(
@@ -71,11 +72,45 @@ public class LayoutPageTemplateStructureImpl
 					SegmentsExperienceLocalServiceUtil.
 						fetchDefaultSegmentsExperienceId(getPlid()));
 
-		if (layoutPageTemplateStructureRel != null) {
-			return layoutPageTemplateStructureRel.getData();
+		if (layoutPageTemplateStructureRel == null) {
+			return null;
 		}
 
-		return StringPool.BLANK;
+		return layoutPageTemplateStructureRel.getLayoutStructure();
+	}
+
+	@Override
+	public LayoutStructure getLayoutStructure(long segmentsExperienceId) {
+		LayoutPageTemplateStructureRel layoutPageTemplateStructureRel =
+			LayoutPageTemplateStructureRelLocalServiceUtil.
+				fetchLayoutPageTemplateStructureRel(
+					getLayoutPageTemplateStructureId(), segmentsExperienceId);
+
+		if (layoutPageTemplateStructureRel == null) {
+			return null;
+		}
+
+		return layoutPageTemplateStructureRel.getLayoutStructure();
+	}
+
+	@Override
+	public LayoutStructure getLayoutStructure(String segmentsExperienceKey) {
+		SegmentsExperience segmentsExperience =
+			SegmentsExperienceLocalServiceUtil.fetchSegmentsExperience(
+				getGroupId(), segmentsExperienceKey,
+				PortalUtil.getClassNameId(Layout.class), getPlid());
+
+		LayoutPageTemplateStructureRel layoutPageTemplateStructureRel =
+			LayoutPageTemplateStructureRelLocalServiceUtil.
+				fetchLayoutPageTemplateStructureRel(
+					getLayoutPageTemplateStructureId(),
+					segmentsExperience.getSegmentsExperienceId());
+
+		if (layoutPageTemplateStructureRel == null) {
+			return null;
+		}
+
+		return layoutPageTemplateStructureRel.getLayoutStructure();
 	}
 
 	@Override
