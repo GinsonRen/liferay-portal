@@ -208,16 +208,6 @@ public class LayoutPageTemplateStructureWrapper
 	}
 
 	@Override
-	public String getData(long segmentsExperienceId) {
-		return model.getData(segmentsExperienceId);
-	}
-
-	@Override
-	public String getData(String segmentsExperienceKey) {
-		return model.getData(segmentsExperienceKey);
-	}
-
-	@Override
 	public com.liferay.layout.util.structure.LayoutStructure
 		getDefaultSegmentsExperienceLayoutStructure() {
 
