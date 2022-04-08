@@ -14,9 +14,32 @@
 
 package com.liferay.layout.page.template.model.impl;
 
+import com.liferay.layout.util.structure.LayoutStructure;
+import com.liferay.portal.kernel.model.cache.CacheField;
+
 /**
  * @author Eudaldo Alonso
  */
 public class LayoutPageTemplateStructureRelImpl
 	extends LayoutPageTemplateStructureRelBaseImpl {
+
+	@Override
+	public LayoutStructure getLayoutStructure() {
+		if (_layoutStructure != null) {
+			return _layoutStructure;
+		}
+
+		_layoutStructure = LayoutStructure.of(getData());
+
+		return _layoutStructure;
+	}
+
+	@Override
+	public void setLayoutStructure(LayoutStructure layoutStructure) {
+		_layoutStructure = layoutStructure;
+	}
+
+	@CacheField(propagateToInterface = true)
+	private LayoutStructure _layoutStructure;
+
 }

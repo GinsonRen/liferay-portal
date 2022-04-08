@@ -16,6 +16,7 @@ package com.liferay.layout.page.template.model.impl;
 
 import com.liferay.layout.page.template.model.LayoutPageTemplateStructureRel;
 import com.liferay.layout.page.template.service.LayoutPageTemplateStructureRelLocalServiceUtil;
+import com.liferay.layout.util.structure.LayoutStructure;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.util.PortalUtil;
@@ -76,6 +77,56 @@ public class LayoutPageTemplateStructureImpl
 		}
 
 		return StringPool.BLANK;
+	}
+
+	@Override
+	public LayoutStructure getDefaultSegmentsExperienceLayoutStructure() {
+		LayoutPageTemplateStructureRel layoutPageTemplateStructureRel =
+			LayoutPageTemplateStructureRelLocalServiceUtil.
+				fetchLayoutPageTemplateStructureRel(
+					getLayoutPageTemplateStructureId(),
+					SegmentsExperienceLocalServiceUtil.
+						fetchDefaultSegmentsExperienceId(getPlid()));
+
+		if (layoutPageTemplateStructureRel == null) {
+			return new LayoutStructure();
+		}
+
+		return layoutPageTemplateStructureRel.getLayoutStructure();
+	}
+
+	@Override
+	public LayoutStructure getLayoutStructure(long segmentsExperienceId) {
+		LayoutPageTemplateStructureRel layoutPageTemplateStructureRel =
+			LayoutPageTemplateStructureRelLocalServiceUtil.
+				fetchLayoutPageTemplateStructureRel(
+					getLayoutPageTemplateStructureId(), segmentsExperienceId);
+
+		if (layoutPageTemplateStructureRel == null) {
+			return new LayoutStructure();
+		}
+
+		return layoutPageTemplateStructureRel.getLayoutStructure();
+	}
+
+	@Override
+	public LayoutStructure getLayoutStructure(String segmentsExperienceKey) {
+		SegmentsExperience segmentsExperience =
+			SegmentsExperienceLocalServiceUtil.fetchSegmentsExperience(
+				getGroupId(), segmentsExperienceKey,
+				PortalUtil.getClassNameId(Layout.class), getPlid());
+
+		LayoutPageTemplateStructureRel layoutPageTemplateStructureRel =
+			LayoutPageTemplateStructureRelLocalServiceUtil.
+				fetchLayoutPageTemplateStructureRel(
+					getLayoutPageTemplateStructureId(),
+					segmentsExperience.getSegmentsExperienceId());
+
+		if (layoutPageTemplateStructureRel == null) {
+			return new LayoutStructure();
+		}
+
+		return layoutPageTemplateStructureRel.getLayoutStructure();
 	}
 
 	@Override
