@@ -68,7 +68,6 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.PortletKeys;
-import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portlet.exportimport.staging.StagingAdvicesThreadLocal;
 import com.liferay.segments.constants.SegmentsExperienceConstants;
 import com.liferay.segments.model.SegmentsExperience;
@@ -348,9 +347,10 @@ public class LayoutCopyHelperImpl implements LayoutCopyHelper {
 		for (Map.Entry<Long, Long> entry :
 				segmentsExperienceIdsMap.entrySet()) {
 
-			String data = layoutPageTemplateStructure.getData(entry.getKey());
+			LayoutStructure layoutStructure =
+				layoutPageTemplateStructure.getLayoutStructure(entry.getKey());
 
-			if (Validator.isNull(data)) {
+			if (layoutStructure == null) {
 				_segmentsExperienceLocalService.deleteSegmentsExperience(
 					entry.getKey());
 
@@ -358,7 +358,8 @@ public class LayoutCopyHelperImpl implements LayoutCopyHelper {
 			}
 
 			JSONObject dataJSONObject = _processDataJSONObject(
-				data, targetLayout, fragmentEntryLinksMap, entry.getValue());
+				layoutStructure, targetLayout, fragmentEntryLinksMap,
+				entry.getValue());
 
 			_layoutPageTemplateStructureLocalService.
 				updateLayoutPageTemplateStructureData(
@@ -376,9 +377,11 @@ public class LayoutCopyHelperImpl implements LayoutCopyHelper {
 				fetchLayoutPageTemplateStructure(
 					sourceLayout.getGroupId(), sourceLayout.getPlid());
 
-		String data = layoutPageTemplateStructure.getData(segmentsExperienceId);
+		LayoutStructure layoutStructure =
+			layoutPageTemplateStructure.getLayoutStructure(
+				segmentsExperienceId);
 
-		if (Validator.isNull(data)) {
+		if (layoutStructure == null) {
 			return;
 		}
 
@@ -395,8 +398,6 @@ public class LayoutCopyHelperImpl implements LayoutCopyHelper {
 				FragmentEntryLink::getFragmentEntryLinkId,
 				fragmentEntryLink -> fragmentEntryLink));
 
-		LayoutStructure layoutStructure = LayoutStructure.of(data);
-
 		for (DeletedLayoutStructureItem deletedLayoutStructureItem :
 				layoutStructure.getDeletedLayoutStructureItems()) {
 
@@ -409,7 +410,7 @@ public class LayoutCopyHelperImpl implements LayoutCopyHelper {
 				targetLayout.getPlid());
 
 		JSONObject dataJSONObject = _processDataJSONObject(
-			layoutStructure.toString(), targetLayout, fragmentEntryLinksMap,
+			layoutStructure, targetLayout, fragmentEntryLinksMap,
 			defaultSegmentsExperienceId);
 
 		_layoutPageTemplateStructureLocalService.
@@ -784,15 +785,13 @@ public class LayoutCopyHelperImpl implements LayoutCopyHelper {
 	}
 
 	private JSONObject _processDataJSONObject(
-			String data, Layout targetLayout,
+			LayoutStructure layoutStructure, Layout targetLayout,
 			Map<Long, FragmentEntryLink> fragmentEntryLinksMap,
 			long targetSegmentsExperienceId)
 		throws Exception {
 
 		ServiceContext serviceContext =
 			ServiceContextThreadLocal.getServiceContext();
-
-		LayoutStructure layoutStructure = LayoutStructure.of(data);
 
 		for (LayoutStructureItem layoutStructureItem :
 				layoutStructure.getLayoutStructureItems()) {

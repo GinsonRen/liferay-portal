@@ -640,8 +640,8 @@ public class PageDefinitionDTOConverterTest {
 					defaultSegmentsExperienceId,
 					StringUtil.replace(_read(fileName), "${", "}", valuesMap));
 
-		return LayoutStructure.of(
-			layoutPageTemplateStructure.getData(defaultSegmentsExperienceId));
+		return layoutPageTemplateStructure.getLayoutStructure(
+			defaultSegmentsExperienceId);
 	}
 
 	private PageDefinition _getPageDefinition(

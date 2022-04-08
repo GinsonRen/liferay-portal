@@ -171,8 +171,8 @@ public class LayoutStructureUtil {
 			LayoutPageTemplateStructureLocalServiceUtil.
 				fetchLayoutPageTemplateStructure(groupId, plid, true);
 
-		return LayoutStructure.of(
-			layoutPageTemplateStructure.getData(segmentsExperienceId));
+		return layoutPageTemplateStructure.getLayoutStructure(
+			segmentsExperienceId);
 	}
 
 	public static LayoutStructure getLayoutStructure(
@@ -183,8 +183,8 @@ public class LayoutStructureUtil {
 			LayoutPageTemplateStructureLocalServiceUtil.
 				fetchLayoutPageTemplateStructure(groupId, plid, true);
 
-		return LayoutStructure.of(
-			layoutPageTemplateStructure.getData(segmentsExperienceKey));
+		return layoutPageTemplateStructure.getLayoutStructure(
+			segmentsExperienceKey);
 	}
 
 	public static JSONObject updateLayoutPageTemplateData(

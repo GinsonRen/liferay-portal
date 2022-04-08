@@ -250,8 +250,8 @@ public class LayoutPageTemplatesExporter {
 				fetchLayoutPageTemplateStructure(
 					layout.getGroupId(), layout.getPlid());
 
-		return LayoutStructure.of(
-			layoutPageTemplateStructure.getDefaultSegmentsExperienceData());
+		return layoutPageTemplateStructure.
+			getDefaultSegmentsExperienceLayoutStructure();
 	}
 
 	private DTOConverter<LayoutStructure, PageDefinition>

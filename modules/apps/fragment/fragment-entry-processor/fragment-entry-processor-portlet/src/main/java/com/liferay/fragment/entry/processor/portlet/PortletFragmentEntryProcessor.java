@@ -259,9 +259,9 @@ public class PortletFragmentEntryProcessor implements FragmentEntryProcessor {
 					currentFragmentEntryLink.getGroupId(),
 					currentFragmentEntryLink.getPlid(), true);
 
-		LayoutStructure layoutStructure = LayoutStructure.of(
-			layoutPageTemplateStructure.getData(
-				currentFragmentEntryLink.getSegmentsExperienceId()));
+		LayoutStructure layoutStructure =
+			layoutPageTemplateStructure.getLayoutStructure(
+				currentFragmentEntryLink.getSegmentsExperienceId());
 
 		for (FragmentEntryLink fragmentEntryLink : fragmentEntryLinks) {
 			if (currentFragmentEntryLink.getFragmentEntryLinkId() ==

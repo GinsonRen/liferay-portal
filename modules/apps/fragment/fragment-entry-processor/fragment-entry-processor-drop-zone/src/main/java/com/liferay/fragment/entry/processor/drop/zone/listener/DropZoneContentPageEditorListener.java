@@ -30,7 +30,6 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
-import com.liferay.portal.kernel.util.Validator;
 
 import java.util.Collections;
 import java.util.List;
@@ -149,14 +148,15 @@ public class DropZoneContentPageEditorListener
 			return null;
 		}
 
-		String data = layoutPageTemplateStructure.getData(
-			fragmentEntryLink.getSegmentsExperienceId());
+		LayoutStructure layoutStructure =
+			layoutPageTemplateStructure.getLayoutStructure(
+				fragmentEntryLink.getSegmentsExperienceId());
 
-		if (Validator.isNull(data)) {
+		if (layoutStructure == null) {
 			return null;
 		}
 
-		return LayoutStructure.of(data);
+		return layoutStructure;
 	}
 
 	private void _updateLayoutPageTemplateStructure(

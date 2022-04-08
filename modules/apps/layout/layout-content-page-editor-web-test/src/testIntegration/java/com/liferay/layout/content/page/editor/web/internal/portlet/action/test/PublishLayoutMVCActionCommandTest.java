@@ -142,8 +142,8 @@ public class PublishLayoutMVCActionCommandTest {
 				fetchLayoutPageTemplateStructure(
 					_group.getGroupId(), layout.getPlid());
 
-		return LayoutStructure.of(
-			layoutPageTemplateStructure.getDefaultSegmentsExperienceData());
+		return layoutPageTemplateStructure.
+			getDefaultSegmentsExperienceLayoutStructure();
 	}
 
 	@DeleteAfterTestRun

@@ -21,7 +21,6 @@ import com.liferay.layout.page.template.service.LayoutPageTemplateStructureLocal
 import com.liferay.layout.util.structure.LayoutStructure;
 import com.liferay.layout.util.structure.LayoutStructureItem;
 import com.liferay.portal.kernel.model.Layout;
-import com.liferay.portal.kernel.util.Validator;
 
 /**
  * @author Eudaldo Alonso
@@ -61,17 +60,17 @@ public class PortletLayoutDisplayContext {
 					masterLayoutPageTemplateEntry.getGroupId(),
 					masterLayoutPageTemplateEntry.getPlid());
 
-		String data =
+		LayoutStructure layoutStructure =
 			masterLayoutPageTemplateStructure.
-				getDefaultSegmentsExperienceData();
+				getDefaultSegmentsExperienceLayoutStructure();
 
-		if (Validator.isNull(data)) {
+		if (layoutStructure == null) {
 			_layoutStructure = _getDefaultMasterLayoutStructure();
 
 			return _layoutStructure;
 		}
 
-		_layoutStructure = LayoutStructure.of(data);
+		_layoutStructure = layoutStructure;
 
 		return _layoutStructure;
 	}

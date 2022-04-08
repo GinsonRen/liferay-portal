@@ -161,8 +161,9 @@ public class LayoutPageTemplatesImporterTest {
 
 		Assert.assertNotNull(layoutPageTemplateStructure);
 
-		LayoutStructure layoutStructure = LayoutStructure.of(
-			layoutPageTemplateStructure.getDefaultSegmentsExperienceData());
+		LayoutStructure layoutStructure =
+			layoutPageTemplateStructure.
+				getDefaultSegmentsExperienceLayoutStructure();
 
 		LayoutStructureItem layoutStructureItem =
 			_getMainChildLayoutStructureItem(layoutStructure);
@@ -198,8 +199,9 @@ public class LayoutPageTemplatesImporterTest {
 
 		Assert.assertNotNull(layoutPageTemplateStructure);
 
-		LayoutStructure layoutStructure = LayoutStructure.of(
-			layoutPageTemplateStructure.getDefaultSegmentsExperienceData());
+		LayoutStructure layoutStructure =
+			layoutPageTemplateStructure.
+				getDefaultSegmentsExperienceLayoutStructure();
 
 		LayoutStructureItem layoutStructureItem =
 			_getMainChildLayoutStructureItem(layoutStructure);
@@ -251,8 +253,9 @@ public class LayoutPageTemplatesImporterTest {
 
 		Assert.assertNotNull(layoutPageTemplateStructure);
 
-		LayoutStructure layoutStructure = LayoutStructure.of(
-			layoutPageTemplateStructure.getDefaultSegmentsExperienceData());
+		LayoutStructure layoutStructure =
+			layoutPageTemplateStructure.
+				getDefaultSegmentsExperienceLayoutStructure();
 
 		LayoutStructureItem layoutStructureItem =
 			_getMainChildLayoutStructureItem(layoutStructure);
@@ -317,8 +320,9 @@ public class LayoutPageTemplatesImporterTest {
 
 		Assert.assertNotNull(layoutPageTemplateStructure);
 
-		LayoutStructure layoutStructure = LayoutStructure.of(
-			layoutPageTemplateStructure.getDefaultSegmentsExperienceData());
+		LayoutStructure layoutStructure =
+			layoutPageTemplateStructure.
+				getDefaultSegmentsExperienceLayoutStructure();
 
 		LayoutStructureItem layoutStructureItem =
 			_getMainChildLayoutStructureItem(layoutStructure);
@@ -691,8 +695,9 @@ public class LayoutPageTemplatesImporterTest {
 
 		Assert.assertNotNull(layoutPageTemplateStructure);
 
-		LayoutStructure layoutStructure = LayoutStructure.of(
-			layoutPageTemplateStructure.getDefaultSegmentsExperienceData());
+		LayoutStructure layoutStructure =
+			layoutPageTemplateStructure.
+				getDefaultSegmentsExperienceLayoutStructure();
 
 		LayoutStructureItem layoutStructureItem =
 			_getMainChildLayoutStructureItem(layoutStructure);

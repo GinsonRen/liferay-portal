@@ -109,8 +109,9 @@ public class FragmentDropZoneMVCActionCommandTest {
 				fetchLayoutPageTemplateStructure(
 					_group.getGroupId(), _layout.getPlid());
 
-		_layoutStructure = LayoutStructure.of(
-			layoutPageTemplateStructure.getDefaultSegmentsExperienceData());
+		_layoutStructure =
+			layoutPageTemplateStructure.
+				getDefaultSegmentsExperienceLayoutStructure();
 
 		ServiceContext serviceContext =
 			ServiceContextTestUtil.getServiceContext(

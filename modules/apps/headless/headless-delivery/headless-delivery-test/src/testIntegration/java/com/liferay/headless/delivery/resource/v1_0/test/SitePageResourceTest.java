@@ -240,9 +240,9 @@ public class SitePageResourceTest extends BaseSitePageResourceTestCase {
 						fetchLayoutPageTemplateStructure(
 							testGroup.getGroupId(), layout.getPlid());
 
-				LayoutStructure layoutStructure = LayoutStructure.of(
+				LayoutStructure layoutStructure =
 					layoutPageTemplateStructure.
-						getDefaultSegmentsExperienceData());
+						getDefaultSegmentsExperienceLayoutStructure();
 
 				layoutStructure.addRootLayoutStructureItem();
 
