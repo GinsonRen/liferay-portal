@@ -67,7 +67,14 @@ public interface LayoutPageTemplateStructure
 
 	public String getData(String segmentsExperienceKey);
 
-	public String getDefaultSegmentsExperienceData();
+	public com.liferay.layout.util.structure.LayoutStructure
+		getDefaultSegmentsExperienceLayoutStructure();
+
+	public com.liferay.layout.util.structure.LayoutStructure getLayoutStructure(
+		long segmentsExperienceId);
+
+	public com.liferay.layout.util.structure.LayoutStructure getLayoutStructure(
+		String segmentsExperienceKey);
 
 	public long getPlid();
 

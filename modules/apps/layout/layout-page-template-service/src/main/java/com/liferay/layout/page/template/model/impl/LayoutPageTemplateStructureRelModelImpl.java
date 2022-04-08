@@ -771,6 +771,16 @@ public class LayoutPageTemplateStructureRelModelImpl
 		_statusDate = statusDate;
 	}
 
+	public com.liferay.layout.util.structure.LayoutStructure
+		getLayoutStructure() {
+
+		return null;
+	}
+
+	public void setLayoutStructure(
+		com.liferay.layout.util.structure.LayoutStructure layoutStructure) {
+	}
+
 	@Override
 	public StagedModelType getStagedModelType() {
 		return new StagedModelType(
@@ -1061,6 +1071,8 @@ public class LayoutPageTemplateStructureRelModelImpl
 
 		_setModifiedDate = false;
 
+		setLayoutStructure(null);
+
 		_columnBitmask = 0;
 	}
 
@@ -1173,6 +1185,11 @@ public class LayoutPageTemplateStructureRelModelImpl
 			layoutPageTemplateStructureRelCacheModel.statusDate =
 				Long.MIN_VALUE;
 		}
+
+		setLayoutStructure(null);
+
+		layoutPageTemplateStructureRelCacheModel._layoutStructure =
+			getLayoutStructure();
 
 		return layoutPageTemplateStructureRelCacheModel;
 	}

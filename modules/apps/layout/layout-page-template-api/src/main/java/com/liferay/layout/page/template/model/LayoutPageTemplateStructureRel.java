@@ -64,4 +64,10 @@ public interface LayoutPageTemplateStructureRel
 
 			};
 
+	public com.liferay.layout.util.structure.LayoutStructure
+		getLayoutStructure();
+
+	public void setLayoutStructure(
+		com.liferay.layout.util.structure.LayoutStructure layoutStructure);
+
 }
