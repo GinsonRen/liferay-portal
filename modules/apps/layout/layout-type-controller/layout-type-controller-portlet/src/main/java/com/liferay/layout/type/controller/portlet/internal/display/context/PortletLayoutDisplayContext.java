@@ -61,17 +61,17 @@ public class PortletLayoutDisplayContext {
 					masterLayoutPageTemplateEntry.getGroupId(),
 					masterLayoutPageTemplateEntry.getPlid());
 
-		String data =
+		LayoutStructure layoutStructure =
 			masterLayoutPageTemplateStructure.
-				getDefaultSegmentsExperienceData();
+				getDefaultSegmentsExperienceLayoutStructure();
 
-		if (Validator.isNull(data)) {
+		if (Validator.isNull(layoutStructure.getMainItemId())) {
 			_layoutStructure = _getDefaultMasterLayoutStructure();
 
 			return _layoutStructure;
 		}
 
-		_layoutStructure = LayoutStructure.of(data);
+		_layoutStructure = layoutStructure;
 
 		return _layoutStructure;
 	}

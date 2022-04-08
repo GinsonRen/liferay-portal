@@ -176,9 +176,9 @@ public class SitePageDTOConverter implements DTOConverter<Layout, SitePage> {
 								segmentsExperience.getSegmentsExperienceKey();
 						}
 
-						LayoutStructure layoutStructure = LayoutStructure.of(
-							layoutPageTemplateStructure.getData(
-								segmentsExperienceKey));
+						LayoutStructure layoutStructure =
+							layoutPageTemplateStructure.getLayoutStructure(
+								segmentsExperienceKey);
 
 						return _pageDefinitionDTOConverter.toDTO(
 							dtoConverterContext, layoutStructure);

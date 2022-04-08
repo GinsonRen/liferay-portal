@@ -127,8 +127,9 @@ public class FragmentStyledLayoutStructureItemTest {
 				fetchLayoutPageTemplateStructure(
 					_layout.getGroupId(), _layout.getPlid());
 
-		LayoutStructure layoutStructure = LayoutStructure.of(
-			layoutPageTemplateStructure.getDefaultSegmentsExperienceData());
+		LayoutStructure layoutStructure =
+			layoutPageTemplateStructure.
+				getDefaultSegmentsExperienceLayoutStructure();
 
 		LayoutStructureItem rowStyledLayoutStructureItem =
 			layoutStructure.addRowStyledLayoutStructureItem(
@@ -155,8 +156,9 @@ public class FragmentStyledLayoutStructureItemTest {
 				fetchLayoutPageTemplateStructure(
 					_layout.getGroupId(), _layout.getPlid());
 
-		LayoutStructure layoutStructure = LayoutStructure.of(
-			layoutPageTemplateStructure.getDefaultSegmentsExperienceData());
+		LayoutStructure layoutStructure =
+			layoutPageTemplateStructure.
+				getDefaultSegmentsExperienceLayoutStructure();
 
 		LayoutStructureItem rowStyledLayoutStructureItem =
 			layoutStructure.addRowStyledLayoutStructureItem(

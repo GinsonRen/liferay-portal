@@ -49,21 +49,25 @@ public class LayoutStructureUtil {
 					fetchLayoutPageTemplateStructure(
 						layout.getGroupId(), layout.getPlid(), true);
 
-			String data = layoutPageTemplateStructure.getData(
-				_getSegmentsExperienceId(httpServletRequest));
+			LayoutStructure layoutStructure =
+				layoutPageTemplateStructure.getLayoutStructure(
+					_getSegmentsExperienceId(httpServletRequest));
 
-			if (Validator.isNull(data)) {
+			if (Validator.isNull(layoutStructure.getMainItemId())) {
 				return null;
 			}
 
-			String masterLayoutData = _getMasterLayoutData(
+			LayoutStructure masterLayoutLayoutStructure = _getMasterLayoutData(
 				layout.getMasterLayoutPlid());
 
-			if (Validator.isNull(masterLayoutData)) {
-				return LayoutStructure.of(data);
+			if ((masterLayoutLayoutStructure == null) ||
+				Validator.isNull(masterLayoutLayoutStructure.getMainItemId())) {
+
+				return layoutStructure;
 			}
 
-			return _mergeLayoutStructure(data, masterLayoutData);
+			return _mergeLayoutStructure(
+				layoutStructure, masterLayoutLayoutStructure);
 		}
 		catch (Exception exception) {
 			_log.error("Unable to get layout structure", exception);
@@ -84,7 +88,7 @@ public class LayoutStructureUtil {
 		return layout;
 	}
 
-	private static String _getMasterLayoutData(long masterLayoutPlid) {
+	private static LayoutStructure _getMasterLayoutData(long masterLayoutPlid) {
 		LayoutPageTemplateEntry masterLayoutPageTemplateEntry =
 			LayoutPageTemplateEntryLocalServiceUtil.
 				fetchLayoutPageTemplateEntryByPlid(masterLayoutPlid);
@@ -104,7 +108,7 @@ public class LayoutStructureUtil {
 		}
 
 		return masterLayoutPageTemplateStructure.
-			getDefaultSegmentsExperienceData();
+			getDefaultSegmentsExperienceLayoutStructure();
 	}
 
 	private static long _getSegmentsExperienceId(
@@ -126,12 +130,8 @@ public class LayoutStructureUtil {
 	}
 
 	private static LayoutStructure _mergeLayoutStructure(
-		String data, String masterLayoutData) {
-
-		LayoutStructure masterLayoutStructure = LayoutStructure.of(
-			masterLayoutData);
-
-		LayoutStructure layoutStructure = LayoutStructure.of(data);
+		LayoutStructure layoutStructure,
+		LayoutStructure masterLayoutStructure) {
 
 		for (LayoutStructureItem layoutStructureItem :
 				layoutStructure.getLayoutStructureItems()) {

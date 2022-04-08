@@ -202,10 +202,12 @@ public class ExportImportMasterLayoutsTest {
 					layoutPageTemplateEntry2.getGroupId(),
 					layoutPageTemplateEntry2.getPlid());
 
-		LayoutStructure layoutStructure1 = LayoutStructure.of(
-			layoutPageTemplateStructure1.getDefaultSegmentsExperienceData());
-		LayoutStructure layoutStructure2 = LayoutStructure.of(
-			layoutPageTemplateStructure2.getDefaultSegmentsExperienceData());
+		LayoutStructure layoutStructure1 =
+			layoutPageTemplateStructure1.
+				getDefaultSegmentsExperienceLayoutStructure();
+		LayoutStructure layoutStructure2 =
+			layoutPageTemplateStructure2.
+				getDefaultSegmentsExperienceLayoutStructure();
 
 		DropZoneLayoutStructureItem dropZoneLayoutStructureItem1 =
 			_getDropZoneLayoutStructureItem(layoutStructure1);

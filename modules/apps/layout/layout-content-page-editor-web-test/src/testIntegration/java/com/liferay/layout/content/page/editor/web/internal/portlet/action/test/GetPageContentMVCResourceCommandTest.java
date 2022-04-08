@@ -474,8 +474,9 @@ public class GetPageContentMVCResourceCommandTest {
 				fetchLayoutPageTemplateStructure(
 					_group.getGroupId(), _layout.getPlid());
 
-		LayoutStructure layoutStructure = LayoutStructure.of(
-			layoutPageTemplateStructure.getDefaultSegmentsExperienceData());
+		LayoutStructure layoutStructure =
+			layoutPageTemplateStructure.
+				getDefaultSegmentsExperienceLayoutStructure();
 
 		layoutStructureConsumer.accept(layoutStructure);
 

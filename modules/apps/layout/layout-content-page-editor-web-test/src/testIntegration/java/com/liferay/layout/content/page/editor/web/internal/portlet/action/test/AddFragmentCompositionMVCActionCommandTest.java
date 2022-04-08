@@ -128,8 +128,9 @@ public class AddFragmentCompositionMVCActionCommandTest {
 				fetchLayoutPageTemplateStructure(
 					_group.getGroupId(), _layout.getPlid());
 
-		LayoutStructure layoutStructure = LayoutStructure.of(
-			layoutPageTemplateStructure.getDefaultSegmentsExperienceData());
+		LayoutStructure layoutStructure =
+			layoutPageTemplateStructure.
+				getDefaultSegmentsExperienceLayoutStructure();
 
 		mockLiferayPortletActionRequest.addParameter(
 			"fragmentCollectionId", String.valueOf(0));
@@ -174,8 +175,9 @@ public class AddFragmentCompositionMVCActionCommandTest {
 				fetchLayoutPageTemplateStructure(
 					_group.getGroupId(), _layout.getPlid());
 
-		LayoutStructure layoutStructure = LayoutStructure.of(
-			layoutPageTemplateStructure.getDefaultSegmentsExperienceData());
+		LayoutStructure layoutStructure =
+			layoutPageTemplateStructure.
+				getDefaultSegmentsExperienceLayoutStructure();
 
 		FragmentCollection newFragmentCollection =
 			_fragmentCollectionLocalService.addFragmentCollection(
@@ -407,8 +409,9 @@ public class AddFragmentCompositionMVCActionCommandTest {
 				fetchLayoutPageTemplateStructure(
 					_group.getGroupId(), _layout.getPlid());
 
-		LayoutStructure layoutStructure = LayoutStructure.of(
-			layoutPageTemplateStructure.getDefaultSegmentsExperienceData());
+		LayoutStructure layoutStructure =
+			layoutPageTemplateStructure.
+				getDefaultSegmentsExperienceLayoutStructure();
 
 		FragmentCollection newFragmentCollection =
 			_fragmentCollectionLocalService.addFragmentCollection(

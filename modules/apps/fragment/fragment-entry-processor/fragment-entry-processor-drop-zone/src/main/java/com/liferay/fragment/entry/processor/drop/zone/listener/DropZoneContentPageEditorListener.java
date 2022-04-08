@@ -149,14 +149,15 @@ public class DropZoneContentPageEditorListener
 			return null;
 		}
 
-		String data = layoutPageTemplateStructure.getData(
-			fragmentEntryLink.getSegmentsExperienceId());
+		LayoutStructure layoutStructure =
+			layoutPageTemplateStructure.getLayoutStructure(
+				fragmentEntryLink.getSegmentsExperienceId());
 
-		if (Validator.isNull(data)) {
+		if (Validator.isNull(layoutStructure.getMainItemId())) {
 			return null;
 		}
 
-		return LayoutStructure.of(data);
+		return layoutStructure;
 	}
 
 	private void _updateLayoutPageTemplateStructure(

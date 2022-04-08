@@ -87,8 +87,9 @@ public class AddItemMVCActionCommandTest {
 				fetchLayoutPageTemplateStructure(
 					_group.getGroupId(), _layout.getPlid());
 
-		_layoutStructure = LayoutStructure.of(
-			layoutPageTemplateStructure.getDefaultSegmentsExperienceData());
+		_layoutStructure =
+			layoutPageTemplateStructure.
+				getDefaultSegmentsExperienceLayoutStructure();
 	}
 
 	@Test

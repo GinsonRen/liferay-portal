@@ -1288,9 +1288,9 @@ public class BundleSiteInitializer implements SiteInitializer {
 								draftLayout.getGroupId(), draftLayout.getPlid(),
 								true);
 
-					LayoutStructure layoutStructure = LayoutStructure.of(
+					LayoutStructure layoutStructure =
 						layoutPageTemplateStructure.
-							getDefaultSegmentsExperienceData());
+							getDefaultSegmentsExperienceLayoutStructure();
 
 					for (int i = 0; i < jsonArray.length(); i++) {
 						_layoutPageTemplatesImporter.importPageElement(

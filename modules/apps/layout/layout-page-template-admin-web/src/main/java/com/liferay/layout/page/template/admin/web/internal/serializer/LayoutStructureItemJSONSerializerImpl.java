@@ -66,8 +66,9 @@ public class LayoutStructureItemJSONSerializerImpl
 				fetchLayoutPageTemplateStructure(
 					layout.getGroupId(), layout.getPlid());
 
-		LayoutStructure layoutStructure = LayoutStructure.of(
-			layoutPageTemplateStructure.getData(segmentsExperienceId));
+		LayoutStructure layoutStructure =
+			layoutPageTemplateStructure.getLayoutStructure(
+				segmentsExperienceId);
 
 		dtoConverterContext.setAttribute("groupId", layout.getGroupId());
 		dtoConverterContext.setAttribute("layoutStructure", layoutStructure);

@@ -130,8 +130,8 @@ public class UpdateItemConfigMVCActionCommandTest {
 				fetchLayoutPageTemplateStructure(
 					_layout.getGroupId(), _layout.getPlid());
 
-		return LayoutStructure.of(
-			layoutPageTemplateStructure.getDefaultSegmentsExperienceData());
+		return layoutPageTemplateStructure.
+			getDefaultSegmentsExperienceLayoutStructure();
 	}
 
 	private MockActionRequest _getMockActionrequest() {
