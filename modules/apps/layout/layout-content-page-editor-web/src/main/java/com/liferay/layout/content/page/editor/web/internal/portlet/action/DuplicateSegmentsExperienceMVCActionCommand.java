@@ -27,6 +27,7 @@ import com.liferay.layout.content.page.editor.web.internal.segments.SegmentsExpe
 import com.liferay.layout.content.page.editor.web.internal.util.FragmentEntryLinkUtil;
 import com.liferay.layout.page.template.model.LayoutPageTemplateStructure;
 import com.liferay.layout.page.template.service.LayoutPageTemplateStructureLocalService;
+import com.liferay.layout.util.structure.LayoutStructure;
 import com.liferay.portal.kernel.comment.CommentManager;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -165,8 +166,11 @@ public class DuplicateSegmentsExperienceMVCActionCommand
 			_layoutPageTemplateStructureLocalService.
 				fetchLayoutPageTemplateStructure(groupId, classPK, true);
 
-		return JSONFactoryUtil.createJSONObject(
-			layoutPageTemplateStructure.getData(segmentsExperienceId));
+		LayoutStructure layoutStructure =
+			layoutPageTemplateStructure.getLayoutStructure(
+				segmentsExperienceId);
+
+		return layoutStructure.toJSONObject();
 	}
 
 	@Reference
