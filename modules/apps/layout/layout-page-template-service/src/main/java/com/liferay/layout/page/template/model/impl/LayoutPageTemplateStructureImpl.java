@@ -17,7 +17,6 @@ package com.liferay.layout.page.template.model.impl;
 import com.liferay.layout.page.template.model.LayoutPageTemplateStructureRel;
 import com.liferay.layout.page.template.service.LayoutPageTemplateStructureRelLocalServiceUtil;
 import com.liferay.layout.util.structure.LayoutStructure;
-import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.segments.model.SegmentsExperience;
@@ -28,40 +27,6 @@ import com.liferay.segments.service.SegmentsExperienceLocalServiceUtil;
  */
 public class LayoutPageTemplateStructureImpl
 	extends LayoutPageTemplateStructureBaseImpl {
-
-	@Override
-	public String getData(long segmentsExperienceId) {
-		LayoutPageTemplateStructureRel layoutPageTemplateStructureRel =
-			LayoutPageTemplateStructureRelLocalServiceUtil.
-				fetchLayoutPageTemplateStructureRel(
-					getLayoutPageTemplateStructureId(), segmentsExperienceId);
-
-		if (layoutPageTemplateStructureRel != null) {
-			return layoutPageTemplateStructureRel.getData();
-		}
-
-		return StringPool.BLANK;
-	}
-
-	@Override
-	public String getData(String segmentsExperienceKey) {
-		SegmentsExperience segmentsExperience =
-			SegmentsExperienceLocalServiceUtil.fetchSegmentsExperience(
-				getGroupId(), segmentsExperienceKey,
-				PortalUtil.getClassNameId(Layout.class), getPlid());
-
-		LayoutPageTemplateStructureRel layoutPageTemplateStructureRel =
-			LayoutPageTemplateStructureRelLocalServiceUtil.
-				fetchLayoutPageTemplateStructureRel(
-					getLayoutPageTemplateStructureId(),
-					segmentsExperience.getSegmentsExperienceId());
-
-		if (layoutPageTemplateStructureRel != null) {
-			return layoutPageTemplateStructureRel.getData();
-		}
-
-		return StringPool.BLANK;
-	}
 
 	@Override
 	public LayoutStructure getDefaultSegmentsExperienceLayoutStructure() {
