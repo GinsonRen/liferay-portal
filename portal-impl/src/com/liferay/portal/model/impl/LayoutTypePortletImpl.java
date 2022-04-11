@@ -269,12 +269,18 @@ public class LayoutTypePortletImpl
 
 	@Override
 	public List<Portlet> getAllPortlets() {
+		if (_allPortlets != null) {
+			return _allPortlets;
+		}
+
 		List<Portlet> staticPortlets = getStaticPortlets(
 			PropsKeys.LAYOUT_STATIC_PORTLETS_ALL);
 
-		return addStaticPortlets(
+		_allPortlets = addStaticPortlets(
 			getExplicitlyAddedPortlets(), staticPortlets,
 			getEmbeddedPortlets());
+
+		return _allPortlets;
 	}
 
 	@Override
@@ -2232,6 +2238,7 @@ public class LayoutTypePortletImpl
 	private static final Layout _nullLayout = new LayoutImpl();
 
 	private String _addedCustomPortletMode;
+	private List<Portlet> _allPortlets;
 	private boolean _customizedView;
 	private final Format _dateFormat =
 		FastDateFormatFactoryUtil.getSimpleDateFormat(
