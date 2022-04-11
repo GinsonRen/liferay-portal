@@ -291,17 +291,21 @@ public class LayoutTypePortletImpl
 			return portlets;
 		}
 
-		List<Portlet> filteredPortlets = new ArrayList<>();
+		if (_filteredPortlets != null) {
+			return _filteredPortlets;
+		}
+
+		_filteredPortlets = new ArrayList<>();
 
 		for (Portlet portlet : portlets) {
 			if (portlet.isSystem() && !includeSystem) {
 				continue;
 			}
 
-			filteredPortlets.add(portlet);
+			_filteredPortlets.add(portlet);
 		}
 
-		return filteredPortlets;
+		return _filteredPortlets;
 	}
 
 	@Override
@@ -2244,6 +2248,7 @@ public class LayoutTypePortletImpl
 		FastDateFormatFactoryUtil.getSimpleDateFormat(
 			PropsValues.INDEX_DATE_FORMAT_PATTERN);
 	private boolean _enablePortletLayoutListener = true;
+	private List<Portlet> _filteredPortlets;
 	private Group _group;
 	private Layout _layoutSetPrototypeLayout;
 	private PortalPreferences _portalPreferences;
