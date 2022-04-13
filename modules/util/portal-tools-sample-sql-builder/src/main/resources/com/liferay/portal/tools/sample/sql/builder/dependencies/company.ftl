@@ -1,7 +1,5 @@
 <#assign companyModel = dataFactory.newCompanyModel() />
 
-${dataFactory.setCompanyId(companyModel.companyId)}
-
 ${dataFactory.toInsertSQL(companyModel)}
 
 ${dataFactory.toInsertSQL(dataFactory.newVirtualHostModel())}
