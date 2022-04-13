@@ -4,7 +4,11 @@
 
 <#include "company.ftl">
 
+<#include "asset.ftl">
+
 <#include "class_names.ftl">
+
+<#include "ddm.ftl">
 
 <#include "default_dl_file_type.ftl">
 

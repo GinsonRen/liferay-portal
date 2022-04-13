@@ -12,6 +12,8 @@ ${dataFactory.toInsertSQL(countryModel)}
 
 <#include "default_user.ftl">
 
+<#include "segments.ftl">
+
 <#include "commerce_groups.ftl">
 
 <@insertGroup _groupModel=globalGroupModel />
@@ -19,12 +21,6 @@ ${dataFactory.toInsertSQL(countryModel)}
 <@insertGroup _groupModel=guestGroupModel />
 
 <@insertGroup _groupModel=dataFactory.newUserPersonalSiteGroupModel() />
-
-<#include "asset.ftl">
-
-<#include "ddm.ftl">
-
-<#include "segments.ftl">
 
 <#list dataFactory.newGroupModels() as groupModel>
 	<#assign groupId = groupModel.groupId />
