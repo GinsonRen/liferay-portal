@@ -8,4 +8,4 @@ ${dataFactory.toInsertSQL(dataFactory.newVirtualHostModel())}
 	${dataFactory.toInsertSQL(portalPreferencesModel)}
 </#list>
 
-${csvFileWriter.write("company", virtualHostModel.hostname + "," + companyModel.companyId + "\n")}
+${csvFileWriter.write("company", companyModel.companyId + "\n")}
