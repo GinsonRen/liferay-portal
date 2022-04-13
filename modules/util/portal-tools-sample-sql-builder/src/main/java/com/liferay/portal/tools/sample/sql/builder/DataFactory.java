@@ -2143,7 +2143,7 @@ public class DataFactory {
 
 		companyModel.setMx("liferay.com");
 		companyModel.setActive(true);
-		companyModel.setName(companyModel.getWebId());
+		companyModel.setName("Liferay");
 		companyModel.setLegalName("Liferay, Inc.");
 
 		return companyModel;
