@@ -2119,17 +2119,40 @@ public class DataFactory {
 						"commerce/commerce_theme_portlet_settings.json"))));
 	}
 
+	public CompanyModel newCompanyModel(String webId) {
+		CompanyModel companyModel = new CompanyModelImpl();
+
+		// PK fields
+
+		companyModel.setCompanyId(_counter.get());
+
+		// Audit fields
+
+		companyModel.setCreateDate(new Date());
+		companyModel.setModifiedDate(new Date());
+
+		// Other fields
+
+		companyModel.setWebId(webId);
+		companyModel.setMx("liferay.com");
+		companyModel.setActive(true);
+		companyModel.setName(webId);
+		companyModel.setLegalName("Liferay, Inc.");
+
+		return companyModel;
+	}
+
 	public List<CompanyModel> newCompanyModels() {
 		List<CompanyModel> companyModels = new ArrayList<>(
 			BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_COUNT + 1);
 
-		companyModels.add(_newCompanyModel("liferay.com"));
+		companyModels.add(newCompanyModel("liferay.com"));
 
 		for (int i = 1; i <= BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_COUNT;
 			 i++) {
 
 			companyModels.add(
-				_newCompanyModel(StringBundler.concat("liferay", i, ".com")));
+				newCompanyModel(StringBundler.concat("liferay", i, ".com")));
 		}
 
 		return companyModels;
@@ -7174,29 +7197,6 @@ public class DataFactory {
 		sb.setIndex(sb.index() - 1);
 
 		return sb.toString();
-	}
-
-	private CompanyModel _newCompanyModel(String webId) {
-		CompanyModel companyModel = new CompanyModelImpl();
-
-		// PK fields
-
-		companyModel.setCompanyId(_counter.get());
-
-		// Audit fields
-
-		companyModel.setCreateDate(new Date());
-		companyModel.setModifiedDate(new Date());
-
-		// Other fields
-
-		companyModel.setWebId(webId);
-		companyModel.setMx("liferay.com");
-		companyModel.setActive(true);
-		companyModel.setName(webId);
-		companyModel.setLegalName("Liferay, Inc.");
-
-		return companyModel;
 	}
 
 	private LayoutModel _newContentPageLayoutModel(
