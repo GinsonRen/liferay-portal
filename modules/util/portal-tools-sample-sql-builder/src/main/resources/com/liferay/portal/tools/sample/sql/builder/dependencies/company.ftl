@@ -11,7 +11,3 @@ ${dataFactory.toInsertSQL(dataFactory.newVirtualHostModel())}
 </#list>
 
 ${csvFileWriter.write("company", virtualHostModel.hostname + "," + companyModel.companyId + "\n")}
-
-<#include "roles.ftl">
-
-<#include "groups.ftl">
