@@ -5494,18 +5494,10 @@ public class DataFactory {
 	}
 
 	public List<UserModel> newUserModels() {
-		int userCount = 0;
+		List<UserModel> userModels = new ArrayList<>(
+			BenchmarksPropsValues.MAX_USER_COUNT);
 
-		if (_webId.equals("liferay.com")) {
-			userCount = BenchmarksPropsValues.MAX_USER_COUNT;
-		}
-		else {
-			userCount = BenchmarksPropsValues.MAX_VIRTUAL_INSTANCE_USER_COUNT;
-		}
-
-		List<UserModel> userModels = new ArrayList<>(userCount);
-
-		for (int i = 0; i < userCount; i++) {
+		for (int i = 0; i < BenchmarksPropsValues.MAX_USER_COUNT; i++) {
 			String[] userName = nextUserName(i);
 
 			userModels.add(
