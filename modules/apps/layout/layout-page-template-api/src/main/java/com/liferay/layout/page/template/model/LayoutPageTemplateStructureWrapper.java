@@ -222,6 +222,13 @@ public class LayoutPageTemplateStructureWrapper
 		return model.getDefaultSegmentsExperienceData();
 	}
 
+	@Override
+	public com.liferay.layout.util.structure.LayoutStructure
+		getDefaultSegmentsExperienceLayoutStructure() {
+
+		return model.getDefaultSegmentsExperienceLayoutStructure();
+	}
+
 	/**
 	 * Returns the group ID of this layout page template structure.
 	 *
@@ -240,6 +247,20 @@ public class LayoutPageTemplateStructureWrapper
 	@Override
 	public long getLayoutPageTemplateStructureId() {
 		return model.getLayoutPageTemplateStructureId();
+	}
+
+	@Override
+	public com.liferay.layout.util.structure.LayoutStructure getLayoutStructure(
+		long segmentsExperienceId) {
+
+		return model.getLayoutStructure(segmentsExperienceId);
+	}
+
+	@Override
+	public com.liferay.layout.util.structure.LayoutStructure getLayoutStructure(
+		String segmentsExperienceKey) {
+
+		return model.getLayoutStructure(segmentsExperienceKey);
 	}
 
 	/**
