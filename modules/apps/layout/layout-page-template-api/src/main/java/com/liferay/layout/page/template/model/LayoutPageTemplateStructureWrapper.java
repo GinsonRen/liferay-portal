@@ -213,11 +213,6 @@ public class LayoutPageTemplateStructureWrapper
 	}
 
 	@Override
-	public String getData(String segmentsExperienceKey) {
-		return model.getData(segmentsExperienceKey);
-	}
-
-	@Override
 	public String getDefaultSegmentsExperienceData() {
 		return model.getDefaultSegmentsExperienceData();
 	}
