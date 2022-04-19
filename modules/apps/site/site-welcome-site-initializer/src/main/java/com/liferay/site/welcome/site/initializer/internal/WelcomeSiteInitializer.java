@@ -290,9 +290,8 @@ public class WelcomeSiteInitializer implements SiteInitializer {
 					fetchLayoutPageTemplateStructure(
 						layout.getGroupId(), layout.getPlid(), true);
 
-			LayoutStructure layoutStructure =
-				layoutPageTemplateStructure.
-					getDefaultSegmentsExperienceLayoutStructure();
+			LayoutStructure layoutStructure = LayoutStructure.of(
+				layoutPageTemplateStructure.getDefaultSegmentsExperienceData());
 
 			Class<?> clazz = getClass();
 

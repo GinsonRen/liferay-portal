@@ -107,8 +107,9 @@ public class LayoutStructureUtil {
 			return null;
 		}
 
-		return masterLayoutPageTemplateStructure.
-			getDefaultSegmentsExperienceLayoutStructure();
+		return LayoutStructure.of(
+			masterLayoutPageTemplateStructure.
+				getDefaultSegmentsExperienceData());
 	}
 
 	private static long _getSegmentsExperienceId(
