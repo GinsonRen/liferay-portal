@@ -44,26 +44,6 @@ public class LayoutPageTemplateStructureImpl
 	}
 
 	@Override
-	public String getData(String segmentsExperienceKey) {
-		SegmentsExperience segmentsExperience =
-			SegmentsExperienceLocalServiceUtil.fetchSegmentsExperience(
-				getGroupId(), segmentsExperienceKey,
-				PortalUtil.getClassNameId(Layout.class), getPlid());
-
-		LayoutPageTemplateStructureRel layoutPageTemplateStructureRel =
-			LayoutPageTemplateStructureRelLocalServiceUtil.
-				fetchLayoutPageTemplateStructureRel(
-					getLayoutPageTemplateStructureId(),
-					segmentsExperience.getSegmentsExperienceId());
-
-		if (layoutPageTemplateStructureRel != null) {
-			return layoutPageTemplateStructureRel.getData();
-		}
-
-		return StringPool.BLANK;
-	}
-
-	@Override
 	public String getDefaultSegmentsExperienceData() {
 		LayoutPageTemplateStructureRel layoutPageTemplateStructureRel =
 			LayoutPageTemplateStructureRelLocalServiceUtil.
