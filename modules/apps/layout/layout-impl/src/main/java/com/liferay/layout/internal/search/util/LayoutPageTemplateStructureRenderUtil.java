@@ -47,14 +47,16 @@ public class LayoutPageTemplateStructureRenderUtil {
 			return StringPool.BLANK;
 		}
 
-		String data = layoutPageTemplateStructure.getData(segmentsExperienceId);
+		LayoutStructure layoutStructure =
+			layoutPageTemplateStructure.getLayoutStructure(
+				segmentsExperienceId);
 
-		if (Validator.isNull(data)) {
+		if (Validator.isNull(layoutStructure.getMainItemId())) {
 			return StringPool.BLANK;
 		}
 
 		return _renderLayoutData(
-			data, fragmentRendererController, httpServletRequest,
+			layoutStructure, fragmentRendererController, httpServletRequest,
 			httpServletResponse, mode, locale);
 	}
 
@@ -83,13 +85,12 @@ public class LayoutPageTemplateStructureRenderUtil {
 	}
 
 	private static String _renderLayoutData(
-		String data, FragmentRendererController fragmentRendererController,
+		LayoutStructure layoutStructure,
+		FragmentRendererController fragmentRendererController,
 		HttpServletRequest httpServletRequest,
 		HttpServletResponse httpServletResponse, String mode, Locale locale) {
 
 		StringBundler sb = new StringBundler();
-
-		LayoutStructure layoutStructure = LayoutStructure.of(data);
 
 		for (LayoutStructureItem layoutStructureItem :
 				layoutStructure.getLayoutStructureItems()) {

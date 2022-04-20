@@ -288,8 +288,8 @@ public class PublishLayoutMVCActionCommandTest {
 				fetchLayoutPageTemplateStructure(
 					_group.getGroupId(), layout.getPlid());
 
-		return LayoutStructure.of(
-			layoutPageTemplateStructure.getDefaultSegmentsExperienceData());
+		return layoutPageTemplateStructure.
+			getDefaultSegmentsExperienceLayoutStructure();
 	}
 
 	@Inject(filter = "mvc.command.name=/layout_content_page_editor/add_portlet")

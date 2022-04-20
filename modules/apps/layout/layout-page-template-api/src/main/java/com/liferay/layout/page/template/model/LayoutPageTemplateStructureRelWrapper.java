@@ -274,6 +274,13 @@ public class LayoutPageTemplateStructureRelWrapper
 		return model.getLayoutPageTemplateStructureRelId();
 	}
 
+	@Override
+	public com.liferay.layout.util.structure.LayoutStructure
+		getLayoutStructure() {
+
+		return model.getLayoutStructure();
+	}
+
 	/**
 	 * Returns the modified date of this layout page template structure rel.
 	 *
@@ -572,6 +579,13 @@ public class LayoutPageTemplateStructureRelWrapper
 
 		model.setLayoutPageTemplateStructureRelId(
 			layoutPageTemplateStructureRelId);
+	}
+
+	@Override
+	public void setLayoutStructure(
+		com.liferay.layout.util.structure.LayoutStructure layoutStructure) {
+
+		model.setLayoutStructure(layoutStructure);
 	}
 
 	/**

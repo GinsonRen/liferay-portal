@@ -210,6 +210,8 @@ public class LayoutPageTemplateStructureRelCacheModel
 
 		layoutPageTemplateStructureRelImpl.resetOriginalValues();
 
+		layoutPageTemplateStructureRelImpl.setLayoutStructure(_layoutStructure);
+
 		return layoutPageTemplateStructureRelImpl;
 	}
 
@@ -244,6 +246,10 @@ public class LayoutPageTemplateStructureRelCacheModel
 		statusByUserId = objectInput.readLong();
 		statusByUserName = objectInput.readUTF();
 		statusDate = objectInput.readLong();
+
+		_layoutStructure =
+			(com.liferay.layout.util.structure.LayoutStructure)
+				objectInput.readObject();
 	}
 
 	@Override
@@ -302,6 +308,8 @@ public class LayoutPageTemplateStructureRelCacheModel
 		}
 
 		objectOutput.writeLong(statusDate);
+
+		objectOutput.writeObject(_layoutStructure);
 	}
 
 	public long mvccVersion;
@@ -322,5 +330,6 @@ public class LayoutPageTemplateStructureRelCacheModel
 	public long statusByUserId;
 	public String statusByUserName;
 	public long statusDate;
+	public com.liferay.layout.util.structure.LayoutStructure _layoutStructure;
 
 }

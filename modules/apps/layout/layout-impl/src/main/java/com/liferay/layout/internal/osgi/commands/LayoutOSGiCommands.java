@@ -61,8 +61,9 @@ public class LayoutOSGiCommands {
 			_segmentsExperienceLocalService.fetchDefaultSegmentsExperienceId(
 				plid);
 
-		LayoutStructure layoutStructure = LayoutStructure.of(
-			layoutPageTemplateStructure.getData(defaultSegmentsExperienceId));
+		LayoutStructure layoutStructure =
+			layoutPageTemplateStructure.getLayoutStructure(
+				defaultSegmentsExperienceId);
 
 		return _layoutStructureItemJSONSerializer.toJSONString(
 			layout, layoutStructure.getMainItemId(), false, false,

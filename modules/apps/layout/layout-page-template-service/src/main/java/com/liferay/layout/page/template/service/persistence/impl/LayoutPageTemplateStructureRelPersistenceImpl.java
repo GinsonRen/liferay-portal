@@ -3003,11 +3003,28 @@ public class LayoutPageTemplateStructureRelPersistenceImpl
 				continue;
 			}
 
-			if (entityCache.getResult(
-					LayoutPageTemplateStructureRelImpl.class,
-					layoutPageTemplateStructureRel.getPrimaryKey()) == null) {
+			LayoutPageTemplateStructureRel
+				cachedLayoutPageTemplateStructureRel =
+					(LayoutPageTemplateStructureRel)entityCache.getResult(
+						LayoutPageTemplateStructureRelImpl.class,
+						layoutPageTemplateStructureRel.getPrimaryKey());
 
+			if (cachedLayoutPageTemplateStructureRel == null) {
 				cacheResult(layoutPageTemplateStructureRel);
+			}
+			else {
+				LayoutPageTemplateStructureRelModelImpl
+					layoutPageTemplateStructureRelModelImpl =
+						(LayoutPageTemplateStructureRelModelImpl)
+							layoutPageTemplateStructureRel;
+				LayoutPageTemplateStructureRelModelImpl
+					cachedLayoutPageTemplateStructureRelModelImpl =
+						(LayoutPageTemplateStructureRelModelImpl)
+							cachedLayoutPageTemplateStructureRel;
+
+				layoutPageTemplateStructureRelModelImpl.setLayoutStructure(
+					cachedLayoutPageTemplateStructureRelModelImpl.
+						getLayoutStructure());
 			}
 		}
 	}
