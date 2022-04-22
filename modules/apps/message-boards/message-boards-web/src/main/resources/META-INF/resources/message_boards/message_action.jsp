@@ -26,7 +26,10 @@ MBMessage message = (MBMessage)objArray[0];
 Set<Long> threadSubscriptionClassPKs = (Set<Long>)request.getAttribute("view.jsp-threadSubscriptionClassPKs");
 
 MBCategory category = message.getCategory();
+
 MBThread thread = message.getThread();
+
+boolean threadLocked = thread.isLocked();
 %>
 
 <liferay-ui:icon-menu
@@ -36,7 +39,7 @@ MBThread thread = message.getThread();
 	message="actions"
 	showWhenSingleIcon="<%= true %>"
 >
-	<c:if test="<%= MBMessagePermission.contains(permissionChecker, message, ActionKeys.UPDATE) && !thread.isLocked() %>">
+	<c:if test="<%= MBMessagePermission.contains(permissionChecker, message, ActionKeys.UPDATE) && !threadLocked %>">
 		<portlet:renderURL var="editURL">
 			<portlet:param name="mvcRenderCommandName" value="/message_boards/edit_message" />
 			<portlet:param name="redirect" value="<%= currentURL %>" />
@@ -49,7 +52,7 @@ MBThread thread = message.getThread();
 		/>
 	</c:if>
 
-	<c:if test="<%= MBCategoryPermission.contains(permissionChecker, message.getGroupId(), message.getCategoryId(), ActionKeys.MOVE_THREAD) && !thread.isLocked() %>">
+	<c:if test="<%= MBCategoryPermission.contains(permissionChecker, message.getGroupId(), message.getCategoryId(), ActionKeys.MOVE_THREAD) && !threadLocked %>">
 		<portlet:renderURL var="moveThreadURL">
 			<portlet:param name="mvcRenderCommandName" value="/message_boards/move_thread" />
 			<portlet:param name="redirect" value="<%= currentURL %>" />
@@ -65,7 +68,7 @@ MBThread thread = message.getThread();
 
 	<c:if test="<%= MBCategoryPermission.contains(permissionChecker, message.getGroupId(), message.getCategoryId(), ActionKeys.LOCK_THREAD) %>">
 		<c:choose>
-			<c:when test="<%= thread.isLocked() %>">
+			<c:when test="<%= threadLocked %>">
 				<portlet:actionURL name="/message_boards/edit_message" var="unlockThreadURL">
 					<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.UNLOCK %>" />
 					<portlet:param name="redirect" value="<%= currentURL %>" />
@@ -131,7 +134,7 @@ MBThread thread = message.getThread();
 		</c:choose>
 	</c:if>
 
-	<c:if test="<%= MBMessagePermission.contains(permissionChecker, message, ActionKeys.PERMISSIONS) && !thread.isLocked() %>">
+	<c:if test="<%= MBMessagePermission.contains(permissionChecker, message, ActionKeys.PERMISSIONS) && !threadLocked %>">
 		<liferay-security:permissionsURL
 			modelResource="<%= MBMessage.class.getName() %>"
 			modelResourceDescription="<%= message.getSubject() %>"
@@ -148,7 +151,7 @@ MBThread thread = message.getThread();
 		/>
 	</c:if>
 
-	<c:if test="<%= MBMessagePermission.contains(permissionChecker, message, ActionKeys.DELETE) && !thread.isLocked() %>">
+	<c:if test="<%= MBMessagePermission.contains(permissionChecker, message, ActionKeys.DELETE) && !threadLocked %>">
 		<portlet:actionURL name="/message_boards/delete_thread" var="deleteURL">
 			<portlet:param name="<%= Constants.CMD %>" value="<%= trashHelper.isTrashEnabled(themeDisplay.getScopeGroupId()) ? Constants.MOVE_TO_TRASH : Constants.DELETE %>" />
 			<portlet:param name="redirect" value="<%= currentURL %>" />

@@ -25,6 +25,8 @@ MBCategory category = message.getCategory();
 
 MBThread thread = MBThreadLocalServiceUtil.getThread(message.getThreadId());
 
+boolean threadLocked = thread.isLocked();
+
 long messageId = message.getMessageId();
 
 long categoryId = message.getCategoryId();
@@ -98,7 +100,7 @@ if (portletTitleBasedNavigation) {
 					<aui:input fieldParam="splitThreadSubject" label="subject-of-the-new-thread" model="<%= MBMessage.class %>" name="subject" value="<%= message.getSubject() %>" />
 				</div>
 
-				<aui:input disabled="<%= thread.isLocked() %>" helpMessage='<%= thread.isLocked() ? LanguageUtil.get(request, "unlock-thread-to-add-an-explanation-post") : StringPool.BLANK %>' label="add-explanation-post-to-the-source-thread" name="addExplanationPost" onClick='<%= liferayPortletResponse.getNamespace() + "toggleExplanationPost();" %>' type="checkbox" />
+				<aui:input disabled="<%= threadLocked %>" helpMessage='<%= threadLocked ? LanguageUtil.get(request, "unlock-thread-to-add-an-explanation-post") : StringPool.BLANK %>' label="add-explanation-post-to-the-source-thread" name="addExplanationPost" onClick='<%= liferayPortletResponse.getNamespace() + "toggleExplanationPost();" %>' type="checkbox" />
 
 				<div id="<portlet:namespace />explanationPost" style="display: none;">
 					<div class="alert alert-info">
