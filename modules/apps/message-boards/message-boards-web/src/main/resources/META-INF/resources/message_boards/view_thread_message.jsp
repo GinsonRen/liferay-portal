@@ -24,7 +24,10 @@ Boolean editable = (Boolean)request.getAttribute("edit_message.jsp-editable");
 MBMessage message = (MBMessage)request.getAttribute("edit_message.jsp-message");
 Boolean showPermanentLink = (Boolean)request.getAttribute("edit-message.jsp-showPermanentLink");
 Boolean showRecentPosts = (Boolean)request.getAttribute("edit-message.jsp-showRecentPosts");
+
 MBThread thread = (MBThread)request.getAttribute("edit_message.jsp-thread");
+
+boolean threadLocked = (request.getAttribute("edit_message.jsp-threadLocked") != null) ? (Boolean)request.getAttribute("edit_message.jsp-threadLocked") : thread.isLocked();
 
 if (message.isAnonymous() || thread.isInTrash()) {
 	showRecentPosts = false;
@@ -193,11 +196,11 @@ User messageUser = UserLocalServiceUtil.fetchUser(message.getUserId());
 
 					<%
 					boolean hasBanUserPermission = (messageUser != null) && (user.getUserId() != messageUser.getUserId()) && MBResourcePermission.contains(permissionChecker, scopeGroupId, ActionKeys.BAN_USER) && !PortalUtil.isGroupAdmin(messageUser, scopeGroupId);
-					boolean hasDeletePermission = !thread.isLocked() && (thread.getMessageCount() > 1) && MBMessagePermission.contains(permissionChecker, message, ActionKeys.DELETE);
+					boolean hasDeletePermission = !threadLocked && (thread.getMessageCount() > 1) && MBMessagePermission.contains(permissionChecker, message, ActionKeys.DELETE);
 					boolean hasMoveThreadPermission = (message.getParentMessageId() != MBMessageConstants.DEFAULT_PARENT_MESSAGE_ID) && MBCategoryPermission.contains(permissionChecker, scopeGroupId, category.getCategoryId(), ActionKeys.MOVE_THREAD);
-					boolean hasPermissionsPermission = !thread.isLocked() && !message.isRoot() && MBMessagePermission.contains(permissionChecker, message, ActionKeys.PERMISSIONS);
-					boolean hasReplyPermission = thread.isApproved() && !thread.isLocked() && !message.isDraft() && MBCategoryPermission.contains(permissionChecker, scopeGroupId, message.getCategoryId(), ActionKeys.REPLY_TO_MESSAGE);
-					boolean hasUpdatePermission = !thread.isLocked() && MBMessagePermission.contains(permissionChecker, message, ActionKeys.UPDATE);
+					boolean hasPermissionsPermission = !threadLocked && !message.isRoot() && MBMessagePermission.contains(permissionChecker, message, ActionKeys.PERMISSIONS);
+					boolean hasReplyPermission = thread.isApproved() && !threadLocked && !message.isDraft() && MBCategoryPermission.contains(permissionChecker, scopeGroupId, message.getCategoryId(), ActionKeys.REPLY_TO_MESSAGE);
+					boolean hasUpdatePermission = !threadLocked && MBMessagePermission.contains(permissionChecker, message, ActionKeys.UPDATE);
 
 					boolean showAnswerFlag = false;
 
