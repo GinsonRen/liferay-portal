@@ -113,6 +113,7 @@ page import="com.liferay.message.boards.web.internal.security.permission.MBCateg
 page import="com.liferay.message.boards.web.internal.security.permission.MBMessagePermission" %><%@
 page import="com.liferay.message.boards.web.internal.security.permission.MBResourcePermission" %><%@
 page import="com.liferay.message.boards.web.internal.util.MBBreadcrumbUtil" %><%@
+page import="com.liferay.message.boards.web.internal.util.MBGroupServiceSettingsUtil" %><%@
 page import="com.liferay.message.boards.web.internal.util.MBMailUtil" %><%@
 page import="com.liferay.message.boards.web.internal.util.MBMessageIterator" %><%@
 page import="com.liferay.message.boards.web.internal.util.MBRSSUtil" %><%@
@@ -214,7 +215,7 @@ String defaultLanguageId = LocaleUtil.toLanguageId(defaultLocale);
 
 CaptchaConfiguration captchaConfiguration = (CaptchaConfiguration)ConfigurationProviderUtil.getSystemConfiguration(CaptchaConfiguration.class);
 
-MBGroupServiceSettings mbGroupServiceSettings = MBGroupServiceSettings.getInstance(themeDisplay.getSiteGroupId());
+MBGroupServiceSettings mbGroupServiceSettings = MBGroupServiceSettingsUtil.getInstance(request, themeDisplay.getSiteGroupId());
 
 String[] priorities = mbGroupServiceSettings.getPriorities(currentLanguageId);
 
