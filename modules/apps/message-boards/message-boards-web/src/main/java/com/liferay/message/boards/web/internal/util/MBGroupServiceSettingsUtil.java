@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 public class MBGroupServiceSettingsUtil {
 
 	public static MBGroupServiceSettings getInstance(
-		HttpServletRequest httpServletRequest, long groupId)
+			HttpServletRequest httpServletRequest, long groupId)
 		throws PortalException {
 
 		MBGroupServiceSettings mbGroupServiceSettings =
