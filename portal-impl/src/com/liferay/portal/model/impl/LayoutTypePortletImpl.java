@@ -269,12 +269,18 @@ public class LayoutTypePortletImpl
 
 	@Override
 	public List<Portlet> getAllPortlets() {
+		if (_allPortlets != null) {
+			return _allPortlets;
+		}
+
 		List<Portlet> staticPortlets = getStaticPortlets(
 			PropsKeys.LAYOUT_STATIC_PORTLETS_ALL);
 
-		return addStaticPortlets(
+		_allPortlets = addStaticPortlets(
 			getExplicitlyAddedPortlets(), staticPortlets,
 			getEmbeddedPortlets());
+
+		return _allPortlets;
 	}
 
 	@Override
@@ -285,17 +291,21 @@ public class LayoutTypePortletImpl
 			return portlets;
 		}
 
-		List<Portlet> filteredPortlets = new ArrayList<>();
+		if (_filteredPortlets != null) {
+			return _filteredPortlets;
+		}
+
+		_filteredPortlets = new ArrayList<>();
 
 		for (Portlet portlet : portlets) {
 			if (portlet.isSystem() && !includeSystem) {
 				continue;
 			}
 
-			filteredPortlets.add(portlet);
+			_filteredPortlets.add(portlet);
 		}
 
-		return filteredPortlets;
+		return _filteredPortlets;
 	}
 
 	@Override
@@ -2234,11 +2244,13 @@ public class LayoutTypePortletImpl
 	private static final Layout _nullLayout = new LayoutImpl();
 
 	private String _addedCustomPortletMode;
+	private List<Portlet> _allPortlets;
 	private boolean _customizedView;
 	private final Format _dateFormat =
 		FastDateFormatFactoryUtil.getSimpleDateFormat(
 			PropsValues.INDEX_DATE_FORMAT_PATTERN);
 	private boolean _enablePortletLayoutListener = true;
+	private List<Portlet> _filteredPortlets;
 	private Group _group;
 	private Layout _layoutSetPrototypeLayout;
 	private PortalPreferences _portalPreferences;
