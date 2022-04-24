@@ -70,11 +70,7 @@ public class DLServiceVerifyProcess extends VerifyProcess {
 
 	@Override
 	protected void doVerify() throws Exception {
-		_checkDLFileEntryMetadata();
-		_checkMimeTypes();
-		_updateClassNameId();
-		_updateFileEntryAssets();
-		_updateFolderAssets();
+
 	}
 
 	@Reference(unbind = "-")

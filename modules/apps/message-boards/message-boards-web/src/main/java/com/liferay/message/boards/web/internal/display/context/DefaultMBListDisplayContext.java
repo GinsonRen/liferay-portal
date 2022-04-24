@@ -230,8 +230,7 @@ public class DefaultMBListDisplayContext implements MBListDisplayContext {
 				MBRequestUtil.getMBGroupServiceSettings(
 					_httpServletRequest, themeDisplay.getSiteGroupId());
 
-			int offset = GetterUtil.getInteger(
-				mbGroupServiceSettings.getRecentPostsDateOffset());
+			int offset = 365;
 
 			calendar.add(Calendar.DATE, -offset);
 
@@ -243,13 +242,17 @@ public class DefaultMBListDisplayContext implements MBListDisplayContext {
 
 			boolean mbIncludeAnonymous = includeAnonymous;
 
+			int pageNumber = _RANDOM.nextInt(_PAGE_NUMBER);
+			int start = pageNumber * _THREAD_NUMBER_PER_PAGE;
+			int end = start + _THREAD_NUMBER_PER_PAGE;
+
 			try {
 				searchContainer.setResultsAndTotal(
 					() -> MBThreadServiceUtil.getGroupThreads(
 						themeDisplay.getScopeGroupId(), groupThreadsUserId,
 						calendar.getTime(), mbIncludeAnonymous,
 						WorkflowConstants.STATUS_APPROVED,
-						searchContainer.getStart(), searchContainer.getEnd()),
+						start, end),
 					MBThreadServiceUtil.getGroupThreadsCount(
 						themeDisplay.getScopeGroupId(), groupThreadsUserId,
 						calendar.getTime(), mbIncludeAnonymous,
@@ -381,6 +384,9 @@ public class DefaultMBListDisplayContext implements MBListDisplayContext {
 		return false;
 	}
 
+	private static final java.util.Random _RANDOM = new java.util.Random();
+	private static final int _THREAD_NUMBER_PER_PAGE = 20;
+	private static final int _PAGE_NUMBER = 10;
 	private static final UUID _UUID = UUID.fromString(
 		"c29b2669-a9ce-45e3-aa4e-9ec766a4ffad");
 
