@@ -22,15 +22,15 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * @author Dante Wang
  */
-public class MBGroupServiceSettingsUtil {
+public class MBRequestUtil {
 
-	public static MBGroupServiceSettings getInstance(
+	public static MBGroupServiceSettings getMBGroupServiceSettings(
 			HttpServletRequest httpServletRequest, long groupId)
 		throws PortalException {
 
 		MBGroupServiceSettings mbGroupServiceSettings =
 			(MBGroupServiceSettings)httpServletRequest.getAttribute(
-				MBGroupServiceSettingsUtil.class.getName());
+				MBRequestUtil.class.getName());
 
 		if (mbGroupServiceSettings != null) {
 			return mbGroupServiceSettings;
@@ -39,7 +39,7 @@ public class MBGroupServiceSettingsUtil {
 		mbGroupServiceSettings = MBGroupServiceSettings.getInstance(groupId);
 
 		httpServletRequest.setAttribute(
-			MBGroupServiceSettingsUtil.class.getName(), mbGroupServiceSettings);
+			MBRequestUtil.class.getName(), mbGroupServiceSettings);
 
 		return mbGroupServiceSettings;
 	}

@@ -17,7 +17,7 @@ package com.liferay.message.boards.web.internal.struts;
 import com.liferay.message.boards.constants.MBCategoryConstants;
 import com.liferay.message.boards.service.MBMessageService;
 import com.liferay.message.boards.settings.MBGroupServiceSettings;
-import com.liferay.message.boards.web.internal.util.MBGroupServiceSettingsUtil;
+import com.liferay.message.boards.web.internal.util.MBRequestUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
@@ -177,7 +177,7 @@ public class RSSStrutsAction implements StrutsAction {
 				WebKeys.THEME_DISPLAY);
 
 		MBGroupServiceSettings mbGroupServiceSettings =
-			MBGroupServiceSettingsUtil.getInstance(
+			MBRequestUtil.getMBGroupServiceSettings(
 				httpServletRequest, themeDisplay.getSiteGroupId());
 
 		return mbGroupServiceSettings.isEnableRSS();

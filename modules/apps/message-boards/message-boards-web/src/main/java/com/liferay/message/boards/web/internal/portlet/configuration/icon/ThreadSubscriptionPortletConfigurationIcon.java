@@ -19,7 +19,7 @@ import com.liferay.message.boards.model.MBMessage;
 import com.liferay.message.boards.model.MBThread;
 import com.liferay.message.boards.settings.MBGroupServiceSettings;
 import com.liferay.message.boards.web.internal.portlet.action.ActionUtil;
-import com.liferay.message.boards.web.internal.util.MBGroupServiceSettingsUtil;
+import com.liferay.message.boards.web.internal.util.MBRequestUtil;
 import com.liferay.petra.portlet.url.builder.PortletURLBuilder;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
@@ -128,7 +128,7 @@ public class ThreadSubscriptionPortletConfigurationIcon
 
 		try {
 			MBGroupServiceSettings mbGroupServiceSettings =
-				MBGroupServiceSettingsUtil.getInstance(
+				MBRequestUtil.getMBGroupServiceSettings(
 					_portal.getHttpServletRequest(portletRequest),
 					themeDisplay.getScopeGroupId());
 
