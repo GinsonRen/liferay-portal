@@ -21,7 +21,11 @@ MBTreeWalker treeWalker = (MBTreeWalker)request.getAttribute(WebKeys.MESSAGE_BOA
 MBMessage selMessage = (MBMessage)request.getAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_SEL_MESSAGE);
 MBMessage message = (MBMessage)request.getAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_CUR_MESSAGE);
 MBCategory category = (MBCategory)request.getAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_CATEGORY);
+
 MBThread thread = (MBThread)request.getAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_THREAD);
+
+boolean threadLocked = (request.getAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_THREAD_LOCKED) != null) ? (Boolean)request.getAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_THREAD_LOCKED) : thread.isLocked();
+
 int depth = (Integer)request.getAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_DEPTH);
 
 int index = GetterUtil.getInteger(request.getAttribute(WebKeys.MESSAGE_BOARDS_TREE_INDEX));
@@ -59,6 +63,7 @@ MBMessage rootMessage = treeWalker.getRoot();
 		request.setAttribute("edit_message.jsp-editable", !thread.isInTrash());
 		request.setAttribute("edit_message.jsp-message", message);
 		request.setAttribute("edit_message.jsp-thread", thread);
+		request.setAttribute("edit_message.jsp-threadLocked", threadLocked);
 		%>
 
 		<liferay-util:include page="/message_boards/view_thread_message.jsp" servletContext="<%= application %>" />
@@ -86,6 +91,7 @@ MBMessage rootMessage = treeWalker.getRoot();
 		request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_LAST_NODE, Boolean.valueOf(lastChildNode));
 		request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_SEL_MESSAGE, selMessage);
 		request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_THREAD, thread);
+		request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_THREAD_LOCKED, threadLocked);
 	%>
 
 		<div class="card-tab message-container">
@@ -96,7 +102,7 @@ MBMessage rootMessage = treeWalker.getRoot();
 	}
 	%>
 
-	<c:if test="<%= !thread.isLocked() && !message.isDraft() && MBCategoryPermission.contains(permissionChecker, scopeGroupId, message.getCategoryId(), ActionKeys.REPLY_TO_MESSAGE) %>">
+	<c:if test="<%= !threadLocked && !message.isDraft() && MBCategoryPermission.contains(permissionChecker, scopeGroupId, message.getCategoryId(), ActionKeys.REPLY_TO_MESSAGE) %>">
 
 		<%
 		long replyToMessageId = message.getMessageId();

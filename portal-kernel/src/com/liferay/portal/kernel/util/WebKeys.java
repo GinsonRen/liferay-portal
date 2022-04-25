@@ -398,6 +398,8 @@ public interface WebKeys {
 
 	public static final String MESSAGE_BOARDS_TREE_WALKER_VIEWABLE_THREAD =
 		"MESSAGE_BOARDS_TREE_WALKER_VIEWABLE_THREAD";
+	public static final String MESSAGE_BOARDS_TREE_WALKER_THREAD_LOCKED =
+		"MESSAGE_BOARDS_TREE_WALKER_THREAD_LOCKED";
 
 	public static final String NETVIBES = "NETVIBES";
 

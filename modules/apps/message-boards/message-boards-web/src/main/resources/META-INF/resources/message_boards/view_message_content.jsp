@@ -29,6 +29,8 @@ MBCategory category = messageDisplay.getCategory();
 
 MBThread thread = messageDisplay.getThread();
 
+boolean threadLocked = thread.isLocked();
+
 boolean portletTitleBasedNavigation = GetterUtil.getBoolean(portletConfig.getInitParameter("portlet-title-based-navigation"));
 
 if (portletTitleBasedNavigation) {
@@ -76,7 +78,7 @@ if (portletTitleBasedNavigation) {
 					message="actions"
 					showWhenSingleIcon="<%= true %>"
 				>
-					<c:if test="<%= !thread.isLocked() && !thread.isInTrash() && MBMessagePermission.contains(permissionChecker, rootMessage, ActionKeys.PERMISSIONS) %>">
+					<c:if test="<%= !threadLocked && !thread.isInTrash() && MBMessagePermission.contains(permissionChecker, rootMessage, ActionKeys.PERMISSIONS) %>">
 						<liferay-security:permissionsURL
 							modelResource="<%= MBMessage.class.getName() %>"
 							modelResourceDescription="<%= rootMessage.getSubject() %>"
@@ -133,7 +135,7 @@ if (portletTitleBasedNavigation) {
 
 					<c:if test="<%= !thread.isInTrash() && MBCategoryPermission.contains(permissionChecker, scopeGroupId, (category != null) ? category.getCategoryId() : MBCategoryConstants.DEFAULT_PARENT_CATEGORY_ID, ActionKeys.LOCK_THREAD) %>">
 						<c:choose>
-							<c:when test="<%= thread.isLocked() %>">
+							<c:when test="<%= threadLocked %>">
 								<portlet:actionURL name="/message_boards/edit_message" var="unlockThreadURL">
 									<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.UNLOCK %>" />
 									<portlet:param name="redirect" value="<%= currentURL %>" />
@@ -174,7 +176,7 @@ if (portletTitleBasedNavigation) {
 						/>
 					</c:if>
 
-					<c:if test="<%= MBMessagePermission.contains(permissionChecker, rootMessage, ActionKeys.DELETE) && !thread.isLocked() %>">
+					<c:if test="<%= MBMessagePermission.contains(permissionChecker, rootMessage, ActionKeys.DELETE) && !threadLocked %>">
 						<portlet:renderURL var="parentCategoryURL">
 							<c:choose>
 								<c:when test="<%= (category == null) || (category.getCategoryId() == MBCategoryConstants.DEFAULT_PARENT_CATEGORY_ID) %>">
@@ -222,6 +224,7 @@ if (portletTitleBasedNavigation) {
 		request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_LAST_NODE, Boolean.valueOf(false));
 		request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_SEL_MESSAGE, message);
 		request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_THREAD, thread);
+		request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_THREAD_LOCKED, threadLocked);
 		request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_VIEWABLE_THREAD, Boolean.FALSE.toString());
 		%>
 
@@ -258,6 +261,7 @@ if (portletTitleBasedNavigation) {
 			request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_LAST_NODE, Boolean.valueOf(false));
 			request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_SEL_MESSAGE, message);
 			request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_THREAD, thread);
+			request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_THREAD_LOCKED, threadLocked);
 		%>
 
 			<div class="card-tab message-container">
@@ -268,7 +272,7 @@ if (portletTitleBasedNavigation) {
 		}
 		%>
 
-		<c:if test="<%= !thread.isLocked() && !thread.isDraft() && MBCategoryPermission.contains(permissionChecker, scopeGroupId, rootMessage.getCategoryId(), ActionKeys.REPLY_TO_MESSAGE) %>">
+		<c:if test="<%= !threadLocked && !thread.isDraft() && MBCategoryPermission.contains(permissionChecker, scopeGroupId, rootMessage.getCategoryId(), ActionKeys.REPLY_TO_MESSAGE) %>">
 
 			<%
 			long replyToMessageId = message.getRootMessageId();
@@ -278,7 +282,7 @@ if (portletTitleBasedNavigation) {
 		</c:if>
 	</div>
 
-	<c:if test="<%= thread.isApproved() && !thread.isLocked() && !thread.isDraft() && MBCategoryPermission.contains(permissionChecker, scopeGroupId, rootMessage.getCategoryId(), ActionKeys.REPLY_TO_MESSAGE) %>">
+	<c:if test="<%= thread.isApproved() && !threadLocked && !thread.isDraft() && MBCategoryPermission.contains(permissionChecker, scopeGroupId, rootMessage.getCategoryId(), ActionKeys.REPLY_TO_MESSAGE) %>">
 
 		<%
 		String taglibReplyToMessageURL = "javascript:" + liferayPortletResponse.getNamespace() + "addReplyToMessage('" + rootMessage.getMessageId() + "', '');";

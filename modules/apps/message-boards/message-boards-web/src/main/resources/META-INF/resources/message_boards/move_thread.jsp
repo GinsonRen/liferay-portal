@@ -29,6 +29,8 @@ category = category.toEscapedModel();
 
 MBThread thread = message.getThread();
 
+boolean threadLocked = thread.isLocked();
+
 MBMessage curParentMessage = null;
 
 String body = StringPool.BLANK;
@@ -72,7 +74,7 @@ if (portletTitleBasedNavigation) {
 					<aui:button name="selectCategoryButton" value="select" />
 				</div>
 
-				<aui:input disabled="<%= thread.isLocked() %>" helpMessage='<%= thread.isLocked() ? LanguageUtil.get(request, "unlock-thread-to-add-an-explanation-post") : StringPool.BLANK %>' label="add-explanation-post" name="addExplanationPost" onClick='<%= liferayPortletResponse.getNamespace() + "toggleExplanationPost();" %>' type="checkbox" />
+				<aui:input disabled="<%= threadLocked %>" helpMessage='<%= threadLocked ? LanguageUtil.get(request, "unlock-thread-to-add-an-explanation-post") : StringPool.BLANK %>' label="add-explanation-post" name="addExplanationPost" onClick='<%= liferayPortletResponse.getNamespace() + "toggleExplanationPost();" %>' type="checkbox" />
 
 				<div class="hide" id="<portlet:namespace />explanationPost">
 					<aui:input maxlength="<%= ModelHintsConstants.TEXT_MAX_LENGTH %>" name="subject" style="width: 350px;" value="">
