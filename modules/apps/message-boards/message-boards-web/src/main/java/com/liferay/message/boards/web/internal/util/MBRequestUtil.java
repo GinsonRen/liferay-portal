@@ -30,7 +30,7 @@ public class MBRequestUtil {
 
 		MBGroupServiceSettings mbGroupServiceSettings =
 			(MBGroupServiceSettings)httpServletRequest.getAttribute(
-				MBRequestUtil.class.getName());
+				_MB_GROUP_SERVICE_SETTINGS);
 
 		if (mbGroupServiceSettings != null) {
 			return mbGroupServiceSettings;
@@ -39,9 +39,12 @@ public class MBRequestUtil {
 		mbGroupServiceSettings = MBGroupServiceSettings.getInstance(groupId);
 
 		httpServletRequest.setAttribute(
-			MBRequestUtil.class.getName(), mbGroupServiceSettings);
+			_MB_GROUP_SERVICE_SETTINGS, mbGroupServiceSettings);
 
 		return mbGroupServiceSettings;
 	}
+
+	private static final String _MB_GROUP_SERVICE_SETTINGS =
+		"MB_GROUP_SERVICE_SETTINGS";
 
 }
