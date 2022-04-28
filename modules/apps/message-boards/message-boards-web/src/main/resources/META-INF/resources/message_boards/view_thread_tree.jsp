@@ -17,6 +17,7 @@
 <%@ include file="/message_boards/init.jsp" %>
 
 <%
+boolean repliedToMessage = (Boolean)request.getAttribute(MBWebKeys.MESSAGE_BOARDS_TREE_WALKER_REPLIED_TO_MESSAGE);
 MBTreeWalker treeWalker = (MBTreeWalker)request.getAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER);
 MBMessage selMessage = (MBMessage)request.getAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_SEL_MESSAGE);
 MBMessage message = (MBMessage)request.getAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_CUR_MESSAGE);
@@ -92,7 +93,7 @@ MBMessage rootMessage = treeWalker.getRoot();
 	}
 	%>
 
-	<c:if test="<%= !thread.isLocked() && !message.isDraft() && MBCategoryPermission.contains(permissionChecker, scopeGroupId, message.getCategoryId(), ActionKeys.REPLY_TO_MESSAGE) %>">
+	<c:if test="<%= !thread.isLocked() && !message.isDraft() && repliedToMessage %>">
 
 		<%
 		long replyToMessageId = message.getMessageId();

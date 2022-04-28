@@ -215,6 +215,10 @@ if (portletTitleBasedNavigation) {
 	<div class="card-tab-group message-container" id="<portlet:namespace />messageContainer">
 
 		<%
+		boolean repliedToMessage = MBCategoryPermission.contains(permissionChecker, scopeGroupId, category.getCategoryId(), ActionKeys.REPLY_TO_MESSAGE);
+
+		request.setAttribute(MBWebKeys.MESSAGE_BOARDS_TREE_WALKER_REPLIED_TO_MESSAGE, Boolean.valueOf(repliedToMessage));
+
 		request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER, mbTreeWalker);
 		request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_CATEGORY, category);
 		request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_CUR_MESSAGE, rootMessage);

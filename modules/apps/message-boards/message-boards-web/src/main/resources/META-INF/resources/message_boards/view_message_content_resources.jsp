@@ -49,6 +49,10 @@ MBMessageIterator mbMessageIterator = new MBMessageIterator(treeWalker.getMessag
 		}
 
 		if (initialSetting) {
+			boolean repliedToMessage = MBCategoryPermission.contains(permissionChecker, scopeGroupId, category.getCategoryId(), ActionKeys.REPLY_TO_MESSAGE);
+
+			request.setAttribute(MBWebKeys.MESSAGE_BOARDS_TREE_WALKER_REPLIED_TO_MESSAGE, Boolean.valueOf(repliedToMessage));
+
 			request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER, treeWalker);
 			request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_CATEGORY, category);
 			request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_DEPTH, Integer.valueOf(0));
