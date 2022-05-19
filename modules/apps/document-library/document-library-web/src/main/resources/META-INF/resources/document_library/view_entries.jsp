@@ -93,6 +93,11 @@ DLViewEntriesDisplayContext dlViewEntriesDisplayContext = new DLViewEntriesDispl
 							/>
 						</c:when>
 						<c:when test="<%= dlViewEntriesDisplayContext.isIconDisplayStyle() %>">
+
+							<%
+							request.setAttribute("view_entries.jsp-dlViewFileVersionDisplayContext", dlViewFileVersionDisplayContext);
+							%>
+
 							<liferay-ui:search-container-column-text>
 								<c:choose>
 									<c:when test="<%= dlViewFileVersionDisplayContext.hasCustomThumbnail() %>">
