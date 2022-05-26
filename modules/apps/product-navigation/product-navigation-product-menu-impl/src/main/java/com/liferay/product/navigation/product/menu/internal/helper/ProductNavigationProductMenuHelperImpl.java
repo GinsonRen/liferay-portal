@@ -50,11 +50,20 @@ public class ProductNavigationProductMenuHelperImpl
 
 	@Override
 	public boolean isShowProductMenu(HttpServletRequest httpServletRequest) {
+		Boolean showProductMenu = (Boolean)httpServletRequest.getAttribute(
+			_SHOW_PRODUCT_MENU);
+
+		if (showProductMenu != null) {
+			return showProductMenu;
+		}
+
 		ThemeDisplay themeDisplay =
 			(ThemeDisplay)httpServletRequest.getAttribute(
 				WebKeys.THEME_DISPLAY);
 
 		if (!themeDisplay.isSignedIn()) {
+			httpServletRequest.setAttribute(_SHOW_PRODUCT_MENU, Boolean.FALSE);
+
 			return false;
 		}
 
@@ -62,12 +71,16 @@ public class ProductNavigationProductMenuHelperImpl
 			httpServletRequest, "p_l_mode", Constants.VIEW);
 
 		if (layoutMode.equals(Constants.PREVIEW)) {
+			httpServletRequest.setAttribute(_SHOW_PRODUCT_MENU, Boolean.FALSE);
+
 			return false;
 		}
 
 		User user = themeDisplay.getUser();
 
 		if (!themeDisplay.isImpersonated() && !user.isSetupComplete()) {
+			httpServletRequest.setAttribute(_SHOW_PRODUCT_MENU, Boolean.FALSE);
+
 			return false;
 		}
 
@@ -75,12 +88,16 @@ public class ProductNavigationProductMenuHelperImpl
 			themeDisplay.getCompanyId());
 
 		if (enableApplicationsMenu && _isApplicationsMenuApp(themeDisplay)) {
+			httpServletRequest.setAttribute(_SHOW_PRODUCT_MENU, Boolean.FALSE);
+
 			return false;
 		}
 
 		Group scopeGroup = themeDisplay.getScopeGroup();
 
 		if (enableApplicationsMenu && scopeGroup.isDepot()) {
+			httpServletRequest.setAttribute(_SHOW_PRODUCT_MENU, Boolean.FALSE);
+
 			return false;
 		}
 
@@ -90,6 +107,8 @@ public class ProductNavigationProductMenuHelperImpl
 				themeDisplay.getScopeGroup());
 
 		if (!childPanelCategories.isEmpty()) {
+			httpServletRequest.setAttribute(_SHOW_PRODUCT_MENU, Boolean.TRUE);
+
 			return true;
 		}
 
@@ -101,9 +120,14 @@ public class ProductNavigationProductMenuHelperImpl
 					themeDisplay.getScopeGroup());
 
 			if (!childPanelCategories.isEmpty()) {
+				httpServletRequest.setAttribute(
+					_SHOW_PRODUCT_MENU, Boolean.TRUE);
+
 				return true;
 			}
 		}
+
+		httpServletRequest.setAttribute(_SHOW_PRODUCT_MENU, Boolean.FALSE);
 
 		return false;
 	}
@@ -154,6 +178,10 @@ public class ProductNavigationProductMenuHelperImpl
 
 		return false;
 	}
+
+	private static final String _SHOW_PRODUCT_MENU =
+		ProductNavigationProductMenuHelperImpl.class.getName() +
+			"#ShowProductMenu";
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		ProductNavigationProductMenuHelperImpl.class);
