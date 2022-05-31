@@ -50,7 +50,7 @@ List<Folder> folders = dlInfoPanelDisplayContext.getFolders();
 				<div class="autofit-col">
 					<ul class="autofit-padded-no-gutters autofit-row">
 						<li class="autofit-col">
-							<%@ include file="/document_library/subscribe.jspf" %>
+							<liferay-util:include page="/document_library/subscribe.jsp" servletContext="<%= application %>" />
 						</li>
 
 						<%
@@ -91,10 +91,10 @@ List<Folder> folders = dlInfoPanelDisplayContext.getFolders();
 							</dd>
 
 							<%
-							Folder parentFolder = folder.getParentFolder();
+							request.setAttribute("info_panel_location.jsp-parentFolder", folder.getParentFolder());
 							%>
 
-							<%@ include file="/document_library/info_panel_location.jspf" %>
+							<liferay-util:include page="/document_library/info_panel_location.jsp" servletContext="<%= application %>" />
 						</c:if>
 					</dl>
 				</liferay-ui:section>
