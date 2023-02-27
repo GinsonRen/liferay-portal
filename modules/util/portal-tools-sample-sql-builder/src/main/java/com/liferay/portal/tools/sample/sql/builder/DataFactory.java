@@ -325,6 +325,7 @@ import com.liferay.segments.criteria.CriteriaSerializer;
 import com.liferay.segments.model.SegmentsEntry;
 import com.liferay.segments.model.SegmentsEntryModel;
 import com.liferay.segments.model.impl.SegmentsEntryImpl;
+import com.liferay.site.navigation.language.constants.SiteNavigationLanguagePortletKeys;
 import com.liferay.social.kernel.model.SocialActivity;
 import com.liferay.social.kernel.model.SocialActivityConstants;
 import com.liferay.social.kernel.model.SocialActivityModel;
@@ -606,6 +607,20 @@ public class DataFactory {
 		return sb.toString();
 	}
 
+        public String getLanguageLayoutColumn(String portletPrefix) {
+
+		StringBundler sb = new StringBundler(
+				2 * BenchmarksPropsValues.MAX_LANGUAGE_PORTLET_COUNT);
+
+		for(int i = 0; i < BenchmarksPropsValues.MAX_LANGUAGE_PORTLET_COUNT; i++){
+
+				sb.append(portletPrefix);
+				sb.append(StringPool.COMMA);
+		}
+
+		return sb.toString();
+	}
+
 	public int getMaxAssetPublisherPageCount() {
 		return BenchmarksPropsValues.MAX_ASSETPUBLISHER_PAGE_COUNT;
 	}
@@ -664,6 +679,14 @@ public class DataFactory {
 	public int getMaxJournalArticleVersionCount() {
 		return BenchmarksPropsValues.MAX_JOURNAL_ARTICLE_VERSION_COUNT;
 	}
+
+        public int getMaxLanguagePageCount() {
+                return BenchmarksPropsValues.MAX_LANGUAGE_PAGE_COUNT;
+        }
+
+        public int getMaxLanguagePortletCount() {
+                return BenchmarksPropsValues.MAX_LANGUAGE_PORTLET_COUNT;
+        }
 
 	public int getMaxSegmentsEntryCount() {
 		return BenchmarksPropsValues.MAX_SEGMENTS_ENTRY_COUNT;
