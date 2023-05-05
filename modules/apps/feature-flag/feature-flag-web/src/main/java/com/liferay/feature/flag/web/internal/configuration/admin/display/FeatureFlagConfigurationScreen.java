@@ -69,7 +69,10 @@ public class FeatureFlagConfigurationScreen implements ConfigurationScreen {
 
 	@Override
 	public boolean isVisible() {
-		if (_featureFlagType.isUIEnabled()) {
+
+		if (_featureFlagManager.isEnabled("LPS-167698") &&
+			_featureFlagStatus.isUIEnabled()) {
+			
 			return true;
 		}
 
