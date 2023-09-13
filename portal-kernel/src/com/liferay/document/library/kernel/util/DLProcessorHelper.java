@@ -1,5 +1,5 @@
 /**
- * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-FileCopyrightText: (c) 2023 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
@@ -13,7 +13,7 @@ import com.liferay.portal.kernel.xml.Element;
 /**
  * @author Mika Koivisto
  */
-public interface DLProcessorRegistry {
+public interface DLProcessorHelper {
 
 	public void cleanUp(FileEntry fileEntry);
 
@@ -24,8 +24,6 @@ public interface DLProcessorRegistry {
 			Element fileEntryElement)
 		throws Exception;
 
-	public DLProcessor getDLProcessor(String dlProcessorType);
-
 	public void importGeneratedFiles(
 			PortletDataContext portletDataContext, FileEntry fileEntry,
 			FileEntry importedFileEntry, Element fileEntryElement)
@@ -33,13 +31,9 @@ public interface DLProcessorRegistry {
 
 	public boolean isPreviewableSize(FileVersion fileVersion);
 
-	public void register(DLProcessor dlProcessor);
-
 	public void trigger(FileEntry fileEntry, FileVersion fileVersion);
 
 	public void trigger(
 		FileEntry fileEntry, FileVersion fileVersion, boolean trusted);
-
-	public void unregister(DLProcessor dlProcessor);
 
 }

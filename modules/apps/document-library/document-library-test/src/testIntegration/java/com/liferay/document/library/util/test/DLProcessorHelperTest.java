@@ -1,5 +1,5 @@
 /**
- * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-FileCopyrightText: (c) 2023 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
@@ -9,7 +9,7 @@ import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.document.library.kernel.model.DLFolderConstants;
 import com.liferay.document.library.kernel.service.DLAppLocalService;
 import com.liferay.document.library.kernel.util.DLProcessor;
-import com.liferay.document.library.kernel.util.DLProcessorRegistry;
+import com.liferay.document.library.kernel.util.DLProcessorHelper;
 import com.liferay.exportimport.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Group;
@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
@@ -37,11 +38,16 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceRegistration;
+
 /**
  * @author Cristina González
  */
 @RunWith(Arquillian.class)
-public class DLProcessorRegistryTest {
+public class DLProcessorHelperTest {
 
 	@ClassRule
 	@Rule
@@ -55,75 +61,81 @@ public class DLProcessorRegistryTest {
 		_cleanUp = new AtomicBoolean(false);
 		_trigger = new AtomicBoolean(false);
 
-		_dlProcessor = new DLProcessor() {
+		Bundle bundle = FrameworkUtil.getBundle(DLProcessorHelperTest.class);
 
-			@Override
-			public void afterPropertiesSet() throws Exception {
-			}
+		BundleContext bundleContext = bundle.getBundleContext();
 
-			@Override
-			public void cleanUp(FileEntry fileEntry) {
-				_cleanUp.set(true);
-			}
+		_dlProcessorServiceRegistration = bundleContext.registerService(
+			DLProcessor.class,
+			new DLProcessor() {
 
-			@Override
-			public void cleanUp(FileVersion fileVersion) {
-				_cleanUp.set(true);
-			}
+				@Override
+				public void afterPropertiesSet() throws Exception {
+				}
 
-			@Override
-			public void copy(
-				FileVersion sourceFileVersion,
-				FileVersion destinationFileVersion) {
-			}
+				@Override
+				public void cleanUp(FileEntry fileEntry) {
+					_cleanUp.set(true);
+				}
 
-			@Override
-			public void exportGeneratedFiles(
-					PortletDataContext portletDataContext, FileEntry fileEntry,
-					Element fileEntryElement)
-				throws Exception {
-			}
+				@Override
+				public void cleanUp(FileVersion fileVersion) {
+					_cleanUp.set(true);
+				}
 
-			@Override
-			public String getType() {
-				return "TEST";
-			}
+				@Override
+				public void copy(
+					FileVersion sourceFileVersion,
+					FileVersion destinationFileVersion) {
+				}
 
-			@Override
-			public void importGeneratedFiles(
-					PortletDataContext portletDataContext, FileEntry fileEntry,
-					FileEntry importedFileEntry, Element fileEntryElement)
-				throws Exception {
-			}
+				@Override
+				public void exportGeneratedFiles(
+						PortletDataContext portletDataContext,
+						FileEntry fileEntry, Element fileEntryElement)
+					throws Exception {
+				}
 
-			@Override
-			public boolean isSupported(FileVersion fileVersion) {
-				return true;
-			}
+				@Override
+				public String getType() {
+					return "TEST";
+				}
 
-			@Override
-			public boolean isSupported(String mimeType) {
-				return true;
-			}
+				@Override
+				public void importGeneratedFiles(
+						PortletDataContext portletDataContext,
+						FileEntry fileEntry, FileEntry importedFileEntry,
+						Element fileEntryElement)
+					throws Exception {
+				}
 
-			@Override
-			public void trigger(
-				FileVersion sourceFileVersion,
-				FileVersion destinationFileVersion) {
+				@Override
+				public boolean isSupported(FileVersion fileVersion) {
+					return true;
+				}
 
-				_trigger.set(true);
-			}
+				@Override
+				public boolean isSupported(String mimeType) {
+					return true;
+				}
 
-		};
+				@Override
+				public void trigger(
+					FileVersion sourceFileVersion,
+					FileVersion destinationFileVersion) {
 
-		_dlProcessorRegistry.register(_dlProcessor);
+					_trigger.set(true);
+				}
+
+			},
+			MapUtil.singletonDictionary("type", "TEST"));
 
 		_group = GroupTestUtil.addGroup();
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		_dlProcessorRegistry.unregister(_dlProcessor);
+		_dlProcessorServiceRegistration.unregister();
 	}
 
 	@Test
@@ -136,7 +148,7 @@ public class DLProcessorRegistryTest {
 			TestDataConstants.TEST_BYTE_ARRAY, null, null,
 			ServiceContextTestUtil.getServiceContext());
 
-		_dlProcessorRegistry.cleanUp(fileEntry);
+		_dlProcessorHelper.cleanUp(fileEntry);
 
 		Assert.assertTrue(_cleanUp.get());
 	}
@@ -151,7 +163,7 @@ public class DLProcessorRegistryTest {
 			TestDataConstants.TEST_BYTE_ARRAY, null, null,
 			ServiceContextTestUtil.getServiceContext());
 
-		_dlProcessorRegistry.cleanUp(fileEntry.getFileVersion());
+		_dlProcessorHelper.cleanUp(fileEntry.getFileVersion());
 
 		Assert.assertTrue(_cleanUp.get());
 	}
@@ -166,7 +178,7 @@ public class DLProcessorRegistryTest {
 			TestDataConstants.TEST_BYTE_ARRAY, null, null,
 			ServiceContextTestUtil.getServiceContext());
 
-		_dlProcessorRegistry.trigger(fileEntry, fileEntry.getFileVersion());
+		_dlProcessorHelper.trigger(fileEntry, fileEntry.getFileVersion());
 
 		Assert.assertTrue(_trigger.get());
 	}
@@ -185,7 +197,7 @@ public class DLProcessorRegistryTest {
 
 		_dlAppLocalService.deleteFileEntry(fileEntry.getFileEntryId());
 
-		_dlProcessorRegistry.trigger(fileEntry, fileVersion);
+		_dlProcessorHelper.trigger(fileEntry, fileVersion);
 
 		Assert.assertTrue(_trigger.get());
 	}
@@ -195,11 +207,10 @@ public class DLProcessorRegistryTest {
 	@Inject
 	private DLAppLocalService _dlAppLocalService;
 
-	private DLProcessor _dlProcessor;
-
 	@Inject
-	private DLProcessorRegistry _dlProcessorRegistry;
+	private DLProcessorHelper _dlProcessorHelper;
 
+	private ServiceRegistration<DLProcessor> _dlProcessorServiceRegistration;
 	private Group _group;
 	private AtomicBoolean _trigger;
 
