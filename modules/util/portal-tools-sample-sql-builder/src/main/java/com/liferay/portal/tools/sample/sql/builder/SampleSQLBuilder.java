@@ -173,7 +173,7 @@ public class SampleSQLBuilder {
 
 			db = new SampleMySQLDB(db.getMajorVersion(), db.getMinorVersion());
 		}
-		else if (_dbType == DBType.POSTGRESQL) {
+		else if (BenchmarksPropsValues.DB_TYPE == DBType.POSTGRESQL) {
 			db = new SamplePostgreSQLDB(
 				db.getMajorVersion(), db.getMinorVersion());
 		}
