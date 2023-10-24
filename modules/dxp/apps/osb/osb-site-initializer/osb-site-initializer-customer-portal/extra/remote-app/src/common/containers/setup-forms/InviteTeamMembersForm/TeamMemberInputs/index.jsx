@@ -4,8 +4,12 @@
  */
 
 import {ClayInput} from '@clayui/form';
+import ClayIcon from '@clayui/icon';
 import {useEffect, useMemo} from 'react';
+import {useAppPropertiesContext} from '~/common/contexts/AppPropertiesContext';
+import useCurrentKoroneikiAccount from '~/common/hooks/useCurrentKoroneikiAccount';
 import useProvisioningLicenseKeys from '~/common/hooks/useProvisioningLicenseKeys';
+import useUserAccountsByAccountExternalReferenceCode from '~/routes/customer-portal/pages/Project/TeamMembers/components/TeamMembersTable/hooks/useUserAccountsByAccountExternalReferenceCode';
 import i18n from '../../../../I18n';
 import {Input, Select} from '../../../../components';
 import useBannedDomains from '../../../../hooks/useBannedDomains';
@@ -21,6 +25,7 @@ const FETCH_DELAY_AFTER_TYPING = 500;
 const TeamMemberInputs = ({
 	administratorsAssetsAvailable,
 	disableError,
+	errors,
 	id,
 	invite,
 	onSelectRole,
@@ -28,6 +33,7 @@ const TeamMemberInputs = ({
 	placeholderEmail,
 	selectOnChange,
 }) => {
+	const {accountSettingsURL, featureFlags} = useAppPropertiesContext();
 	const provisioningService = useProvisioningLicenseKeys();
 
 	const bannedDomains = useBannedDomains(
@@ -35,9 +41,30 @@ const TeamMemberInputs = ({
 		FETCH_DELAY_AFTER_TYPING
 	);
 
-	const validateEmail = useMemo(async () => {
-		const [, domain] = invite?.email.split('@');
+	const {data} = useCurrentKoroneikiAccount();
+	const koroneikiAccount = data?.koroneikiAccountByExternalReferenceCode;
 
+	const [
+		,
+		{data: userAccountsData},
+	] = useUserAccountsByAccountExternalReferenceCode(
+		koroneikiAccount?.accountKey
+	);
+
+	const currentDomain = userAccountsData?.accountUserAccountsByExternalReferenceCode.items
+		.map(({emailAddress}) => emailAddress.split('@')[1])
+		.flat();
+
+	const [, domain] = invite?.email.split('@');
+
+	const mathEmail = currentDomain?.includes(domain) || false;
+
+	const isEmailValid = !!errors.invites?.[id]?.email;
+
+	const warningMessage =
+		invite?.email.length > 1 && !mathEmail && !isEmailValid;
+
+	const validateEmail = useMemo(async () => {
 		if (isValidEmail(invite?.email, bannedDomains)) {
 			return isValidEmail(invite?.email, bannedDomains);
 		}
@@ -140,6 +167,56 @@ const TeamMemberInputs = ({
 					/>
 				</ClayInput.GroupItem>
 			</ClayInput.Group>
+
+			{featureFlags.includes('ISSD-100') && warningMessage && (
+				<div
+					className="alert alert-warning align-items-top d-flex m-3 p-3"
+					role="alert"
+				>
+					<div className="alert-indicator mt-1">
+						<span>
+							<ClayIcon symbol="warning-full" />
+						</span>
+					</div>
+
+					<div className="mx-2">
+						{`${i18n.translate('is')} `}
+
+						<strong>{invite.email}</strong>
+
+						{` ${i18n.sub(
+							'part-of-your-organization-it-looks-like-x-is-a-new-domain-name',
+							[`${domain}`]
+						)}`}
+
+						<ul className="mb-0">
+							<li>
+								{`${i18n.translate(
+									'to-update-an-existing-users-email-address-have-the-user-log-in-with-their-current-address-to-access'
+								)} `}
+
+								<a
+									className="alert-link"
+									href={accountSettingsURL}
+									rel="noreferrer noopener"
+									target="_blank"
+								>
+									<u className="font-weight-semi-bold text-warning">
+										{i18n.translate('account-settings')}
+									</u>
+								</a>
+							</li>
+
+							<li>
+								{i18n.translate(
+									'be-aware-that-adding-new-users-from-outside-your-organization-may-compromise-the-security-of-your-project'
+								)}
+							</li>
+						</ul>
+					</div>
+				</div>
+			)}
+
 			<hr className="mb-3 mt-2" />
 		</>
 	);

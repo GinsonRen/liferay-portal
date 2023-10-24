@@ -31,9 +31,12 @@ const AppRoutes = {
 };
 
 type Properties = {
+	accountSettingsURL: string | null;
 	articleAccountSupportURL: string | null;
+	articleDeactivateKey: string | null;
 	articleDeployingActivationKeysURL: string | null;
 	articleGettingStartedWithLiferayEnterpriseSearchURL: string | null;
+	articleNotifiedWhenMyActivationKeyIsAboutToExpireURL: string | null;
 	articleWhatIsMyInstanceSizingValueURL: string | null;
 	featureFlags?: string[];
 	importDate?: Date | null;
@@ -96,14 +99,21 @@ class CustomerPortalWebComponent extends HTMLElement {
 
 	connectedCallback() {
 		const properties = {
+			accountSettingsURL: super.getAttribute('account-settings-url'),
 			articleAccountSupportURL: super.getAttribute(
 				'article-account-support-url'
+			),
+			articleDeactivateKey: super.getAttribute(
+				'article-deactivate-key-url'
 			),
 			articleDeployingActivationKeysURL: super.getAttribute(
 				'article-deploying-activation-keys-url'
 			),
 			articleGettingStartedWithLiferayEnterpriseSearchURL: super.getAttribute(
 				'article-getting-started-with-liferay-enterprise-search-url'
+			),
+			articleNotifiedWhenMyActivationKeyIsAboutToExpireURL: super.getAttribute(
+				'article-notified-when-my-activation-key-is-about-to-expire-url'
 			),
 			articleWhatIsMyInstanceSizingValueURL: super.getAttribute(
 				'article-what-is-my-instance-sizing-value-url'

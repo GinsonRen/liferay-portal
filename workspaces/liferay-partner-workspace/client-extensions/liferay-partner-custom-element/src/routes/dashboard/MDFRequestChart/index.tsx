@@ -13,6 +13,7 @@ import {mdfChartColumnColors} from '../../../common/components/dashboard/utils/c
 import getChartColumns from '../../../common/components/dashboard/utils/getChartColumns';
 import {siteURL} from '../../../common/components/dashboard/utils/siteURL';
 import {Liferay} from '../../../common/services/liferay';
+import {LiferayAPIs} from '../../../common/services/liferay/common/enums/apis';
 import {retry} from '../../../common/utils/retry';
 
 const MDFRequestChart = () => {
@@ -39,14 +40,41 @@ const MDFRequestChart = () => {
 			)
 		);
 
-		if (response.ok) {
-			const mdfRequests = await response.json();
-			const mdfCurrency = 'USD';
+		const myUserAccountResponse = await retry<Response>(() =>
+			fetch(`/o/${LiferayAPIs.HEADERLESS_ADMIN_USER}/my-user-account`, {
+				headers: {
+					'accept': 'application/json',
+					'x-csrf-token': Liferay.authToken,
+				},
+			})
+		);
+		const myUserAccount = await myUserAccountResponse.json();
 
-			setCurrencyData(mdfCurrency);
+		const accountResponse =
+			myUserAccount.accountBriefs[0]?.externalReferenceCode &&
+			(await retry<Response>(() =>
+				fetch(
+					`/o/${LiferayAPIs.HEADERLESS_ADMIN_USER}/accounts/by-external-reference-code/${myUserAccount.accountBriefs[0]?.externalReferenceCode}`,
+					{
+						headers: {
+							'accept': 'application/json',
+							'x-csrf-token': Liferay.authToken,
+						},
+					}
+				)
+			));
+
+		const account = await accountResponse?.json();
+
+		const currency = account ? account.currency : 'USD';
+
+		if (response.ok && currency) {
+			const mdfRequests = await response.json();
+
+			setCurrencyData(currency);
 
 			getChartColumns(
-				mdfCurrency,
+				currency,
 				mdfRequests,
 				setColumnsMDFChart,
 				setTitleChart,
@@ -73,32 +101,35 @@ const MDFRequestChart = () => {
 
 	return (
 		<Container
-			className="dashboard-mdf-request-chart"
+			className="dashboard-mdf-chart justify-content-between"
 			footer={
-				<>
+				<div className="mt-n2">
 					<ClayButton
-						className="border-brand-primary-darken-1 mr-4 text-brand-primary-darken-1"
+						className="bg-neutral-0 border-brand-primary-darken-1 text-brand-primary-darken-1"
 						displayType="secondary"
 						onClick={() =>
 							Liferay.Util.navigate(
 								`${siteURL}/marketing/mdf-requests`
 							)
 						}
+						size="sm"
 					>
 						View all
 					</ClayButton>
 
 					<ClayButton
+						className="btn btn-primary ml-4"
 						displayType="primary"
 						onClick={() =>
 							Liferay.Util.navigate(
 								`${siteURL}/marketing/mdf-requests/new`
 							)
 						}
+						size="sm"
 					>
 						New MDF Request
 					</ClayButton>
-				</>
+				</div>
 			}
 			title="Market Development Funds"
 		>

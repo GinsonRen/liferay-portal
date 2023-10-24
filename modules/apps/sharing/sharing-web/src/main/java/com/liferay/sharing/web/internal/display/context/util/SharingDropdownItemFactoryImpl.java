@@ -5,8 +5,11 @@
 
 package com.liferay.sharing.web.internal.display.context.util;
 
+import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownContextItem;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItem;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItemBuilder;
+import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItemListBuilder;
+import com.liferay.petra.function.UnsafeConsumer;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.sharing.display.context.util.SharingDropdownItemFactory;
 import com.liferay.sharing.display.context.util.SharingJavaScriptFactory;
@@ -42,6 +45,32 @@ public class SharingDropdownItemFactoryImpl
 			SharingItemFactoryUtil.getManageCollaboratorsLabel(
 				httpServletRequest)
 		).build();
+	}
+
+	@Override
+	public UnsafeConsumer<DropdownContextItem, Exception>
+		createShareActionUnsafeConsumer(
+			String className, long classPK,
+			HttpServletRequest httpServletRequest) {
+
+		return dropdownContextItem -> {
+			dropdownContextItem.setDropdownItems(
+				DropdownItemListBuilder.add(
+					createShareDropdownItem(
+						className, classPK, httpServletRequest)
+				).add(
+					dropdownItem -> {
+						dropdownItem.putData("action", "copyLink");
+						dropdownItem.setIcon("link");
+						dropdownItem.setLabel(
+							SharingItemFactoryUtil.getCopyLinkLabel(
+								httpServletRequest));
+					}
+				).build());
+			dropdownContextItem.setIcon("share");
+			dropdownContextItem.setLabel(
+				SharingItemFactoryUtil.getSharingLabel(httpServletRequest));
+		};
 	}
 
 	@Override

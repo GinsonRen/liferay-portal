@@ -265,11 +265,11 @@ public class Main {
 						"Updating structured content " +
 							structuredContent.getFriendlyUrlPath());
 
+					_setPermissions(fileName, structuredContent);
+
 					importedStructuredContent =
 						_structuredContentResource.putStructuredContent(
 							siteStructuredContent.getId(), structuredContent);
-
-					_setVisibility(fileName, siteStructuredContent);
 
 					updatedStructuredContentCount++;
 				}
@@ -296,14 +296,14 @@ public class Main {
 						"Adding structured content " +
 							structuredContent.getFriendlyUrlPath());
 
+					_setPermissions(fileName, structuredContent);
+
 					importedStructuredContent =
 						_structuredContentResource.
 							postStructuredContentFolderStructuredContent(
 								structuredContent.
 									getStructuredContentFolderId(),
 								structuredContent);
-
-					_setVisibility(fileName, structuredContent);
 
 					addedStructuredContentCount++;
 				}
@@ -1461,7 +1461,7 @@ public class Main {
 		return line;
 	}
 
-	private void _setVisibility(
+	private void _setPermissions(
 			String fileName, StructuredContent structuredContent)
 		throws Exception {
 
@@ -1479,17 +1479,15 @@ public class Main {
 		Map<String, Object> data = snakeYamlFrontMatterVisitor.getData();
 
 		if ((data == null) || !data.containsKey("visibility")) {
-			Permission[] permissions = {
-				new Permission() {
-					{
-						actionIds = new String[] {"VIEW"};
-						roleName = "Guest";
+			structuredContent.setPermissions(
+				new Permission[] {
+					new Permission() {
+						{
+							actionIds = new String[] {"VIEW"};
+							roleName = "Guest";
+						}
 					}
-				}
-			};
-
-			_structuredContentResource.putStructuredContentPermissionsPage(
-				structuredContent.getId(), permissions);
+				});
 
 			return;
 		}
@@ -1528,8 +1526,7 @@ public class Main {
 				}
 			});
 
-		_structuredContentResource.putStructuredContentPermissionsPage(
-			structuredContent.getId(), permissions.toArray(new Permission[0]));
+		structuredContent.setPermissions(permissions.toArray());
 	}
 
 	private String _toFriendlyURLPath(File file) {

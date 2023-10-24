@@ -38,40 +38,26 @@ const ProductCard = ({
 	const [hasTrial, setHasTrial] = useState(false);
 	const [basePrice, setBasePrice] = useState(0);
 
-	const productHasTrialSKU = (skus: SKU[]) => {
-		skus.forEach(async (sku) => {
-			const licenseUsageType = sku?.skuOptions.find((option) => {
-				return (
-					option?.key === 'trial' &&
-					option?.value === 'yes' &&
-					option?.key
-				);
-			});
-			if (
-				licenseUsageType &&
-				licenseUsageType?.key.toLowerCase() ===
-					SkuOptions.TRIAL.toLowerCase()
-			) {
-				setHasTrial(true);
-			}
-		});
-	};
-
-	const getProductBasePrice = (product: Product) => {
-		product?.skus?.forEach((sku) => {
-			const licenseUsageType = sku?.skuOptions.find(
+	const getProductBasePriceAndTrial = (skus: SKU[]) => {
+		skus?.forEach((sku) => {
+			const licenseUsageTypes = sku?.skuOptions.filter(
 				(skuOption) =>
-					skuOption?.key === 'standard' &&
-					skuOption?.value === 'yes' &&
-					skuOption?.key
+					skuOption?.value === SkuOptions.STANDARD.toLowerCase() ||
+					skuOption?.value === SkuOptions.TRIAL.toLowerCase()
 			);
 
-			if (
-				licenseUsageType?.key.toLowerCase() ===
-				SkuOptions.STANDARD.toLowerCase()
-			) {
-				setBasePrice(sku.price);
-			}
+			licenseUsageTypes.forEach((licenseUsageType) => {
+				switch (licenseUsageType?.value.toLowerCase()) {
+					case SkuOptions.STANDARD.toLowerCase():
+						setBasePrice(sku.price);
+						break;
+					case SkuOptions.TRIAL.toLowerCase():
+						setHasTrial(true);
+						break;
+					default:
+						break;
+				}
+			});
 		});
 	};
 
@@ -120,8 +106,7 @@ const ProductCard = ({
 
 	useEffect(() => {
 		if (product) {
-			productHasTrialSKU(product.skus);
-			getProductBasePrice(product);
+			getProductBasePriceAndTrial(product.skus);
 		}
 	}, [product]);
 
@@ -163,9 +148,11 @@ const ProductCard = ({
 						<FormattedValues />
 					</div>
 
-					<div className="license-tag px-2">
-						{getLicenseTagText(product)}
-					</div>
+					{!!basePrice && (
+						<div className="license-tag px-2">
+							{getLicenseTagText(product)}
+						</div>
+					)}
 				</div>
 			</div>
 

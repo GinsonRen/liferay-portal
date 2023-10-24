@@ -644,6 +644,8 @@ definition {
 			}
 
 			task ("Assert the Name of object entries are respectively shown in each cell") {
+				ContentPages.gotoPageEditor();
+
 				var n = 1;
 
 				for (var title : list "Banana,Apple") {
@@ -858,6 +860,8 @@ definition {
 			}
 
 			task ("Assert the Name of object entries are respectively shown in each cell") {
+				ContentPages.gotoPageEditor();
+
 				var n = 1;
 
 				for (var title : list "Banana,Apple") {
@@ -1224,6 +1228,8 @@ definition {
 			}
 
 			task ("Assert the Name of object entries are respectively shown in each cell") {
+				ContentPages.gotoPageEditor();
+
 				var n = 1;
 
 				for (var title : list "Banana,Apple") {
@@ -1388,8 +1394,6 @@ definition {
 		task ("Then the page marketer could configue the page via options menu") {
 			LexiconEntry.gotoHeaderMenuItem(menuItem = "Configure");
 
-			SelectWindow.selectPopUp(locator1 = "null");
-
 			AssertVisible(
 				key_title = "General",
 				locator1 = "Header#H2_TITLE");
@@ -1400,7 +1404,7 @@ definition {
 		}
 
 		task ("When the page marketer goes back to the page editor") {
-			Close.closeWindow();
+			Navigator.gotoBack();
 		}
 
 		task ("Then the page marketer could preview changes in a new tab via options menu") {
@@ -1441,8 +1445,6 @@ definition {
 		task ("Then the page marketer could configue the page via options menu") {
 			LexiconEntry.gotoHeaderMenuItem(menuItem = "Configure");
 
-			SelectWindow.selectPopUp(locator1 = "null");
-
 			AssertVisible(
 				key_title = "General",
 				locator1 = "Header#H2_TITLE");
@@ -1453,7 +1455,7 @@ definition {
 		}
 
 		task ("When the page marketer goes back to the page editor") {
-			Close.closeWindow();
+			Navigator.gotoBack();
 		}
 
 		task ("Then the page marketer could preview changes in a new tab via options menu") {

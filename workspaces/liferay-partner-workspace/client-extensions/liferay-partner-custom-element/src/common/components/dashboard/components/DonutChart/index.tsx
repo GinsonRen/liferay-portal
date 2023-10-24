@@ -8,6 +8,7 @@ import ClayChart from '@clayui/charts';
 import ClayLoadingIndicator from '@clayui/loading-indicator';
 import React, {useCallback, useMemo} from 'react';
 
+import './index.css';
 import formatCurrency from '../../utils/formatCurrency';
 
 interface iProps {
@@ -38,8 +39,8 @@ const DonutChart = ({
 	width = 300,
 }: iProps) => {
 	const legendTransformData = useCallback((newItems: any, colors: any) => {
-		return newItems.map((item: any, index: any) => ({
-			color: Object.entries(colors)[index][1],
+		return newItems.map((item: any) => ({
+			color: colors[item[0]],
 			name: item[0],
 			value: item[1],
 		}));
@@ -58,13 +59,15 @@ const DonutChart = ({
 
 	const buildChart = () => {
 		if (isLoading) {
-			return <ClayLoadingIndicator className="mb-10 mt-9" size="md" />;
+			return (
+				<ClayLoadingIndicator className="h-100 mb-10 mt-9" size="md" />
+			);
 		}
 
 		if (!hasChartData && !isLoading) {
 			return (
 				<ClayAlert
-					className="mb-10 mt-9 text-center w-50"
+					className="my-10 text-center w-50"
 					displayType="info"
 					title="Info:"
 				>
@@ -78,11 +81,17 @@ const DonutChart = ({
 				<span className="text-nowrap">
 					{titleChart}
 
-					<b>{valueChart}</b>
+					<b>
+						{formatCurrency(
+							valueChart,
+							dataCurrency,
+							'lessPrecision'
+						)}
+					</b>
 				</span>
 
 				<div className="d-flex">
-					<div className="d-flex flex-column flex-sm-row justify-content-start">
+					<div className="d-flex flex-column flex-md-row justify-content-start">
 						<>
 							<ClayChart
 								data={chartDataColumns}
@@ -108,7 +117,8 @@ const DonutChart = ({
 											} Activities</span>
 											<span class="text-weight-bold text-primary">Total ${formatCurrency(
 												chartColumnsData[1],
-												dataCurrency
+												dataCurrency,
+												'lessPrecision'
 											)}</span>
 											</div>`;
 										}
@@ -118,7 +128,8 @@ const DonutChart = ({
 											${chartColumnsData[0]}</span>
 											<span class="text-weight-bold text-primary">Total ${formatCurrency(
 												chartColumnsData[1],
-												dataCurrency
+												dataCurrency,
+												'lessPrecision'
 											)}</span>
 											</div>`;
 									},
@@ -128,8 +139,8 @@ const DonutChart = ({
 							<LegendElement />
 
 							{!hasLegend && (
-								<div className="d-flex flex-column justify-content-around pb-4 pl-4">
-									<div className="d-flex flex-column flex-wrap h-100 justify-content-center mb-1">
+								<div className="d-flex flex-column justify-content-around pl-4">
+									<div className="d-flex flex-column flex-wrap h-100 justify-content-center">
 										{legendItems?.map(
 											(item: any, index: any) => {
 												return (

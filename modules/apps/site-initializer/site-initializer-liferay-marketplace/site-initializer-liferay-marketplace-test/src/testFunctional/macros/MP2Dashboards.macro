@@ -1,5 +1,13 @@
 definition {
 
+	macro assertNoResendInvitationButton {
+		AssertElementNotPresent(locator1 = "MP2Dashboards#RESEND_INVITATION");
+	}
+
+	macro assertResendInvitationButton {
+		AssertElementPresent(locator1 = "MP2Dashboards#RESEND_INVITATION");
+	}
+
 	macro clickBreadcrumb {
 		var key_accountTitle = ${accountTitle};
 
@@ -21,6 +29,12 @@ definition {
 			key_label = ${label},
 			key_text = ${value},
 			locator1 = "MP2Dashboards#DASHBOARD_TABLE");
+	}
+
+	macro clickOnTheResendInvitationButton {
+		Click(locator1 = "MP2Dashboards#RESEND_INVITATION");
+
+		Alert.viewSuccessMessage();
 	}
 
 	macro inviteNewMember {

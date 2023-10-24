@@ -34,7 +34,7 @@ export type TableHeaders = {
 }[];
 
 interface DashboardTableProps<T> {
-	children: (item: T) => ReactNode;
+	children?: (item: T) => ReactNode;
 	emptyStateMessage: {
 		description1: string;
 		description2: string;
@@ -46,25 +46,13 @@ interface DashboardTableProps<T> {
 }
 
 export function DashboardTable<T>({
-	children,
+	children = () => null,
 	emptyStateMessage,
 	icon,
 	items,
 	tableHeaders,
 }: DashboardTableProps<T>) {
-	const {description1, description2, title} = emptyStateMessage;
-
-	if (!items.length) {
-		return (
-			<DashboardEmptyTable
-				description1={description1}
-				description2={description2}
-				icon={icon}
-				title={title}
-			/>
-		);
-	}
-	else {
+	if (items.length) {
 		return (
 			<ClayTable borderless className="dashboard-table-container">
 				<ClayTable.Head>
@@ -91,4 +79,15 @@ export function DashboardTable<T>({
 			</ClayTable>
 		);
 	}
+
+	const {description1, description2, title} = emptyStateMessage;
+
+	return (
+		<DashboardEmptyTable
+			description1={description1}
+			description2={description2}
+			icon={icon}
+			title={title}
+		/>
+	);
 }

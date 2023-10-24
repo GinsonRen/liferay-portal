@@ -172,6 +172,11 @@ public class FDSViewsPortlet extends MVCPortlet {
 					ObjectFieldUtil.createObjectField(
 						ObjectFieldConstants.BUSINESS_TYPE_TEXT,
 						ObjectFieldConstants.DB_TYPE_STRING, true, false, null,
+						_language.get(locale, "modal-size"), "modalSize",
+						false),
+					ObjectFieldUtil.createObjectField(
+						ObjectFieldConstants.BUSINESS_TYPE_TEXT,
+						ObjectFieldConstants.DB_TYPE_STRING, true, false, null,
 						_language.get(locale, "permission-key"),
 						"permissionKey", false),
 					ObjectFieldUtil.createObjectField(
@@ -204,8 +209,17 @@ public class FDSViewsPortlet extends MVCPortlet {
 			userId, fdsViewObjectDefinition.getObjectDefinitionId(),
 			fdsActionObjectDefinition.getObjectDefinitionId(), 0,
 			ObjectRelationshipConstants.DELETION_TYPE_CASCADE,
-			LocalizedMapUtil.getLocalizedMap("FDSView FDSAction Relationship"),
-			"fdsViewFDSActionRelationship", false,
+			LocalizedMapUtil.getLocalizedMap(
+				"FDSView FDSCreationAction Relationship"),
+			"fdsViewFDSCreationActionRelationship", false,
+			ObjectRelationshipConstants.TYPE_ONE_TO_MANY);
+		_objectRelationshipLocalService.addObjectRelationship(
+			userId, fdsViewObjectDefinition.getObjectDefinitionId(),
+			fdsActionObjectDefinition.getObjectDefinitionId(), 0,
+			ObjectRelationshipConstants.DELETION_TYPE_CASCADE,
+			LocalizedMapUtil.getLocalizedMap(
+				"FDSView FDSItemAction Relationship"),
+			"fdsViewFDSItemActionRelationship", false,
 			ObjectRelationshipConstants.TYPE_ONE_TO_MANY);
 	}
 
@@ -532,8 +546,8 @@ public class FDSViewsPortlet extends MVCPortlet {
 					ObjectFieldUtil.createObjectField(
 						ObjectFieldConstants.BUSINESS_TYPE_LONG_TEXT,
 						ObjectFieldConstants.DB_TYPE_CLOB, true, false, null,
-						_language.get(locale, "actions-order"),
-						"fdsActionsOrder", false),
+						_language.get(locale, "creation-actions-order"),
+						"fdsCreationActionsOrder", false),
 					ObjectFieldUtil.createObjectField(
 						ObjectFieldConstants.BUSINESS_TYPE_LONG_TEXT,
 						ObjectFieldConstants.DB_TYPE_CLOB, true, false, null,
@@ -544,6 +558,11 @@ public class FDSViewsPortlet extends MVCPortlet {
 						ObjectFieldConstants.DB_TYPE_CLOB, true, false, null,
 						_language.get(locale, "filters-order"),
 						"fdsFiltersOrder", false),
+					ObjectFieldUtil.createObjectField(
+						ObjectFieldConstants.BUSINESS_TYPE_LONG_TEXT,
+						ObjectFieldConstants.DB_TYPE_CLOB, true, false, null,
+						_language.get(locale, "item-actions-order"),
+						"fdsItemActionsOrder", false),
 					ObjectFieldUtil.createObjectField(
 						ObjectFieldConstants.BUSINESS_TYPE_LONG_TEXT,
 						ObjectFieldConstants.DB_TYPE_CLOB, true, false, null,

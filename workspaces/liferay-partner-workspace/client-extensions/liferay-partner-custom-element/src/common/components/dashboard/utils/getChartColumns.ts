@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import formatCurrency from './formatCurrency';
-
 export default function getChartColumns(
 	mdfCurrency: any,
 	mdfRequests: any,
@@ -14,21 +12,23 @@ export default function getChartColumns(
 ) {
 	const chartColumns: any[] = [];
 
-	const totalMDFActivitiesAmount = totalMDFActivities(
+	const totalMDFActivitiesAmount = totalMDFRequested(
 		mdfRequests,
 		chartColumns
 	);
 
 	totalMDFApprovedRequests(mdfRequests, chartColumns);
 
-	totalMDFRequestToClaims(mdfRequests, chartColumns);
+	totalRequestedMDFToClaims(mdfRequests, chartColumns);
 
 	totalApprovedMDFToClaims(mdfRequests, chartColumns);
+
+	totalPaidMDFToClaims(mdfRequests, chartColumns);
 
 	expiringSoonTotalActivities(mdfRequests, chartColumns);
 
 	expiredTotalActivites(mdfRequests, chartColumns);
-	setValueChart(formatCurrency(totalMDFActivitiesAmount, mdfCurrency));
+	setValueChart(totalMDFActivitiesAmount);
 	setTitleChart('Total MDF ');
 	setColumnsMDFChart(chartColumns);
 }
@@ -39,9 +39,7 @@ function expiredTotalActivites(mdfRequests: any, chartColumns: any) {
 	const expiredActivities = mdfRequests?.items
 		?.map((activity: any) =>
 			activity?.mdfReqToActs?.filter(
-				(request: any) =>
-					new Date(request.endDate).setTime(expiredDate) >
-					new Date().getTime()
+				(activity: any) => activity.activityStatus.key === 'expired'
 			)
 		)
 		.flat();
@@ -63,9 +61,10 @@ function expiringSoonTotalActivities(mdfRequests: any, chartColumns: any) {
 	const expiringSoonActivitiesDate = mdfRequests?.items
 		?.map((activity: any) =>
 			activity.mdfReqToActs.filter(
-				(request: any) =>
-					new Date(request.endDate).setTime(expiredDate) <
-					new Date().getTime()
+				(activity: any) =>
+					new Date(activity.endDate).setTime(expiredDate) <
+						new Date().getTime() &&
+					activity.activityStatus.key !== 'expired'
 			)
 		)
 		.flat();
@@ -84,36 +83,66 @@ function expiringSoonTotalActivities(mdfRequests: any, chartColumns: any) {
 	]);
 }
 
-function totalApprovedMDFToClaims(mdfRequests: any, chartColumns: any) {
-	const claimedRequests = mdfRequests?.items
+function totalRequestedMDFToClaims(mdfRequests: any, chartColumns: any) {
+	const claimesRequested = mdfRequests?.items
 		?.map((claim: any) =>
 			claim.mdfReqToMDFClms.filter(
-				(request: any) => request.mdfClaimStatus.key === 'approved'
+				(request: any) =>
+					request.mdfClaimStatus.key === 'inDirectorReview' ||
+					request.mdfClaimStatus.key === 'pendingMarketingReview' ||
+					request.mdfClaimStatus.key === 'approved'
 			)
 		)
 		.flat();
 
-	const totalClaimedApprovedRequestsAmount = claimedRequests?.reduce(
+	const totalClaimsRequestedAmount = claimesRequested?.reduce(
 		(acc: any, value: any) => acc + value?.totalClaimAmount || 0,
 		0
 	);
 
-	const numberOfClaimedApprovedRequests = claimedRequests.length;
+	const totalMDFClaimActivitiesCount = claimesRequested.reduce(
+		(acc: any, value: any) =>
+			acc + parseFloat(value.mdfClaimActivitiesCount),
+		0
+	);
 
 	chartColumns.push([
-		'Claim Approved',
-		totalClaimedApprovedRequestsAmount,
-		numberOfClaimedApprovedRequests,
+		'Claim Requested',
+		totalClaimsRequestedAmount,
+		totalMDFClaimActivitiesCount,
 	]);
 }
 
-function totalMDFRequestToClaims(mdfRequests: any, chartColumns: any) {
-	const totalClaimedRequestsAmount = mdfRequests?.items?.reduce(
-		(acc: any, value: any) =>
-			acc + parseFloat(value.totalClaimedRequest || 0),
+function totalApprovedMDFToClaims(mdfRequests: any, chartColumns: any) {
+	const claimsApproved = mdfRequests?.items
+		?.map((claim: any) =>
+			claim.mdfReqToMDFClms.filter(
+				(request: any) =>
+					request.mdfClaimStatus.key === 'inFinanceReview'
+			)
+		)
+		.flat();
+
+	const totalClaimesApprovedAmount = claimsApproved?.reduce(
+		(acc: any, value: any) => acc + value?.totalClaimAmount || 0,
 		0
 	);
-	const claimedRequests = mdfRequests?.items
+
+	const totalMDFClaimActivitiesCount = claimsApproved.reduce(
+		(acc: any, value: any) =>
+			acc + parseFloat(value.mdfClaimActivitiesCount),
+		0
+	);
+
+	chartColumns.push([
+		'Claim Approved',
+		totalClaimesApprovedAmount,
+		totalMDFClaimActivitiesCount,
+	]);
+}
+
+function totalPaidMDFToClaims(mdfRequests: any, chartColumns: any) {
+	const claimsPaid = mdfRequests?.items
 		?.map((claim: any) =>
 			claim.mdfReqToMDFClms.filter(
 				(request: any) => request.mdfClaimStatus.key === 'claimPaid'
@@ -121,32 +150,40 @@ function totalMDFRequestToClaims(mdfRequests: any, chartColumns: any) {
 		)
 		.flat();
 
-	const totalClaimedActivites = claimedRequests.reduce(
+	const totalClaimsPaidAmount = claimsPaid?.reduce(
+		(acc: any, value: any) => acc + parseFloat(value.totalClaimAmount || 0),
+		0
+	);
+
+	const totalMDFClaimActivitiesCount = claimsPaid.reduce(
 		(acc: any, value: any) =>
 			acc + parseFloat(value.mdfClaimActivitiesCount),
 		0
 	);
 
 	chartColumns.push([
-		'Claimed',
-		totalClaimedRequestsAmount,
-		totalClaimedActivites,
+		'Claim Paid',
+		totalClaimsPaidAmount,
+		totalMDFClaimActivitiesCount,
 	]);
 }
 
-function totalMDFActivities(mdfRequests: any, chartColumns: any) {
+function totalMDFRequested(mdfRequests: any, chartColumns: any) {
 	const totalMDFActivitiesAmount = mdfRequests?.items?.reduce(
 		(prevValue: any, currValue: any) =>
 			prevValue + (parseFloat(currValue.totalMDFRequestAmount) || 0),
 		0
 	);
 
-	const numberOfMDFActivities = mdfRequests?.items?.length;
+	const totalMDFActivitiesCount = mdfRequests?.items?.reduce(
+		(acc: any, value: any) => acc + parseFloat(value.mdfActivitiesCount),
+		0
+	);
 
 	chartColumns.push([
 		'Requested',
 		totalMDFActivitiesAmount,
-		numberOfMDFActivities,
+		totalMDFActivitiesCount,
 	]);
 
 	return totalMDFActivitiesAmount;
@@ -161,11 +198,14 @@ function totalMDFApprovedRequests(mdfRequests: any, chartColumns: any) {
 		0
 	);
 
-	const numberOfMDFApprovedRequests = mdfApprovedRequests.length;
+	const totalMDFActivitiesCount = mdfApprovedRequests?.reduce(
+		(acc: any, value: any) => acc + parseFloat(value.mdfActivitiesCount),
+		0
+	);
 
 	chartColumns.push([
 		'Approved',
 		totalMDFApprovedRequestsAmount,
-		numberOfMDFApprovedRequests,
+		totalMDFActivitiesCount,
 	]);
 }

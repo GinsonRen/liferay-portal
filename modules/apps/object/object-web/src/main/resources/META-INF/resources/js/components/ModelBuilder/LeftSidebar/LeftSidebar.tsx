@@ -27,7 +27,12 @@ export default function LeftSidebar({setShowModal}: LeftSidebarProps) {
 	);
 	const [query, setQuery] = useState('');
 	const [
-		{isLoadingObjectFolder, leftSidebarItems, selectedObjectFolder},
+		{
+			isLoadingObjectFolder,
+			leftSidebarItems,
+			selectedObjectFolder,
+			showSidebars,
+		},
 	] = useObjectFolderContext();
 
 	const filteredLeftSidebarItems = useMemo(() => {
@@ -55,10 +60,14 @@ export default function LeftSidebar({setShowModal}: LeftSidebarProps) {
 			};
 		});
 
-		setExpandedKeys(new Set(keys));
+		const selectedObjectFolderKey = keys.find(
+			(key) => key === selectedObjectFolder.name
+		) as string;
+
+		setExpandedKeys(new Set([selectedObjectFolderKey]));
 
 		return newLeftSidebarItems;
-	}, [leftSidebarItems, query]);
+	}, [leftSidebarItems, query, selectedObjectFolder]);
 
 	const leftSidebarOtherObjectFoldersItems = filteredLeftSidebarItems.filter(
 		(filteredLeftSidebarItem) =>
@@ -86,7 +95,7 @@ export default function LeftSidebar({setShowModal}: LeftSidebarProps) {
 			panelWidth={300}
 			position="left"
 			resize={false}
-			triggerSideBarAnimation={true}
+			triggerSideBarAnimation={showSidebars}
 			verticalBarItems={[
 				{
 					title: 'objectsModelBuilderLeftSidebar',

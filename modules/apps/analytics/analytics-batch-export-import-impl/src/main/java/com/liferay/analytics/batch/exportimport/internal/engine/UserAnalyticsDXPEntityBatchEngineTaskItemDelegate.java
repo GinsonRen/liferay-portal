@@ -9,12 +9,14 @@ import com.liferay.analytics.batch.exportimport.internal.dto.v1_0.converter.cons
 import com.liferay.analytics.dxp.entity.rest.dto.v1_0.DXPEntity;
 import com.liferay.analytics.settings.configuration.AnalyticsConfiguration;
 import com.liferay.analytics.settings.configuration.AnalyticsConfigurationRegistry;
+import com.liferay.analytics.settings.rest.manager.AnalyticsSettingsManager;
 import com.liferay.analytics.settings.security.constants.AnalyticsSecurityConstants;
 import com.liferay.batch.engine.BatchEngineTaskItemDelegate;
 import com.liferay.batch.engine.pagination.Page;
 import com.liferay.batch.engine.pagination.Pagination;
 import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.petra.sql.dsl.DSLQueryFactoryUtil;
+import com.liferay.petra.sql.dsl.expression.Predicate;
 import com.liferay.petra.sql.dsl.query.DSLQuery;
 import com.liferay.petra.sql.dsl.query.JoinStep;
 import com.liferay.portal.kernel.model.BaseModel;
@@ -31,6 +33,7 @@ import com.liferay.portal.vulcan.dto.converter.DTOConverter;
 
 import java.io.Serializable;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -53,18 +56,30 @@ public class UserAnalyticsDXPEntityBatchEngineTaskItemDelegate
 			Map<String, Serializable> parameters, String search)
 		throws Exception {
 
+		if (!_analyticsSettingsManager.syncedContactSettingsEnabled(
+				contextCompany.getCompanyId())) {
+
+			return Page.of(
+				Collections.emptyList(),
+				Pagination.of(pagination.getPage(), pagination.getPageSize()),
+				0);
+		}
+
 		return Page.of(
 			TransformUtil.transform(
 				_userLocalService.<List<User>>dslQuery(
 					_createSelectDSLQuery(
-						contextCompany.getCompanyId(), filter, pagination)),
+						contextCompany.getCompanyId(), pagination, parameters)),
 				user -> _dxpEntityDTOConverter.toDTO(user)),
 			Pagination.of(pagination.getPage(), pagination.getPageSize()),
 			_userLocalService.dslQuery(
-				_createCountDSLQuery(contextCompany.getCompanyId(), filter)));
+				_createCountDSLQuery(
+					contextCompany.getCompanyId(), parameters)));
 	}
 
-	private DSLQuery _createCountDSLQuery(long companyId, Filter filter) {
+	private DSLQuery _createCountDSLQuery(
+		long companyId, Map<String, Serializable> parameters) {
+
 		JoinStep joinStep = DSLQueryFactoryUtil.count(
 		).from(
 			UserTable.INSTANCE
@@ -108,19 +123,19 @@ public class UserAnalyticsDXPEntityBatchEngineTaskItemDelegate
 		}
 
 		return joinStep.where(
-			buildPredicate(
-				UserTable.INSTANCE, companyId,
+			Predicate.and(
+				buildPredicate(UserTable.INSTANCE, companyId, parameters),
 				UserTable.INSTANCE.screenName.neq(
 					AnalyticsSecurityConstants.SCREEN_NAME_ANALYTICS_ADMIN
 				).and(
 					UserTable.INSTANCE.status.neq(
 						WorkflowConstants.STATUS_INACTIVE)
-				),
-				filter));
+				)));
 	}
 
 	private DSLQuery _createSelectDSLQuery(
-		long companyId, Filter filter, Pagination pagination) {
+		long companyId, Pagination pagination,
+		Map<String, Serializable> parameters) {
 
 		JoinStep joinStep = DSLQueryFactoryUtil.select(
 		).from(
@@ -165,15 +180,14 @@ public class UserAnalyticsDXPEntityBatchEngineTaskItemDelegate
 		}
 
 		return joinStep.where(
-			buildPredicate(
-				UserTable.INSTANCE, companyId,
+			Predicate.and(
+				buildPredicate(UserTable.INSTANCE, companyId, parameters),
 				UserTable.INSTANCE.screenName.neq(
 					AnalyticsSecurityConstants.SCREEN_NAME_ANALYTICS_ADMIN
 				).and(
 					UserTable.INSTANCE.status.neq(
 						WorkflowConstants.STATUS_INACTIVE)
-				),
-				filter)
+				))
 		).limit(
 			pagination.getPage() * pagination.getPageSize(),
 			(pagination.getPage() + 1) * pagination.getPageSize()
@@ -182,6 +196,9 @@ public class UserAnalyticsDXPEntityBatchEngineTaskItemDelegate
 
 	@Reference
 	private AnalyticsConfigurationRegistry _analyticsConfigurationRegistry;
+
+	@Reference
+	private AnalyticsSettingsManager _analyticsSettingsManager;
 
 	@Reference(target = DTOConverterConstants.DXP_ENTITY_DTO_CONVERTER)
 	private DTOConverter<BaseModel<?>, DXPEntity> _dxpEntityDTOConverter;

@@ -11,7 +11,15 @@ import React, {useEffect, useRef, useState} from 'react';
 import ServiceProvider from '../../ServiceProvider/index';
 import {CP_INSTANCE_CHANGED} from '../../utilities/eventsDefinitions';
 
-function TierPrice({accountId, channelId, cpInstanceId, namespace, productId}) {
+function TierPrice({
+	accountId,
+	alwaysVisible,
+	autoload,
+	channelId,
+	cpInstanceId,
+	namespace,
+	productId,
+}) {
 	const [columns, setColumns] = useState([]);
 	const [rows, setRows] = useState([]);
 	const [isExpanded, setIsExpanded] = useState(false);
@@ -128,7 +136,7 @@ function TierPrice({accountId, channelId, cpInstanceId, namespace, productId}) {
 	};
 
 	useEffect(() => {
-		if (cpInstanceId) {
+		if (autoload && cpInstanceId) {
 			DeliveryCatalogAPIServiceProviderRef.current
 				.getChannelProductSku(
 					channelId,
@@ -140,7 +148,7 @@ function TierPrice({accountId, channelId, cpInstanceId, namespace, productId}) {
 					handleCPInstanceChanged({cpInstance});
 				});
 		}
-	}, [accountId, channelId, cpInstanceId, productId]);
+	}, [accountId, autoload, channelId, cpInstanceId, productId]);
 
 	useEffect(() => {
 		Liferay.on(
@@ -158,7 +166,7 @@ function TierPrice({accountId, channelId, cpInstanceId, namespace, productId}) {
 
 	return (
 		<>
-			{rows.length > 1 ? (
+			{alwaysVisible || rows.length > 1 ? (
 				<div
 					className={classNames('table-container', {
 						expanded: isExpanded,
@@ -230,8 +238,15 @@ function TierPrice({accountId, channelId, cpInstanceId, namespace, productId}) {
 	);
 }
 
+TierPrice.defaultProps = {
+	alwaysVisible: false,
+	autoload: true,
+};
+
 TierPrice.propTypes = {
 	accountId: PropTypes.number,
+	alwaysVisible: PropTypes.bool,
+	autoload: PropTypes.bool,
 	channelId: PropTypes.number.isRequired,
 	cpInstanceId: PropTypes.number.isRequired,
 	namespace: PropTypes.string,

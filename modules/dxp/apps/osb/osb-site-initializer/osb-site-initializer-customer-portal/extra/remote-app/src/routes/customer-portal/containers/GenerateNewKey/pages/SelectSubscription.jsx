@@ -31,7 +31,11 @@ const SelectSubscription = ({
 	urlPreviousPage,
 }) => {
 	const [{subscriptionGroups}] = useCustomerPortal();
-	const {featureFlags, provisioningServerAPI} = useAppPropertiesContext();
+	const {
+		articleDeactivateKey,
+		featureFlags,
+		provisioningServerAPI,
+	} = useAppPropertiesContext();
 
 	const {data: generateFormValues, isLoading} = useSWR(
 		sessionId ? `/${accountKey}/${productGroupName}/form-values` : null,
@@ -54,7 +58,7 @@ const SelectSubscription = ({
 		infoSelectedKey?.licenseEntryType
 	);
 
-	const [hasKeyComplementary, setHasKeyComplementary] = useState(false);
+	const [hasKeyComplimentary, setHasKeyComplimentary] = useState(false);
 
 	const doesNotAllowPermanentLicense = !generateFormValues?.allowPermanentLicenses;
 
@@ -163,37 +167,73 @@ const SelectSubscription = ({
 		[generateFormValues?.subscriptionTerms, selectedProductKey]
 	);
 
-	const getCustomAlert = (subscriptionTerm) => (
-		<ClayAlert className="px-4 py-3" displayType="info">
-			<span className="text-paragraph">
-				{hasNotPermanentLicence || doesNotAllowPermanentLicense
-					? i18n.sub('activation-keys-will-be-valid-x-x', [
-							getDateCustomFormat(
-								subscriptionTerm.startDate,
-								FORMAT_DATE_TYPES.day2DMonthSYearN
-							),
-							getDateCustomFormat(
-								getLicenseKeyEndDatesByLicenseType({
-									...infoSelectedKey,
-									selectedSubscription: {
-										...subscriptionTerm,
-									},
-								}),
-								FORMAT_DATE_TYPES.day2DMonthSYearN
-							),
-					  ])
-					: i18n.sub(
-							'activation-keys-will-be-valid-indefinitely-starting-x-or-until-manually-deactivated',
-							[
+	const customComplimentaryKeyAlert = () => {
+		return (
+			<ClayAlert className="px-4 py-3" displayType="info">
+				<span className="text-paragraph">
+					{`${i18n.translate(
+						'this-option-is-available-to-use-a-single-time-please-contact-your-liferay-representative-if-you-need-to-use-it-later'
+					)} `}
+				</span>
+			</ClayAlert>
+		);
+	};
+
+	const getCustomAlert = (subscriptionTerm, activeKeysAvailable) => {
+		if (activeKeysAvailable === 0) {
+			return (
+				<ClayAlert className="px-4 py-3" displayType="warning">
+					<span className="text-paragraph">
+						{`${i18n.translate(
+							'key-activations-available-is-zero-to-deactivate-a-key-or-reach-out-to-provisioning-read'
+						)} `}
+
+						<a
+							href={articleDeactivateKey}
+							rel="noreferrer noopener"
+							target="_blank"
+						>
+							<u className="font-weight-semi-bold warning-content-link">
+								{i18n.translate('this-article')}
+							</u>
+						</a>
+					</span>
+				</ClayAlert>
+			);
+		}
+
+		return (
+			<ClayAlert className="px-4 py-3" displayType="info">
+				<span className="text-paragraph">
+					{hasNotPermanentLicence || doesNotAllowPermanentLicense
+						? i18n.sub('activation-keys-will-be-valid-x-x', [
 								getDateCustomFormat(
 									subscriptionTerm.startDate,
 									FORMAT_DATE_TYPES.day2DMonthSYearN
 								),
-							]
-					  )}
-			</span>
-		</ClayAlert>
-	);
+								getDateCustomFormat(
+									getLicenseKeyEndDatesByLicenseType({
+										...infoSelectedKey,
+										selectedSubscription: {
+											...subscriptionTerm,
+										},
+									}),
+									FORMAT_DATE_TYPES.day2DMonthSYearN
+								),
+						  ])
+						: i18n.sub(
+								'activation-keys-will-be-valid-indefinitely-starting-x-or-until-manually-deactivated',
+								[
+									getDateCustomFormat(
+										subscriptionTerm.startDate,
+										FORMAT_DATE_TYPES.day2DMonthSYearN
+									),
+								]
+						  )}
+				</span>
+			</ClayAlert>
+		);
+	};
 
 	if (!generateFormValues || !accountKey || !sessionId || isLoading) {
 		return <GenerateNewKeySkeleton />;
@@ -231,7 +271,7 @@ const SelectSubscription = ({
 									...selectedSubscription,
 								},
 							}));
-							setStep(hasKeyComplementary ? 1 : 2);
+							setStep(hasKeyComplimentary ? 1 : 2);
 						}}
 					>
 						{i18n.translate('next')}
@@ -321,7 +361,7 @@ const SelectSubscription = ({
 							onChange={({target}) => {
 								setSelectedKeyType(target.value);
 								setSelectedSubscription({});
-								setHasKeyComplementary(false);
+								setHasKeyComplimentary(false);
 							}}
 							value={selectedKeyType}
 						>
@@ -353,7 +393,8 @@ const SelectSubscription = ({
 						{subscriptionTerms
 							?.filter((subscriptionTerm) => {
 								return (
-									new Date() < new Date(subscriptionTerm.endDate) &&
+									new Date() <
+										new Date(subscriptionTerm.endDate) &&
 									subscriptionTerm
 								);
 							})
@@ -398,10 +439,6 @@ const SelectSubscription = ({
 									productVersion: selectedVersion,
 								};
 
-								const displayAlertType = getCustomAlert(
-									subscriptionTerm
-								);
-
 								let numberOfActivationKeysAvailable =
 									subscriptionTerm.quantity -
 									subscriptionTerm.provisionedCount;
@@ -409,6 +446,19 @@ const SelectSubscription = ({
 									numberOfActivationKeysAvailable < 0
 										? 0
 										: numberOfActivationKeysAvailable;
+
+								const displayAlertType = getCustomAlert(
+									subscriptionTerm,
+									numberOfActivationKeysAvailable
+								);
+
+								const handleCustomAlert = () => {
+									if (numberOfActivationKeysAvailable === 0) {
+										return displayAlertType;
+									}
+
+									return selected && displayAlertType;
+								};
 
 								return (
 									<Radio
@@ -419,9 +469,7 @@ const SelectSubscription = ({
 												subscriptionTerm.quantity,
 											]
 										)}
-										hasCustomAlert={
-											selected && displayAlertType
-										}
+										hasCustomAlert={handleCustomAlert()}
 										isActivationKeyAvailable={
 											subscriptionTerm.quantity -
 												subscriptionTerm.provisionedCount >
@@ -435,7 +483,7 @@ const SelectSubscription = ({
 												index,
 											});
 											setInfoSelectedKey(infoSelectedKey);
-											setHasKeyComplementary(false);
+											setHasKeyComplimentary(false);
 										}}
 										selected={selected}
 										subtitle={i18n.sub('instance-size-x', [
@@ -449,13 +497,17 @@ const SelectSubscription = ({
 
 					{featureFlags.includes('LPS-148342') && allowComplimentary && (
 						<Radio
+							hasCustomAlert={
+								hasKeyComplimentary &&
+								customComplimentaryKeyAlert()
+							}
 							isActivationKeyAvailable={5}
 							label="Complimentary"
 							onChange={(event) => {
 								setSelectedSubscription({
 									...event.target.value,
 								});
-								setHasKeyComplementary(true);
+								setHasKeyComplimentary(true);
 
 								setInfoSelectedKey({
 									licenseEntryType: selectedKeyType,
@@ -463,7 +515,7 @@ const SelectSubscription = ({
 									productVersion: selectedVersion,
 								});
 							}}
-							selected={hasKeyComplementary}
+							selected={hasKeyComplimentary}
 							subtitle={i18n.translate(
 								'choose-this-option-if-you-want-an-activation-key-for-30-days'
 							)}

@@ -253,6 +253,12 @@ definition {
 			ObjectField.checkToggleMandatory();
 		}
 
+		if (${acceptUniqueValuesOnly} == "true") {
+			Check.checkToggleSwitch(
+				key_toggleSwitchLabel = "Accept Unique Values Only",
+				locator1 = "ToggleSwitch#ANY_TOGGLE_SWITCH");
+		}
+
 		if (isSet(fieldPicklist)) {
 			Click(locator1 = "ObjectCustomViews#SELECT_AUTO_COMPLETE");
 
@@ -281,7 +287,11 @@ definition {
 				locator1 = "ObjectField#SELECT_FORMULA_FIELD_OPTION");
 		}
 
-		PortletEntry.save();
+		Button.clickSave();
+
+		WaitForVisible(
+			key_fieldLabel = ${fieldLabel},
+			locator1 = "ObjectAdmin#VIEW_OBJECT_FIELD_LABEL");
 	}
 
 	macro addObjectLayoutViaAPI {
@@ -433,7 +443,6 @@ definition {
 	macro addObjectViaAPI {
 		JSONObject.addObject(
 			externalReferenceCode = ${externalReferenceCode},
-			folderName = ${folderName},
 			labelName = ${labelName},
 			objectName = ${objectName},
 			panelCategoryKey = ${panelCategoryKey},
@@ -1306,7 +1315,7 @@ definition {
 				key_name = ${labelName},
 				locator1 = "CreateObject#SELECT_ANY_OBJECT_FIELD_IN_TABLE");
 
-			MenuItem.clickNoError(menuItem = "View");
+			MenuItem.clickNoError(menuItem = "Edit");
 		}
 		else {
 			Click(

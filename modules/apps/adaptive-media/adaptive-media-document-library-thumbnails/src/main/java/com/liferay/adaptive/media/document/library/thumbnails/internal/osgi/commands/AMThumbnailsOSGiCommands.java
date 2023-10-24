@@ -13,13 +13,12 @@ import com.liferay.adaptive.media.image.model.AMImageEntry;
 import com.liferay.adaptive.media.image.service.AMImageEntryLocalService;
 import com.liferay.document.library.kernel.service.DLAppLocalService;
 import com.liferay.document.library.kernel.store.Store;
-import com.liferay.document.library.kernel.util.DLPreviewableProcessor;
 import com.liferay.osgi.util.osgi.commands.OSGiCommands;
 import com.liferay.petra.io.StreamUtil;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.image.ImageToolUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.image.ImageBag;
-import com.liferay.portal.kernel.image.ImageTool;
 import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayInputStream;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -31,6 +30,7 @@ import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portlet.documentlibrary.util.DLPreviewableProcessor;
 
 import java.awt.image.RenderedImage;
 
@@ -285,7 +285,7 @@ public class AMThumbnailsOSGiCommands implements OSGiCommands {
 					DLPreviewableProcessor.REPOSITORY_ID, fileName,
 					StringPool.BLANK));
 
-			ImageBag imageBag = _imageTool.read(bytes);
+			ImageBag imageBag = ImageToolUtil.read(bytes);
 
 			RenderedImage renderedImage = imageBag.getRenderedImage();
 
@@ -316,9 +316,6 @@ public class AMThumbnailsOSGiCommands implements OSGiCommands {
 
 	@Reference
 	private DLAppLocalService _dlAppLocalService;
-
-	@Reference
-	private ImageTool _imageTool;
 
 	@Reference(target = "(default=true)")
 	private Store _store;
