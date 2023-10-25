@@ -1082,18 +1082,6 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 				_classNameLocalService.getClassNameId(Group.class),
 				group.getGroupId());
 
-			// Resources
-
-			List<ResourcePermission> resourcePermissions =
-				_resourcePermissionPersistence.findByC_S_P(
-					group.getCompanyId(), ResourceConstants.SCOPE_GROUP,
-					String.valueOf(group.getGroupId()));
-
-			for (ResourcePermission resourcePermission : resourcePermissions) {
-				_resourcePermissionLocalService.deleteResourcePermission(
-					resourcePermission);
-			}
-
 			// Workflow
 
 			List<WorkflowDefinitionLink> workflowDefinitionLinks =
@@ -1115,6 +1103,20 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 				group.setSite(false);
 
 				group = groupPersistence.update(group);
+
+				// Resources
+
+				List<ResourcePermission> resourcePermissions =
+					_resourcePermissionPersistence.findByC_S_P(
+						group.getCompanyId(), ResourceConstants.SCOPE_GROUP,
+						String.valueOf(group.getGroupId()));
+
+				for (ResourcePermission resourcePermission :
+						resourcePermissions) {
+
+					_resourcePermissionLocalService.deleteResourcePermission(
+						resourcePermission);
+				}
 
 				// Group roles
 
@@ -1140,18 +1142,16 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 
 				// Resources
 
-				try {
-					_resourceLocalService.deleteResource(
-						group.getCompanyId(), Group.class.getName(),
-						ResourceConstants.SCOPE_INDIVIDUAL, group.getGroupId());
-				}
-				catch (Exception exception) {
-					if (_log.isWarnEnabled()) {
-						_log.warn(
-							"No resources found for group " +
-								group.getGroupId(),
-							exception);
-					}
+				List<ResourcePermission> resourcePermissions =
+					_resourcePermissionPersistence.findByC_LikeP(
+						group.getCompanyId(),
+						String.valueOf(group.getGroupId()));
+
+				for (ResourcePermission resourcePermission :
+						resourcePermissions) {
+
+					_resourcePermissionLocalService.deleteResourcePermission(
+						resourcePermission);
 				}
 
 				long companyId = group.getCompanyId();

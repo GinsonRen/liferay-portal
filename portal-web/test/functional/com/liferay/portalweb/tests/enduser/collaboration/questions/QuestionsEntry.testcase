@@ -179,7 +179,7 @@ definition {
 
 			AssertVisible(
 				key_categoryItem = "Questions Test Category",
-				locator1 = "Questions#QUESTIONS_CATEGORY_LABEL_ITEM");
+				locator1 = "Questions#QUESTIONS_CATEGORY_LABEL_BADGE");
 
 			var parentCategoryId = JSONMBMessage.getCategoryIdByName(
 				categoryName = "Questions Test Category",
@@ -592,7 +592,7 @@ definition {
 		}
 
 		task ("Then he can delete an answer") {
-			Questions.deleteQuestion();
+			Questions.deleteQuestion(questionTitle = "Title AddQuestion");
 		}
 	}
 
@@ -1030,7 +1030,7 @@ definition {
 				siteURLKey = "guest",
 				topicName = "questions-test-category");
 
-			Questions.subscribeQuestion();
+			Questions.subscribeFromQuestion(questionTitle = "Title AddQuestion");
 		}
 
 		task ("Then he can see that he was subscribed on 'Subscriptions' page") {
@@ -1221,7 +1221,7 @@ definition {
 
 			Questions.assertCanonicalURL(
 				category = "category",
-				pageName = "Questions Page",
+				pageName = "questions-page",
 				portalURL = ${portalURL},
 				title = "question");
 		}
@@ -1288,13 +1288,7 @@ definition {
 		}
 
 		task ("When an anonymous user goes to the most recently created question's detail page") {
-			Navigator.openSpecificURL(url = "${portalURL}/web/guest/questions-page");
-
-			Questions.gotoCategory(categoryName = "Category");
-
-			Questions.gotoDetails(
-				questionTabField = "Questions",
-				questionTitle = "Question");
+			Navigator.openSpecificURL(url = "${portalURL}/questions-page/questions/category/question-1");
 		}
 
 		task ("Then a he can see the question title on url as 'question-1'") {
@@ -1375,12 +1369,6 @@ definition {
 				topicName = "questions-test-category");
 		}
 
-		task ("And the user can se that there are not questions created") {
-			Questions.viewSearchField(noQuestion = "true");
-
-			Questions.viewSelectFilter(noQuestion = "true");
-		}
-
 		task ("When the user creates a question") {
 			JSONQuestions.addQuestion(
 				bodyField = "Body AddQuestionWithTheTestBody",
@@ -1394,7 +1382,7 @@ definition {
 				topicName = "questions-test-category");
 		}
 
-		task ("Then he can see the select filter and serarch field") {
+		task ("Then he can see the select filter and search field") {
 			Questions.viewSearchField();
 
 			Questions.viewSelectFilter();
@@ -1644,10 +1632,9 @@ definition {
 		}
 
 		task ("When the user do to the main category and change topic to 'Questions Test Category2'") {
-			Questions.openToQuestionsTopic(
-				layoutName = "questions-page",
-				siteURLKey = "guest",
-				topicName = "questions-test-category1");
+			Navigator.gotoPage(pageName = "Questions Page");
+
+			Questions.gotoCategory(categoryName = "Questions Test Category1");
 
 			Questions.changeTopic(
 				parentTopicName = "Questions Test Category1",
@@ -1762,7 +1749,7 @@ definition {
 				questionTitle = "Question 3",
 				votedCount = 0);
 
-			Questions.configureFilter(filterBy = "Most Voted");
+			Questions.clickFilterAndOrderBy(option = "Most Frequent");
 
 			Questions.viewFilterResults(
 				lastQuestionTitle = "Question 1",
@@ -1881,31 +1868,23 @@ definition {
 			PortletEntry.publish();
 		}
 
-		task ("When the user select the filter 'Latest Edited'") {
+		task ("When the user select the filter 'No Answer'") {
 			Questions.openToQuestionsTopic(
 				layoutName = "questions-page",
 				siteURLKey = "guest",
 				topicName = "questions-test-category");
 
-			Questions.configureFilter(filterBy = "Latest Edited");
+			Questions.clickFilterAndOrderBy(option = "No Answer");
 		}
 
-		task ("Then he can see questions that had been edited lately") {
+		task ("Then he can see questions that had been No Answer") {
 			Questions.viewFilterResults(
 				lastQuestionTitle = "Question 2",
 				questionTitle = "Question 1 Edit");
 		}
 
 		task ("When the user select another kind of filters then he can see the expected results") {
-			Questions.configureFilter(filterBy = "Voted in the Last Week");
-
-			Questions.viewNoFilteredResult();
-
-			Questions.configureFilter(filterBy = "Voted in the Last Month");
-
-			Questions.viewNoFilteredResult();
-
-			Questions.configureFilter(filterBy = "Latest Created");
+			Questions.clickFilterAndOrderBy(option = "Most Frequent");
 
 			Questions.viewFilterResults(
 				lastQuestionTitle = "Question 1 Edit",

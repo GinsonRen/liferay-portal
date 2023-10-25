@@ -7,6 +7,7 @@ package com.liferay.source.formatter.processor;
 
 import com.liferay.petra.string.StringBundler;
 import com.liferay.source.formatter.SourceFormatterArgs;
+import com.liferay.source.formatter.check.JSONUpgradeLiferayThemePackageJSONCheck;
 import com.liferay.source.formatter.check.UpgradeCatchAllCheck;
 
 import java.util.ArrayList;
@@ -26,6 +27,8 @@ public class UpgradeSourceProcessorTest extends BaseSourceProcessorTestCase {
 
 	@Test
 	public void testJSONUpgradeLiferayThemePackageJSONCheck() throws Exception {
+		JSONUpgradeLiferayThemePackageJSONCheck.setTestMode(true);
+
 		test(
 			"upgrade/json-upgrade-liferay-theme-package-json-check/package." +
 				"testjson");
@@ -50,6 +53,7 @@ public class UpgradeSourceProcessorTest extends BaseSourceProcessorTestCase {
 		test(
 			"upgrade/UpgradeCatchAllCheck.testjava",
 			UpgradeCatchAllCheck.getExpectedMessages());
+		test("upgrade/UpgradeCatchAllCheck.testjsp");
 	}
 
 	@Test
@@ -101,21 +105,6 @@ public class UpgradeSourceProcessorTest extends BaseSourceProcessorTestCase {
 				"AddressLocalServiceUtil, AddressService and ",
 				"AddressServiceUtil. Fill the new parameters manually, see ",
 				"LPS-193462"));
-	}
-
-	@Test
-	public void testUpgradeJavaAddCategoryParameterCheck() throws Exception {
-		test(
-			"upgrade/UpgradeJavaAddCategoryParameterCheck.testjava",
-			StringBundler.concat(
-				"Unable to format method addCategory from ",
-				"AssetCategoryLocalService and AssetCategoryLocalServiceUtil. ",
-				"Fill the new parameters manually, see LPS-192320"));
-	}
-
-	@Test
-	public void testUpgradeJavaAddFDSTableSchemaFieldCheck() throws Exception {
-		test("upgrade/UpgradeJavaAddFDSTableSchemaFieldCheck.testjava");
 	}
 
 	@Test

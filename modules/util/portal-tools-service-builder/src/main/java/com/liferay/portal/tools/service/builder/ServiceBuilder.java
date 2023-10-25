@@ -4162,6 +4162,8 @@ public class ServiceBuilder {
 				if (entity.isChangeTrackingEnabled() &&
 					!dbNames.contains("ctCollectionId")) {
 
+					dbNames.add(0, "ctCollectionId");
+
 					if (indexMetadatas != null) {
 						Iterator<IndexMetadata> iterator =
 							indexMetadatas.iterator();
@@ -4180,8 +4182,6 @@ public class ServiceBuilder {
 							}
 						}
 					}
-
-					dbNames.add("ctCollectionId");
 				}
 
 				IndexMetadata indexMetadata =
@@ -6394,15 +6394,15 @@ public class ServiceBuilder {
 			boolean colJsonEnabled = GetterUtil.getBoolean(
 				columnElement.attributeValue("json-enabled"), jsonEnabled);
 
-			String changeTrackingResolutionType = "STRICT";
+			String changeTrackingResolutionType = "strict";
 
 			if (primary) {
-				changeTrackingResolutionType = "PK";
+				changeTrackingResolutionType = "pk";
 			}
 			else if (columnName.equals("modifiedDate") &&
 					 columnType.equals("Date")) {
 
-				changeTrackingResolutionType = "IGNORE";
+				changeTrackingResolutionType = "ignore";
 			}
 
 			changeTrackingResolutionType = StringUtil.toUpperCase(
@@ -7054,6 +7054,11 @@ public class ServiceBuilder {
 		Element newLocalizedEntityElement = DocumentHelper.createElement(
 			"entity");
 
+		if (entity.isChangeTrackingEnabled()) {
+			newLocalizedEntityElement.addAttribute(
+				"change-tracking-enabled", "true");
+		}
+
 		if (Validator.isNotNull(entity.getDataSource())) {
 			newLocalizedEntityElement.addAttribute(
 				"data-source", entity.getDataSource());
@@ -7180,6 +7185,10 @@ public class ServiceBuilder {
 				"column");
 
 			newLocalizedColumnElement.addAttribute("name", columnName);
+			newLocalizedColumnElement.addAttribute(
+				"change-tracking-resolution-type",
+				localizedColumnElement.attributeValue(
+					"change-tracking-resolution-type"));
 			newLocalizedColumnElement.addAttribute("db-name", columnDBName);
 			newLocalizedColumnElement.addAttribute("type", "String");
 		}

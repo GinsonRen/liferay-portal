@@ -262,9 +262,10 @@ create table Counter (
 
 create table Country (
 	mvccVersion LONG default 0 not null,
+	ctCollectionId LONG default 0 not null,
 	uuid_ VARCHAR(75) null,
 	defaultLanguageId VARCHAR(75) null,
-	countryId LONG not null primary key,
+	countryId LONG not null,
 	companyId LONG,
 	userId LONG,
 	userName VARCHAR(75) null,
@@ -282,16 +283,19 @@ create table Country (
 	shippingAllowed BOOLEAN,
 	subjectToVAT BOOLEAN,
 	zipRequired BOOLEAN,
-	lastPublishDate DATE null
+	lastPublishDate DATE null,
+	primary key (countryId, ctCollectionId)
 );
 
 create table CountryLocalization (
 	mvccVersion LONG default 0 not null,
-	countryLocalizationId LONG not null primary key,
+	ctCollectionId LONG default 0 not null,
+	countryLocalizationId LONG not null,
 	companyId LONG,
 	countryId LONG,
 	languageId VARCHAR(75) null,
-	title VARCHAR(75) null
+	title VARCHAR(75) null,
+	primary key (countryLocalizationId, ctCollectionId)
 );
 
 create table DLFileEntry (
@@ -1093,9 +1097,10 @@ create table RecentLayoutSetBranch (
 
 create table Region (
 	mvccVersion LONG default 0 not null,
+	ctCollectionId LONG default 0 not null,
 	uuid_ VARCHAR(75) null,
 	defaultLanguageId VARCHAR(75) null,
-	regionId LONG not null primary key,
+	regionId LONG not null,
 	companyId LONG,
 	userId LONG,
 	userName VARCHAR(75) null,
@@ -1106,16 +1111,19 @@ create table Region (
 	name VARCHAR(75) null,
 	position DOUBLE,
 	regionCode VARCHAR(75) null,
-	lastPublishDate DATE null
+	lastPublishDate DATE null,
+	primary key (regionId, ctCollectionId)
 );
 
 create table RegionLocalization (
 	mvccVersion LONG default 0 not null,
-	regionLocalizationId LONG not null primary key,
+	ctCollectionId LONG default 0 not null,
+	regionLocalizationId LONG not null,
 	companyId LONG,
 	regionId LONG,
 	languageId VARCHAR(75) null,
-	title VARCHAR(75) null
+	title VARCHAR(75) null,
+	primary key (regionLocalizationId, ctCollectionId)
 );
 
 create table Release_ (

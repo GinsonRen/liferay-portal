@@ -375,6 +375,14 @@ definition {
 		CP2Utils.onlySeeExportAllKeys(text = "Actions");
 	}
 
+	macro ifOnboardingPresent {
+		if (IsElementPresent(key_text = "Start Project Setup", locator1 = "Button#ANY")) {
+			task ("And pass through onboarding") {
+				CP2Utils.onboardingFlow();
+			}
+		}
+	}
+
 	macro onboardingFlow {
 		Button.click(button = "Start Project Setup");
 

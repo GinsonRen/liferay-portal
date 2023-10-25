@@ -17,13 +17,9 @@
 	<bean class="com.liferay.portal.security.auth.AuthTokenWhitelistImpl" id="com.liferay.portal.kernel.security.auth.AuthTokenWhitelist" />
 	<bean class="com.liferay.portal.kernel.security.auth.DefaultEmailAddressGenerator" id="com.liferay.portal.kernel.security.auth.DefaultEmailAddressGenerator" />
 	<bean class="com.liferay.portal.kernel.security.auth.DefaultEmailAddressValidator" id="com.liferay.portal.kernel.security.auth.DefaultEmailAddressValidator" />
-	<bean class="com.liferay.portal.kernel.security.auth.DefaultFullNameGenerator" id="com.liferay.portal.kernel.security.auth.DefaultFullNameGenerator" />
 	<bean class="com.liferay.portal.kernel.security.auth.DefaultFullNameValidator" id="com.liferay.portal.kernel.security.auth.DefaultFullNameValidator" />
 	<bean class="com.liferay.portal.kernel.security.auth.DefaultScreenNameGenerator" id="com.liferay.portal.kernel.security.auth.DefaultScreenNameGenerator" />
 	<bean class="com.liferay.portal.kernel.security.auth.DefaultScreenNameValidator" id="com.liferay.portal.kernel.security.auth.DefaultScreenNameValidator" />
-	<bean class="com.liferay.portal.kernel.security.auth.LiberalEmailAddressValidator" id="com.liferay.portal.kernel.security.auth.LiberalEmailAddressValidator" />
-	<bean class="com.liferay.portal.kernel.security.auth.LiberalScreenNameValidator" id="com.liferay.portal.kernel.security.auth.LiberalScreenNameValidator" />
-	<bean class="com.liferay.portal.security.auth.http.HttpAuthManagerImpl" id="com.liferay.portal.kernel.security.auth.http.HttpAuthManager" />
 	<bean class="com.liferay.portal.security.auth.session.AuthenticatedSessionManagerImpl" id="com.liferay.portal.kernel.security.auth.session.AuthenticatedSessionManager" />
 	<bean class="com.liferay.portal.kernel.security.membershippolicy.DummyOrganizationMembershipPolicy" id="com.liferay.portal.kernel.security.membershippolicy.DummyOrganizationMembershipPolicy" />
 	<bean class="com.liferay.portal.kernel.security.membershippolicy.DummyRoleMembershipPolicy" id="com.liferay.portal.kernel.security.membershippolicy.DummyRoleMembershipPolicy" />
@@ -31,10 +27,6 @@
 	<bean class="com.liferay.portal.security.membershippolicy.OrganizationMembershipPolicyFactoryImpl" id="com.liferay.portal.kernel.security.membershippolicy.OrganizationMembershipPolicyFactory" />
 	<bean class="com.liferay.portal.kernel.security.membershippolicy.OrganizationMembershipPolicyFactoryUtil" id="com.liferay.portal.kernel.security.membershippolicy.OrganizationMembershipPolicyFactoryUtil">
 		<property name="organizationMembershipPolicyFactory" ref="com.liferay.portal.kernel.security.membershippolicy.OrganizationMembershipPolicyFactory" />
-	</bean>
-	<bean class="com.liferay.portal.security.membershippolicy.RoleMembershipPolicyFactoryImpl" id="com.liferay.portal.kernel.security.membershippolicy.RoleMembershipPolicyFactory" />
-	<bean class="com.liferay.portal.kernel.security.membershippolicy.RoleMembershipPolicyFactoryUtil" id="com.liferay.portal.kernel.security.membershippolicy.RoleMembershipPolicyFactoryUtil">
-		<property name="roleMembershipPolicyFactory" ref="com.liferay.portal.kernel.security.membershippolicy.RoleMembershipPolicyFactory" />
 	</bean>
 	<bean class="com.liferay.portal.security.membershippolicy.SiteMembershipPolicyFactoryImpl" id="com.liferay.portal.kernel.security.membershippolicy.SiteMembershipPolicyFactory" />
 	<bean class="com.liferay.portal.kernel.security.membershippolicy.SiteMembershipPolicyFactoryUtil" id="com.liferay.portal.kernel.security.membershippolicy.SiteMembershipPolicyFactoryUtil">

@@ -262,6 +262,7 @@ interface PlacedOrderItems {
 	subscription: boolean;
 	thumbnail: string;
 	version: string;
+	virtualItemURLs: string;
 }
 
 interface PostalAddressResponse {
@@ -478,4 +479,14 @@ type OrderInfo = {
 type RadioOption<T> = {
 	index: number;
 	value: T;
+};
+
+type APIResponse<Query = any> = {
+	actions: ObjectActions;
+	facets: Facets[];
+	items: Query[];
+	lastPage: number;
+	page: number;
+	pageSize: number;
+	totalCount: number;
 };

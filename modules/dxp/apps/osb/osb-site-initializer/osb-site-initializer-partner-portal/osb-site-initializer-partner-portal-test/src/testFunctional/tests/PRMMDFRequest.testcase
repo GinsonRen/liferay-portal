@@ -555,6 +555,10 @@ definition {
 				targetOfLeads = 03,
 				targetRolesOptions = "Administrator",
 				typeOfActivity = "Miscellaneous Marketing");
+
+			Button.click(button = "See MDF Home");
+
+			PRMNavigator.openSitePage(pageName = "MDF Requests");
 		}
 
 		task ("Then the MDF status appears on list") {

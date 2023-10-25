@@ -4,8 +4,10 @@
  */
 
 import {useModal} from '@clayui/core';
+import {ClayCheckbox} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
 import {useCallback, useEffect, useState} from 'react';
+import useProvisioningLicenseKeys from '~/common/hooks/useProvisioningLicenseKeys';
 import {getRolesFiltered} from '~/common/utils/getProjectRoles';
 import {rolesHighPriorityContacts} from '~/routes/customer-portal/utils/getHighPriorityContacts';
 import i18n from '../../../../../../../common/I18n';
@@ -35,9 +37,12 @@ const TeamMembersTable = ({
 }) => {
 	const {
 		articleAccountSupportURL,
+		articleNotifiedWhenMyActivationKeyIsAboutToExpireURL,
 		gravatarAPI,
 		importDate,
 	} = useAppPropertiesContext();
+
+	const provisioningKeys = useProvisioningLicenseKeys();
 
 	const [{sessionId}] = useCustomerPortal();
 
@@ -49,6 +54,10 @@ const TeamMembersTable = ({
 	const [highPriorityContactsNames, setHighPriorityContactsNames] = useState(
 		[]
 	);
+	const [checkedBoxSubscription, setCheckedBoxSubscription] = useState(false);
+	const [isSingleSubscribedUser, setIsSingleSubscribedUser] = useState([]);
+	const [singleSubscribedKeys, setSingleSubscribedKeys] = useState('');
+	const [loadingModal, setLoadingModal] = useState(false);
 
 	const {
 		data: myUserAccountData,
@@ -158,6 +167,32 @@ const TeamMembersTable = ({
 	const loading =
 		myUserAccountLoading || userAccountsLoading || accountRolesLoading;
 
+	const handleProvisioningKeys = useCallback(
+		async (userAccount) => {
+			try {
+				setLoadingModal(true);
+
+				const {
+					items,
+				} = await provisioningKeys.getSingleUserSubscriptions(
+					koroneikiAccount?.accountKey,
+					userAccount?.emailAddress
+				);
+
+				const getLicensesKeyIds = items.map((licenseKey) => {
+					return licenseKey.id;
+				});
+
+				setIsSingleSubscribedUser(items);
+				setSingleSubscribedKeys(getLicensesKeyIds);
+			} catch (error) {
+				console.error('Error:', error);
+			}
+			setLoadingModal(false);
+		},
+		[koroneikiAccount?.accountKey, provisioningKeys]
+	);
+
 	useEffect(() => {
 		if (!updating) {
 			onOpenChange(false);
@@ -214,25 +249,92 @@ const TeamMembersTable = ({
 		);
 	};
 
+	const saveSubscriptionKey = (singleSubscribedKeys) => {
+		singleSubscribedKeys?.forEach(async (singleSubscribeKey) => {
+			try {
+				await provisioningKeys.putSubscriptionInKey(singleSubscribeKey);
+			} catch (error) {
+				console.error('Error:', error);
+			}
+		});
+	};
+
 	return (
 		<>
-			{open && currentUserRemoving !== undefined && (
+			{open && currentUserRemoving !== undefined && !loadingModal && (
 				<RemoveUserModal
+					isSingleSubscribedUser={isSingleSubscribedUser}
 					modalTitle={i18n.translate('remove-user')}
 					observer={observer}
 					onClose={() => onOpenChange(false)}
-					onRemove={() => remove(currentUserRemoving)}
+					onRemove={() => {
+						if (checkedBoxSubscription) {
+							saveSubscriptionKey(singleSubscribedKeys);
+							remove(currentUserRemoving);
+						}
+
+						remove(currentUserRemoving);
+					}}
 					removing={updating}
 				>
 					<p className="my-0 text-neutral-10">
-						<p>
-							<b>Team Member:</b> {currentUserRemoving.name}
+						<p className="font-weight-bold">
+							{`${i18n.translate('team-member')}: ${
+								currentUserRemoving?.name
+							}`}
 						</p>
 
-						{i18n.translate(
-							'are-you-sure-you-want-to-remove-this-team-member-from-the-project'
+						{!isSingleSubscribedUser.length ? (
+							<>
+								{i18n.translate(
+									'are-you-sure-you-want-to-remove-this-team-member-from-the-project'
+								)}
+							</>
+						) : (
+							<>
+								{i18n.translate(
+									'there-is-at-least-one-activation-key-for-which-this-team-member-is-the-only-one-subscribed-to-be-notified-before-the-activation-key-expires-are-you-sure-you-want-to-remove-this-team-member-and-their-notifications'
+								)}
+							</>
 						)}
 					</p>
+
+					{!!isSingleSubscribedUser.length && (
+						<div className="align-items-center d-flex pt-3">
+							<ClayCheckbox
+								checked={checkedBoxSubscription}
+								onChange={() =>
+									setCheckedBoxSubscription(
+										(checkedBoxSubscription) =>
+											!checkedBoxSubscription
+									)
+								}
+							/>
+
+							<p className="mb-0 pb-0 px-2">
+								{i18n.translate(
+									'i-want-to-receive-these-notifications'
+								)}
+							</p>
+
+							<a
+								href={
+									articleNotifiedWhenMyActivationKeyIsAboutToExpireURL
+								}
+								rel="noreferrer noopener"
+								target="_blank"
+							>
+								<u className="font-weight-semi-bold text-decoration-none">
+									{i18n.translate('learn-more')}
+								</u>
+
+								<ClayIcon
+									className="pl-1"
+									symbol="order-arrow-right"
+								/>
+							</a>
+						</div>
+					)}
 				</RemoveUserModal>
 			)}
 
@@ -306,6 +408,9 @@ const TeamMembersTable = ({
 													userAccount
 												);
 												onOpenChange(true);
+												handleProvisioningKeys(
+													userAccount
+												);
 											}}
 											onSave={() => handleEdit()}
 											saveDisabled={

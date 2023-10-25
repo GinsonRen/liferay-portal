@@ -58,6 +58,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -694,13 +696,6 @@ public class ObjectRelationshipLocalServiceTest {
 				LocalizedMapUtil.getLocalizedMap(RandomTestUtil.randomString()),
 				name, system, ObjectRelationshipConstants.TYPE_MANY_TO_MANY);
 
-		Assert.assertEquals(
-			StringBundler.concat(
-				"R_", objectRelationship.getCompanyId(),
-				objectDefinition1.getShortName(), "_",
-				objectDefinition2.getShortName(), "_", name),
-			objectRelationship.getDBTableName());
-
 		Map<String, String> pkObjectFieldDBColumnNames =
 			ObjectRelationshipUtil.getPKObjectFieldDBColumnNames(
 				objectDefinition1, objectDefinition2, false);
@@ -855,12 +850,9 @@ public class ObjectRelationshipLocalServiceTest {
 			objectRelationship.getDBTableName(),
 			reverseObjectRelationship.getDBTableName());
 
-		Assert.assertEquals(
-			StringBundler.concat(
-				"R_", objectRelationship.getCompanyId(),
-				objectDefinition.getShortName(), "_",
-				relatedObjectDefinition.getShortName(), "_", name),
-			objectRelationship.getDBTableName());
+		Matcher matcher = _pattern.matcher(objectRelationship.getDBTableName());
+
+		Assert.assertTrue(matcher.matches());
 
 		Map<String, String> pkObjectFieldDBColumnNames =
 			ObjectRelationshipUtil.getPKObjectFieldDBColumnNames(
@@ -969,6 +961,8 @@ public class ObjectRelationshipLocalServiceTest {
 	@Inject
 	private static ObjectDefinitionLocalService _objectDefinitionLocalService;
 
+	private static final Pattern _pattern = Pattern.compile(
+		"R_[A-Z][0-9][A-Z][0-9]$");
 	private static ObjectDefinition _systemObjectDefinition1;
 
 	@DeleteAfterTestRun

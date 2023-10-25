@@ -3,11 +3,13 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import React from 'react';
 import {Root, createRoot} from 'react-dom/client';
+import {SWRConfig} from 'swr';
 
 import App from './App';
+import MarketplaceContextProvider from './context/MarketplaceContext';
 import {AppContextProvider} from './manage-app-state/AppManageState';
+import SWRCacheProvider from './services/SWRCacheProvider';
 
 const GRAVATAR_API = `https://www.gravatar.com/avatar`;
 
@@ -19,11 +21,18 @@ class WebComponent extends HTMLElement {
 			this.root = createRoot(this);
 
 			this.root.render(
-				<React.StrictMode>
-					<AppContextProvider gravatarAPI={GRAVATAR_API}>
-						<App route={this.getAttribute('route') || '/'} />
-					</AppContextProvider>
-				</React.StrictMode>
+				<SWRConfig
+					value={{
+						provider: SWRCacheProvider,
+						revalidateOnFocus: false,
+					}}
+				>
+					<MarketplaceContextProvider>
+						<AppContextProvider gravatarAPI={GRAVATAR_API}>
+							<App route={this.getAttribute('route') || '/'} />
+						</AppContextProvider>
+					</MarketplaceContextProvider>
+				</SWRConfig>
 			);
 		}
 	}

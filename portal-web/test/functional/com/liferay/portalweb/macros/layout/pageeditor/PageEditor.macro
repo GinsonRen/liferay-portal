@@ -661,7 +661,9 @@ definition {
 			locator1 = "PageEditor#EXPERIENCE_SELECT_SEGMENT",
 			value1 = ${segmentName});
 
-		Click(locator1 = "Button#SAVE");
+		Click(
+			key_text = "Save",
+			locator1 = "Modal#MODAL_FOOTER_BUTTON");
 
 		if (isSet(failureText)) {
 			AssertTextEquals(
@@ -1484,6 +1486,26 @@ definition {
 			PageEditor.waitForAutoSave();
 		}
 
+		if (isSet(errorInteraction)) {
+			Select(
+				key_fieldLabel = "Error Interaction",
+				locator1 = "Select#GENERIC_SELECT_FIELD",
+				value1 = ${errorInteraction});
+
+			if (isSet(errorText)) {
+				Type(
+					key_text = "Error Text",
+					locator1 = "TextInput#ANY",
+					value1 = ${errorText});
+
+				Click(
+					key_sidebarButton = "Browser",
+					locator1 = "PageEditor#FRAGMENT_SIDEBAR_TITLE");
+			}
+
+			PageEditor.waitForAutoSave();
+		}
+
 		if (isSet(fontSize)) {
 			Select(
 				key_text = "font-size",
@@ -1700,6 +1722,17 @@ definition {
 				key_fieldLabel = "Success Interaction",
 				locator1 = "Select#GENERIC_SELECT_FIELD",
 				value1 = ${successInteraction});
+
+			if (isSet(successText)) {
+				Type(
+					key_text = "Success Text",
+					locator1 = "TextInput#ANY",
+					value1 = ${successText});
+
+				Click(
+					key_sidebarButton = "Browser",
+					locator1 = "PageEditor#FRAGMENT_SIDEBAR_TITLE");
+			}
 
 			PageEditor.waitForAutoSave();
 		}

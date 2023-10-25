@@ -146,9 +146,9 @@ definition {
 	@description = "LPS-186876. Confirm that is possible to cancel changes in the Actions tab."
 	@priority = 3
 	test CanCancelChangesOnActions {
-		task ("And clicks on Create Item Action button") {
+		task ("And clicks on New Item Action button") {
 			Click.clickNoMouseOver(
-				key_text = "Create Item Action",
+				key_text = "New Item Action",
 				locator1 = "Button#ANY_SECONDARY");
 		}
 
@@ -224,6 +224,55 @@ definition {
 		}
 	}
 
+	@description = "LPS-192149. Verify if the user can an Action"
+	@priority = 5
+	test CanCreateActionEntry {
+		task ("And clicks on Create Item Action button") {
+			LexiconEntry.gotoAdd();
+		}
+
+		task ("And fills the fields in the Action tab") {
+			Type(
+				key_unnamedTitle = "",
+				locator1 = "TextInput#DEPOT_UNNAMED_DEFAULT_TITLE",
+				value1 = "View");
+
+			Select(
+				key_fieldLabel = "Type",
+				locator1 = "Select#GENERIC_SELECT_FIELD",
+				value1 = "Link");
+
+			Select(
+				key_fieldLabel = "Icon",
+				locator1 = "Select#GENERIC_SELECT_FIELD",
+				value1 = "view");
+
+			Type(
+				key_fieldId = "URL",
+				locator1 = "TextArea#ANY_ID",
+				value1 = "http://localhost:8080/o/data-set-manager/");
+		}
+
+		task ("And clicks on the Save button") {
+			Click(
+				key_fieldLabel = "Icon",
+				locator1 = "Select#GENERIC_SELECT_FIELD");
+
+			PortletEntry.save();
+		}
+
+		task ("Then a confirmation message is displayed") {
+			Alert.viewSuccessMessage();
+		}
+
+		task ("And the item action is saved and it appears in the list of the Item Actions tab") {
+			AssertElementPresent(
+				key_position = 1,
+				keyName = "View",
+				locator1 = "DataSet#FIELDS_TABLE");
+		}
+	}
+
 	@description = "LPS-191486. Verify if the user can delete an Action entry"
 	@priority = 5
 	test CanDeleteAction {
@@ -269,6 +318,56 @@ definition {
 			AssertElementNotPresent(
 				key_position = 1,
 				keyName = "delete",
+				locator1 = "DataSet#FIELDS_TABLE");
+		}
+	}
+
+	@description = "LPS-192149. Verify if the user can change the entry order with drag and drop in the action entries table"
+	@priority = 4
+	test CanDragAndDropActionEntry {
+		task ("And creates two or more item actions") {
+			DataSetAdmin.addActions(
+				actionName = "delete",
+				icon = "trash",
+				type = "Link",
+				url = "http://localhost:8080/o/data-set-manager/");
+
+			DataSetAdmin.addActions(
+				actionName = "view",
+				icon = "view",
+				type = "Link",
+				url = "http://localhost:8080/o/data-set-manager/");
+		}
+
+		task ("Then the list of item actions includes the correct information about the Icon, Label and Type") {
+			for (var name_listTable : list "view,view,link") {
+				AssertElementPresent(
+					key_position = 1,
+					keyName = ${name_listTable},
+					locator1 = "DataSet#FIELDS_TABLE");
+			}
+
+			for (var name_listTable : list "trash,delete,link") {
+				AssertElementPresent(
+					key_position = 2,
+					keyName = ${name_listTable},
+					locator1 = "DataSet#FIELDS_TABLE");
+			}
+		}
+
+		task ("When the user changes the item actions position using drag and drop") {
+			DragAndDrop.javaScriptDragAndDropToBottom(
+				key_position = 2,
+				key_rowNumber = 1,
+				keyName = "delete",
+				locator1 = "DataSet#DRAG_ROW",
+				locator2 = "DataSet#FIELDS_TABLE");
+		}
+
+		task ("Then the item actions are ordered correctly following the changes") {
+			AssertElementPresent(
+				key_position = 2,
+				keyName = "view",
 				locator1 = "DataSet#FIELDS_TABLE");
 		}
 	}
@@ -531,6 +630,23 @@ definition {
 		}
 	}
 
+	@description = "LPS-192149. Verify if when an Action entry was not created, a text and an empty table will appears"
+	@priority = 4
+	test CanSeeEmptyActionTable {
+		task ("And there are no item actions created") {
+			AssertElementNotPresent(
+				key_position = 1,
+				keyName = "delete",
+				locator1 = "DataSet#FIELDS_TABLE");
+		}
+
+		task ("Then the text “No actions were created. Start creating one action to interact with your data.” is displayed above the Create Item Action button") {
+			AssertElementPresent(
+				key_textName = "No actions were created.",
+				locator1 = "DataSet#ACTIONS_EMPTY_TABLE");
+		}
+	}
+
 	@description = "LPS-191488. Verify if the user can edit a created Action and see the informations"
 	@priority = 5
 	test CanSeeModalWhenClicksOnEditAction {
@@ -592,6 +708,294 @@ definition {
 			AssertElementPresent(
 				key_modalText = "Are you sure you want to delete this action?",
 				locator1 = "DataSet#DELETE_DATA_SET_MODAL_BODY");
+		}
+	}
+
+	@description = "LPS-192149. Verify if the Headless Action Key is not mandatory and contains an tooltip Icon with an message"
+	@priority = 3
+	test HeadlessActionKeyIsNotMandatory {
+		task ("And clicks on Create Item Action button") {
+			LexiconEntry.gotoAdd();
+		}
+
+		task ("Then the Headless Action Key field is not mandatory") {
+			AssertElementNotPresent(
+				key_fieldName = "Headless Action Key",
+				locator1 = "DataSet#MANDATORY_FIELD");
+		}
+
+		task ("And next to the Headless Action Key field title there is a tooltip icon.") {
+			AssertElementPresent(
+				key_indexNumber = 1,
+				key_text = "question-circle-full",
+				locator1 = "Icon#ANY_N");
+		}
+
+		task ("When the user hovers the tooltip icon") {
+			MouseOver(
+				key_indexNumber = 1,
+				key_text = "question-circle-full",
+				locator1 = "Icon#ANY_N");
+		}
+
+		task ("Then the message “This key allows the action to be performed when the permission is associated with it” is displayed.") {
+			AssertElementPresent(
+				key_title = "",
+				locator1 = "DataSet#FILTER_TOOLTIP",
+				value1 = "This key is used to display the action if the user has the permission for it by checking if the key is present in the data item's actions array.");
+		}
+
+		task ("When the mandatory fields are filled") {
+			Type(
+				key_unnamedTitle = "",
+				locator1 = "TextInput#DEPOT_UNNAMED_DEFAULT_TITLE",
+				value1 = "New Action");
+
+			Type(
+				key_fieldId = "URL",
+				locator1 = "TextArea#ANY_ID",
+				value1 = "http://localhost:8080/o/data-set-manager/");
+		}
+
+		task ("And clicks on Save button") {
+			Click(
+				key_fieldLabel = "Icon",
+				locator1 = "Select#GENERIC_SELECT_FIELD");
+
+			PortletEntry.save();
+		}
+
+		task ("And a successful toast message is displayed") {
+			Alert.viewSuccessMessage();
+		}
+
+		task ("Then the changes are saved") {
+			AssertElementPresent(
+				key_position = 1,
+				keyName = "New Action",
+				locator1 = "DataSet#FIELDS_TABLE");
+		}
+	}
+
+	@description = "LPS-192149. Verify if the Icon field is not mandatory and shows the correct icon"
+	@priority = 4
+	test IconFieldIsNotMandatory {
+		task ("And clicks on Create Item Action button") {
+			LexiconEntry.gotoAdd();
+		}
+
+		task ("Then the New Item Action modal is displayed") {
+			AssertElementPresent(
+				key_title = "New Item Action",
+				locator1 = "Header#H2_TITLE");
+		}
+
+		task ("Then the Icon field is not mandatory") {
+			AssertElementNotPresent(
+				key_fieldName = "Icon",
+				locator1 = "DataSet#MANDATORY_FIELD");
+		}
+
+		task ("When the user clicks on the Icon field") {
+			Click(
+				key_fieldLabel = "Icon",
+				locator1 = "Select#GENERIC_SELECT_FIELD");
+		}
+
+		task ("Then a dropdown list all the icons in clay with the name and the corresponding icon") {
+			Select(
+				key_fieldLabel = "Icon",
+				locator1 = "Select#GENERIC_SELECT_FIELD",
+				value1 = "accessibility");
+
+			AssertElementPresent(
+				key_text = "pt-br",
+				locator1 = "Icon#ANY");
+		}
+
+		task ("When the mandatory fields are filled") {
+			Type(
+				key_unnamedTitle = "",
+				locator1 = "TextInput#DEPOT_UNNAMED_DEFAULT_TITLE",
+				value1 = "New Action");
+
+			Type(
+				key_fieldId = "URL",
+				locator1 = "TextArea#ANY_ID",
+				value1 = "http://localhost:8080/o/data-set-manager/");
+		}
+
+		task ("And clicks on Save button") {
+			Click(
+				key_fieldLabel = "Icon",
+				locator1 = "Select#GENERIC_SELECT_FIELD");
+
+			PortletEntry.save();
+		}
+
+		task ("And a successful toast message is displayed") {
+			Alert.viewSuccessMessage();
+		}
+
+		task ("Then the changes are saved") {
+			AssertElementPresent(
+				key_position = 1,
+				keyName = "New Action",
+				locator1 = "DataSet#FIELDS_TABLE");
+		}
+	}
+
+	@description = "LPS-192149. Verify if the Confirmation Message field is not mandatory and is localized"
+	@priority = 4
+	test LocalizedConfirmationMessageField {
+		task ("And clicks on Create Item Action button") {
+			LexiconEntry.gotoAdd();
+		}
+
+		task ("And selects the Link option") {
+			Select(
+				key_fieldLabel = "Type",
+				locator1 = "Select#GENERIC_SELECT_FIELD",
+				value1 = "Link");
+		}
+
+		task ("Then the Confirmation Message field is present") {
+			AssertElementPresent(
+				key_placeholder = "Add a message here.",
+				locator1 = "FrontendDataSet#PLACEHOLDER");
+
+			Type(
+				key_unnamedTitle = "",
+				locator1 = "TextInput#DEPOT_UNNAMED_DEFAULT_TITLE",
+				value1 = "New Action");
+
+			Type(
+				key_fieldId = "URL",
+				locator1 = "TextArea#ANY_ID",
+				value1 = "http://localhost:8080/o/data-set-manager/");
+		}
+
+		task ("And clicks on Save button") {
+			Click(
+				key_fieldLabel = "Icon",
+				locator1 = "Select#GENERIC_SELECT_FIELD");
+
+			PortletEntry.save();
+		}
+
+		task ("And a successful toast message is displayed") {
+			Alert.viewSuccessMessage();
+		}
+
+		task ("Then the changes are saved") {
+			AssertElementPresent(
+				key_position = 1,
+				keyName = "New Action",
+				locator1 = "DataSet#FIELDS_TABLE");
+		}
+	}
+
+	@description = "LPS-192149. Verify if the Label field is mandatory and localized in Action"
+	@priority = 5
+	test MandatoryAndLocalizedLabelField {
+		task ("And clicks on Create Item Action button") {
+			LexiconEntry.gotoAdd();
+		}
+
+		task ("Then the New Item Action modal is displayed ") {
+			AssertElementPresent(
+				key_title = "New Item Action",
+				locator1 = "Header#H2_TITLE");
+		}
+
+		task ("And the Label field is mandatory") {
+			AssertElementPresent(
+				key_fieldName = "Label",
+				locator1 = "DataSet#MANDATORY_FIELD");
+		}
+
+		task ("And Label field is localized") {
+			AssertElementPresent(
+				key_field = "Label",
+				key_localizedLanguage = "en_US",
+				locator1 = "DataSet#LOCALIZED_FIELD");
+		}
+
+		task ("And the URL and Type field are filled") {
+			Type(
+				key_fieldId = "URL",
+				locator1 = "TextArea#ANY_ID",
+				value1 = "http://localhost:8080/o/data-set-manager/");
+		}
+
+		task ("Then is not possible to save") {
+			AssertElementPresent(locator1 = "Button#DISABLED_BUTTON");
+		}
+	}
+
+	@description = "LPS-192149. Verify if the URL field is mandatory"
+	@priority = 4
+	test MandatoryURLField {
+		task ("And clicks on plus button") {
+			LexiconEntry.gotoAdd();
+		}
+
+		task ("Then the URL field is mandatory") {
+			AssertElementPresent(
+				key_fieldName = "URL",
+				locator1 = "DataSet#MANDATORY_FIELD");
+
+			Type(
+				key_unnamedTitle = "",
+				locator1 = "TextInput#DEPOT_UNNAMED_DEFAULT_TITLE",
+				value1 = "New Action");
+		}
+
+		task ("And is not possible to save") {
+			AssertElementPresent(locator1 = "Button#DISABLED_BUTTON");
+		}
+	}
+
+	@description = "LPS-192149. Verify if the Message Type field is not mandatory"
+	@priority = 3
+	test MessageTypeIsNotMandatory {
+		task ("And clicks on Create Item Action button") {
+			LexiconEntry.gotoAdd();
+		}
+
+		task ("Then the Message Type field is not mandatory") {
+			AssertElementNotPresent(
+				key_fieldName = "Message Type",
+				locator1 = "DataSet#MANDATORY_FIELD");
+
+			Type(
+				key_unnamedTitle = "",
+				locator1 = "TextInput#DEPOT_UNNAMED_DEFAULT_TITLE",
+				value1 = "New Action");
+
+			Type(
+				key_fieldId = "URL",
+				locator1 = "TextArea#ANY_ID",
+				value1 = "http://localhost:8080/o/data-set-manager/");
+		}
+
+		task ("And clicks on Save button") {
+			Click(
+				key_fieldLabel = "Icon",
+				locator1 = "Select#GENERIC_SELECT_FIELD");
+
+			PortletEntry.save();
+		}
+
+		task ("And a successful toast message is displayed") {
+			Alert.viewSuccessMessage();
+		}
+
+		task ("Then the changes are saved") {
+			AssertElementPresent(
+				key_position = 1,
+				keyName = "New Action",
+				locator1 = "DataSet#FIELDS_TABLE");
 		}
 	}
 

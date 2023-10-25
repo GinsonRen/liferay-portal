@@ -7,10 +7,8 @@ package com.liferay.layout.locked.layouts.web.internal.display.context;
 
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItem;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItemListBuilder;
-import com.liferay.layout.constants.LockedLayoutType;
 import com.liferay.layout.manager.LayoutLockManager;
 import com.liferay.layout.model.LockedLayout;
-import com.liferay.layout.model.LockedLayoutOrder;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.search.EmptyOnClickRowChecker;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
@@ -22,16 +20,18 @@ import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.url.builder.PortletURLBuilder;
 import com.liferay.portal.kernel.service.LayoutLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.CollatorUtil;
 import com.liferay.portal.kernel.util.ListUtil;
-import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -66,9 +66,7 @@ public class LockedLayoutsDisplayContext {
 	}
 
 	public String getLayoutType(LockedLayout lockedLayout) {
-		return _layoutLockManager.getLayoutType(
-			lockedLayout.getClassPK(), _themeDisplay.getLocale(),
-			lockedLayout.getType());
+		return lockedLayout.getType();
 	}
 
 	public String getLayoutURL(LockedLayout lockedLayout)
@@ -130,8 +128,7 @@ public class LockedLayoutsDisplayContext {
 	}
 
 	public String getName(LockedLayout lockedLayout) {
-		return LocalizationUtil.getLocalization(
-			lockedLayout.getName(), _themeDisplay.getLanguageId());
+		return lockedLayout.getName();
 	}
 
 	public String getOrderByCol() {
@@ -184,6 +181,100 @@ public class LockedLayoutsDisplayContext {
 		return true;
 	}
 
+	public static class LockedLayoutOrder {
+
+		public LockedLayoutOrder(
+			boolean ascending, Locale locale,
+			LockedLayoutOrderType lockedLayoutOrderType) {
+
+			_ascending = ascending;
+			_locale = locale;
+			_lockedLayoutOrderType = lockedLayoutOrderType;
+		}
+
+		public Locale getLocale() {
+			return _locale;
+		}
+
+		public LockedLayoutOrderType getLockedLayoutOrderType() {
+			return _lockedLayoutOrderType;
+		}
+
+		public boolean isAscending() {
+			return _ascending;
+		}
+
+		public enum LockedLayoutOrderType {
+
+			LAST_AUTOSAVE("last-autosave"), NAME("name"), USER("user");
+
+			public static LockedLayoutOrderType create(String value) {
+				if (Validator.isNull(value)) {
+					return null;
+				}
+
+				for (LockedLayoutOrderType lockedLayoutType :
+						LockedLayoutOrderType.values()) {
+
+					if (Objects.equals(lockedLayoutType.getValue(), value)) {
+						return lockedLayoutType;
+					}
+				}
+
+				return null;
+			}
+
+			public String getValue() {
+				return _value;
+			}
+
+			private LockedLayoutOrderType(String value) {
+				_value = value;
+			}
+
+			private final String _value;
+
+		}
+
+		private final boolean _ascending;
+		private final Locale _locale;
+		private final LockedLayoutOrderType _lockedLayoutOrderType;
+
+	}
+
+	public enum LockedLayoutType {
+
+		COLLECTION_PAGE("collection-page"), CONTENT_PAGE("content-page"),
+		CONTENT_PAGE_TEMPLATE("content-page-template"),
+		DISPLAY_PAGE_TEMPLATE("display-page-template"),
+		MASTER_PAGE("master-page"), UTILITY_PAGE("utility-page");
+
+		public static LockedLayoutType create(String value) {
+			if (Validator.isNull(value)) {
+				return null;
+			}
+
+			for (LockedLayoutType lockedLayoutType : values()) {
+				if (Objects.equals(lockedLayoutType.getValue(), value)) {
+					return lockedLayoutType;
+				}
+			}
+
+			return null;
+		}
+
+		public String getValue() {
+			return _value;
+		}
+
+		private LockedLayoutType(String value) {
+			_value = value;
+		}
+
+		private final String _value;
+
+	}
+
 	private List<LockedLayout> _getFilteredLockedLayouts() {
 		if (_filteredLockedLayouts != null) {
 			return _filteredLockedLayouts;
@@ -218,9 +309,61 @@ public class LockedLayoutsDisplayContext {
 			return _lockedLayouts;
 		}
 
-		_lockedLayouts = _layoutLockManager.getLockedLayouts(
+		List<LockedLayout> lockedLayouts = _layoutLockManager.getLockedLayouts(
 			_themeDisplay.getCompanyId(), _themeDisplay.getScopeGroupId(),
-			getLockedLayoutOrder(), getLockedLayoutType());
+			_themeDisplay.getLocale());
+
+		if (ListUtil.isEmpty(lockedLayouts)) {
+			_lockedLayouts = lockedLayouts;
+
+			return _lockedLayouts;
+		}
+
+		LockedLayoutType lockedLayoutType = getLockedLayoutType();
+
+		if (lockedLayoutType != null) {
+			String type = _language.get(
+				_themeDisplay.getLocale(), lockedLayoutType.getValue());
+
+			lockedLayouts = ListUtil.filter(
+				lockedLayouts,
+				lockedLayout -> Objects.equals(lockedLayout.getType(), type));
+		}
+
+		String orderByCol = getOrderByCol();
+		String orderByType = getOrderByType();
+
+		Comparator<LockedLayout> lockedLayoutComparator = null;
+
+		if (Objects.equals(
+				orderByCol,
+				LockedLayoutOrder.LockedLayoutOrderType.LAST_AUTOSAVE.
+					getValue())) {
+
+			lockedLayoutComparator = Comparator.comparing(
+				lockedLayout -> lockedLayout.getLastAutoSaveDate());
+		}
+		else if (Objects.equals(
+					orderByCol,
+					LockedLayoutOrder.LockedLayoutOrderType.NAME.getValue())) {
+
+			lockedLayoutComparator = Comparator.comparing(
+				LockedLayout::getName,
+				CollatorUtil.getInstance(_themeDisplay.getLocale()));
+		}
+		else {
+			lockedLayoutComparator = Comparator.comparing(
+				LockedLayout::getUserName,
+				CollatorUtil.getInstance(_themeDisplay.getLocale()));
+		}
+
+		if (Objects.equals(orderByType, "desc")) {
+			lockedLayoutComparator = lockedLayoutComparator.reversed();
+		}
+
+		lockedLayouts.sort(lockedLayoutComparator);
+
+		_lockedLayouts = lockedLayouts;
 
 		return _lockedLayouts;
 	}

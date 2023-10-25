@@ -106,23 +106,16 @@ public class UpgradeCatchAllCheck extends BaseFileCheck {
 
 		String from = jsonObject.getString("from");
 
-		int periodIndex = from.indexOf(CharPool.PERIOD);
+		int index = from.indexOf(CharPool.PERIOD);
 
-		if (periodIndex != -1) {
+		if (index != -1) {
 			from = StringUtil.replace(from, CharPool.PERIOD, CharPool.POUND);
 		}
 		else {
 			sb.append(StringPool.POUND);
 		}
 
-		int parenthesisIndex = from.indexOf(CharPool.OPEN_PARENTHESIS);
-
-		if (parenthesisIndex != -1) {
-			sb.append(from.substring(0, parenthesisIndex));
-		}
-		else {
-			sb.append(from);
-		}
+		sb.append(from);
 
 		return sb.toString();
 	}
@@ -134,13 +127,13 @@ public class UpgradeCatchAllCheck extends BaseFileCheck {
 			from = from.substring(0, from.indexOf(CharPool.OPEN_PARENTHESIS));
 		}
 
-		String regex = "\\w+\\.[\\w\\(\\)\\s\\.]*" + from;
+		String regex = "\\w+\\.[\\w\\(\\)\\s\\.]*\\b" + from;
 
 		if (from.contains(StringPool.PERIOD)) {
 			regex = StringUtil.replace(from, CharPool.PERIOD, "\\.\\s*");
 		}
 
-		return Pattern.compile(regex + "\\(");
+		return Pattern.compile(regex + "[\\(;]");
 	}
 
 	private static JSONArray _getReplacementsJSONArray(String fileName)
@@ -160,7 +153,7 @@ public class UpgradeCatchAllCheck extends BaseFileCheck {
 
 			return StringUtil.replaceLast(
 				content, CharPool.CLOSE_CURLY_BRACE,
-				"\n\t@Reference\n\tprivate " + newReference + ";\n\n}");
+				"\t@Reference\n\tprivate " + newReference + ";\n\n}");
 		}
 
 		return content;
@@ -217,13 +210,8 @@ public class UpgradeCatchAllCheck extends BaseFileCheck {
 				newContent, jsonObject.getString("newReference"));
 		}
 		else if (fileName.endsWith(".jsp")) {
-			for (String newImport : newImports) {
-				if (!newContent.contains(newImport)) {
-					newContent = StringBundler.concat(
-						"<%@ page import=\"", newImport, "\" %>\n\n",
-						newContent);
-				}
-			}
+			newContent = BaseUpgradeCheck.addNewImportsJSPHeader(
+				newContent, newImports);
 		}
 
 		return newContent;
@@ -365,13 +353,15 @@ public class UpgradeCatchAllCheck extends BaseFileCheck {
 	private boolean _hasValidClassName(
 		String[] classNames, String content, String methodCall) {
 
+		String variableName = getVariableName(methodCall);
+
 		for (String className : classNames) {
-			if (className.endsWith("Util") &&
-				StringUtil.equals(getVariableName(methodCall), className)) {
+			if (Character.isUpperCase(variableName.charAt(0)) &&
+				StringUtil.equals(variableName, className)) {
 
 				return true;
 			}
-			else if (!className.endsWith("Util") &&
+			else if (!Character.isUpperCase(variableName.charAt(0)) &&
 					 hasClassOrVariableName(
 						 className, content, content, methodCall)) {
 

@@ -391,6 +391,26 @@
 	<td>//div[@class="panel-group panel-group-flush"]</td>
 	<td></td>
 </tr>
+<tr>
+	<td>ACTIONS_EMPTY_TABLE</td>
+	<td>//div[@class="c-empty-state"]//*[contains(text(),'${key_textName}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>DRAG_ROW</td>
+	<td>//table[contains(@class,'table-list')]//tr[@class='orderable-table-row'][${key_rowNumber}]//button[@aria-label="Drag view"]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>MANDATORY_FIELD</td>
+	<td>//label[contains(text(),'${key_fieldName}')]/*[contains(text(),'Mandatory')] | //label[contains(text(),'${key_fieldName}')]/*[contains(text(),'Required')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>LOCALIZED_FIELD</td>
+	<td>//div[contains(@class,'input-localized')]//*[text()="${key_field}"]/..//span[contains(text(),'${key_localizedLanguage}')]</td>
+	<td></td>
+</tr>
 
 <!-- DATA SET ACTIONS -->
 

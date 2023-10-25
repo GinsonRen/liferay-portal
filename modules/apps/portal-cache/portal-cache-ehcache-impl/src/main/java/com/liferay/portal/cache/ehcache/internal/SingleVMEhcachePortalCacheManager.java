@@ -6,7 +6,6 @@
 package com.liferay.portal.cache.ehcache.internal;
 
 import com.liferay.portal.cache.ehcache.internal.configurator.BaseEhcachePortalCacheManagerConfigurator;
-import com.liferay.portal.cache.ehcache.internal.configurator.SingleVMEhcachePortalCacheManagerConfigurator;
 import com.liferay.portal.kernel.cache.PortalCacheManager;
 import com.liferay.portal.kernel.cache.PortalCacheManagerNames;
 import com.liferay.portal.kernel.log.Log;
@@ -19,7 +18,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
-import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Tina Tian
@@ -64,8 +62,12 @@ public class SingleVMEhcachePortalCacheManager<K extends Serializable, V>
 	private static final Log _log = LogFactoryUtil.getLog(
 		SingleVMEhcachePortalCacheManager.class);
 
-	@Reference
-	private SingleVMEhcachePortalCacheManagerConfigurator
-		_singleVMEhcachePortalCacheManagerConfigurator;
+	private final SingleVMEhcachePortalCacheManagerConfigurator
+		_singleVMEhcachePortalCacheManagerConfigurator =
+			new SingleVMEhcachePortalCacheManagerConfigurator();
+
+	private static class SingleVMEhcachePortalCacheManagerConfigurator
+		extends BaseEhcachePortalCacheManagerConfigurator {
+	}
 
 }

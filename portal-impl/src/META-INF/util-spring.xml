@@ -10,7 +10,6 @@
 	<bean class="com.liferay.portal.bean.BeanPropertiesImpl" id="com.liferay.portal.bean.BeanPropertiesImpl" />
 	<bean class="com.liferay.portal.dao.jdbc.CurrentConnectionImpl" id="com.liferay.portal.dao.jdbc.CurrentConnectionImpl" />
 	<bean class="com.liferay.portal.format.IdenticalPhoneNumberFormatImpl" id="com.liferay.portal.format.IdenticalPhoneNumberFormatImpl" />
-	<bean class="com.liferay.portal.image.ImageToolImpl" id="com.liferay.portal.image.ImageToolImpl" />
 	<bean factory-bean="com.liferay.portal.kernel.json.JSONFactory" factory-method="getLiferayJSONDeserializationWhitelist" id="com.liferay.portal.json.jabsorb.serializer.LiferayJSONDeserializationWhitelist" />
 	<bean class="com.liferay.portal.kernel.bean.BeanPropertiesUtil" id="com.liferay.portal.kernel.bean.BeanPropertiesUtil">
 		<property name="beanProperties" ref="com.liferay.portal.bean.BeanPropertiesImpl" />
@@ -35,9 +34,6 @@
 	<bean class="com.liferay.portal.kernel.dao.jdbc.CurrentConnectionUtil">
 		<property name="currentConnection" ref="com.liferay.portal.dao.jdbc.CurrentConnectionImpl" />
 	</bean>
-	<bean class="com.liferay.portal.kernel.image.ImageToolUtil" id="com.liferay.portal.kernel.image.ImageToolUtil">
-		<property name="imageTool" ref="com.liferay.portal.image.ImageToolImpl" />
-	</bean>
 	<bean class="com.liferay.portal.json.JSONFactoryImpl" id="com.liferay.portal.kernel.json.JSONFactory" />
 	<bean class="com.liferay.portal.kernel.json.JSONFactoryUtil" id="com.liferay.portal.kernel.json.JSONFactoryUtil">
 		<property name="JSONFactory" ref="com.liferay.portal.kernel.json.JSONFactory" />
@@ -56,10 +52,6 @@
 	</bean>
 	<bean class="com.liferay.portal.kernel.portlet.configuration.icon.PortletConfigurationIconMenu" id="com.liferay.portal.kernel.portlet.configuration.icon.PortletConfigurationIconMenu" />
 	<bean class="com.liferay.portal.kernel.portlet.toolbar.PortletToolbar" id="com.liferay.portal.kernel.portlet.toolbar.PortletToolbar" />
-	<bean class="com.liferay.portal.service.permission.PortletPermissionImpl" id="com.liferay.portal.kernel.service.permission.PortletPermission" />
-	<bean class="com.liferay.portal.kernel.service.permission.PortletPermissionUtil" id="com.liferay.portal.kernel.service.permission.PortletPermissionUtil">
-		<property name="portletPermission" ref="com.liferay.portal.kernel.service.permission.PortletPermission" />
-	</bean>
 	<bean class="com.liferay.portal.kernel.spring.orm.LastSessionRecorderHelperUtil" id="com.liferay.portal.kernel.spring.orm.LastSessionRecorderHelperUtil">
 		<property name="lastSessionRecorderHelper">
 			<bean class="com.liferay.portal.spring.hibernate.LastSessionRecorderHelperImpl" />
@@ -89,20 +81,6 @@
 	</bean>
 	<bean class="com.liferay.portal.kernel.util.PortalUtil" id="com.liferay.portal.kernel.util.PortalUtil">
 		<property name="portal" ref="com.liferay.portal.util.Portal" />
-	</bean>
-	<bean class="com.liferay.portal.kernel.util.ThreadLocalDistributor" id="com.liferay.portal.kernel.util.ThreadLocalDistributor">
-		<property name="threadLocalSources">
-			<list>
-				<bean class="com.liferay.portal.kernel.util.KeyValuePair">
-					<constructor-arg name="key" value="com.liferay.portal.kernel.service.ServiceContextThreadLocal" />
-					<constructor-arg name="value" value="_serviceContextThreadLocal" />
-				</bean>
-				<bean class="com.liferay.portal.kernel.util.KeyValuePair">
-					<constructor-arg name="key" value="com.liferay.exportimport.kernel.staging.MergeLayoutPrototypesThreadLocal" />
-					<constructor-arg name="value" value="_inProgress" />
-				</bean>
-			</list>
-		</property>
 	</bean>
 	<bean class="com.liferay.portal.webserver.WebServerServletTokenImpl" id="com.liferay.portal.kernel.webserver.WebServerServletToken" />
 	<bean class="com.liferay.portal.kernel.webserver.WebServerServletTokenUtil" id="com.liferay.portal.kernel.webserver.WebServerServletTokenUtil">

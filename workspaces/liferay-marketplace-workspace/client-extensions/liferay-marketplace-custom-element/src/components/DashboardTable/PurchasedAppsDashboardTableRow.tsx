@@ -10,9 +10,13 @@ import ClayTable from '@clayui/table';
 import './PurchasedAppsDashboardTableRow.scss';
 
 import DropDown from '@clayui/drop-down/lib/DropDown';
+import {ClayTooltipProvider} from '@clayui/tooltip';
 import classNames from 'classnames';
+import {useNavigate} from 'react-router-dom';
 
-import {PurchasedAppProps} from '../../pages/PurchasedAppsDashboardPage/PurchasedAppsDashboardPage';
+import {OrderStatus} from '../../enums/OrderStatus';
+import {orderType} from '../../enums/orderType';
+import {PurchasedAppProps} from '../../pages/PurchasedAppsDashboard/PurchasedAppsDashboardOutlet';
 import {showAppImage} from '../../utils/util';
 
 interface PurchasedAppsDashboardTableRowProps {
@@ -25,14 +29,23 @@ export function PurchasedAppsDashboardTableRow({
 	const {
 		name,
 		orderId,
+		orderTypeExternalReferenceCode,
+		productId,
 		project,
 		provisioning,
+		provisioningLabel,
 		purchasedBy,
 		purchasedDate,
 		thumbnail,
 		type,
 		version,
+		virtualURL,
 	} = item;
+
+	const navigate = useNavigate();
+
+	const orderStatusIsNotCompleted =
+		provisioningLabel !== OrderStatus.COMPLETED;
 
 	return (
 		<ClayTable.Row>
@@ -106,11 +119,12 @@ export function PurchasedAppsDashboardTableRow({
 							'dashboard-table-row-provisioning-icon',
 							{
 								'dashboard-table-row-provisioning-icon-completed':
-									provisioning === 'Completed',
+									provisioningLabel === OrderStatus.COMPLETED,
 								'dashboard-table-row-provisioning-icon-pending':
-									provisioning === 'Pending',
+									provisioningLabel === OrderStatus.PENDING,
 								'dashboard-table-row-provisioning-icon-processing':
-									provisioning === 'Processing',
+									provisioningLabel ===
+									OrderStatus.PROCESSING,
 							}
 						)}
 						symbol="circle"
@@ -132,6 +146,26 @@ export function PurchasedAppsDashboardTableRow({
 					}
 				>
 					<DropDown.ItemList>
+						{orderTypeExternalReferenceCode === orderType.DXP && (
+							<ClayTooltipProvider>
+								<DropDown.Item
+									data-tooltip-align="left"
+									disabled={orderStatusIsNotCompleted}
+									onClick={() =>
+										navigate(
+											`/app/${productId}/create-license`
+										)
+									}
+									title={
+										orderStatusIsNotCompleted
+											? 'The order must be completed before licensing this app.'
+											: undefined
+									}
+								>
+									Create License Key
+								</DropDown.Item>
+							</ClayTooltipProvider>
+						)}
 						<DropDown.Item
 							onClick={() => {
 								window.location.href =
@@ -140,6 +174,24 @@ export function PurchasedAppsDashboardTableRow({
 						>
 							Access Console
 						</DropDown.Item>
+						{orderTypeExternalReferenceCode === orderType.DXP && (
+							<ClayTooltipProvider>
+								<DropDown.Item
+									data-tooltip-align="left"
+									disabled={orderStatusIsNotCompleted}
+									onClick={() => {
+										window.location.href = virtualURL;
+									}}
+									title={
+										orderStatusIsNotCompleted
+											? 'This order must be completed before downloading this app.'
+											: undefined
+									}
+								>
+									Download App
+								</DropDown.Item>
+							</ClayTooltipProvider>
+						)}
 					</DropDown.ItemList>
 				</DropDown>
 			</ClayTable.Cell>
