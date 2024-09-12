@@ -52,6 +52,7 @@ import com.liferay.expando.kernel.service.ExpandoTableLocalService;
 import com.liferay.expando.kernel.service.ExpandoValueLocalService;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Release;
 import com.liferay.portal.kernel.service.AddressLocalService;
 import com.liferay.portal.kernel.service.ClassNameLocalService;
 import com.liferay.portal.kernel.service.CompanyLocalService;
@@ -768,6 +769,11 @@ public class CommerceServiceUpgradeStepRegistrator
 
 	@Reference
 	private RegionLocalService _regionLocalService;
+
+	@Reference(
+		target = "(&(release.bundle.symbolic.name=portal)(release.schema.version>=18.0.0))"
+	)
+	private Release _release;
 
 	@Reference
 	private ResourceActionLocalService _resourceActionLocalService;
