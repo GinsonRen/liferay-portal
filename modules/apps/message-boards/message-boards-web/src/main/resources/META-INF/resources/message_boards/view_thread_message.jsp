@@ -83,7 +83,29 @@ User messageUser = UserLocalServiceUtil.fetchUser(message.getUserId());
 				int messageCount = 0;
 
 				if (!message.isAnonymous()) {
-					messageCount = MBStatsUserLocalServiceUtil.getMessageCount(scopeGroupId, message.getUserId());
+					Map<Long, Integer> userIdMessageCounts = (Map<Long, Integer>)request.getAttribute("view_thread_message.jsp-userIdMessageCount");
+
+					if (userIdMessageCounts != null) {
+						Integer userIdMessageCount = userIdMessageCounts.get(message.getUserId());
+
+						if (userIdMessageCount == null) {
+							messageCount = MBStatsUserLocalServiceUtil.getMessageCount(scopeGroupId, message.getUserId());
+
+							userIdMessageCounts.put(message.getUserId(), messageCount);
+						}
+						else {
+							messageCount = userIdMessageCount;
+						}
+					}
+					else {
+						messageCount = MBStatsUserLocalServiceUtil.getMessageCount(scopeGroupId, message.getUserId());
+
+						request.setAttribute(
+							"view_thread_message.jsp-userIdMessageCount",
+							HashMapBuilder.put(
+								message.getUserId(), messageCount
+							).build());
+					}
 				}
 
 				int posts = message.isAnonymous() ? 1 : messageCount;
@@ -91,7 +113,29 @@ User messageUser = UserLocalServiceUtil.fetchUser(message.getUserId());
 				String[] ranks = {StringPool.BLANK, StringPool.BLANK};
 
 				if (!message.isAnonymous()) {
-					ranks = MBStatsUserLocalServiceUtil.getUserRank(themeDisplay.getSiteGroupId(), themeDisplay.getLanguageId(), message.getUserId());
+					Map<Long, String[]> userIdRanks = (Map<Long, String[]>)request.getAttribute("view_thread_message.jsp-userIdRanks");
+
+					if (userIdRanks != null) {
+						String[] userIdRank = userIdRanks.get(message.getUserId());
+
+						if (userIdRank == null) {
+							ranks = MBStatsUserLocalServiceUtil.getUserRank(themeDisplay.getSiteGroupId(), themeDisplay.getLanguageId(), message.getUserId());
+
+							userIdRanks.put(message.getUserId(), ranks);
+						}
+						else {
+							ranks = userIdRank;
+						}
+					}
+					else {
+						ranks = MBStatsUserLocalServiceUtil.getUserRank(themeDisplay.getSiteGroupId(), themeDisplay.getLanguageId(), message.getUserId());
+
+						request.setAttribute(
+							"view_thread_message.jsp-userIdRanks",
+							HashMapBuilder.put(
+								message.getUserId(), ranks
+							).build());
+					}
 				}
 				%>
 
