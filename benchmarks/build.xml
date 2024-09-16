@@ -13,6 +13,10 @@
 			dir="."
 			fork="true"
 		>
+			<jvmarg value="-Xms3072m" />
+			<jvmarg value="-Xmx3072m" />
+			<jvmarg value="-XX:MaxPermSize=512m" />
+
 			<classpath>
 				<fileset
 					dir="${sdk.dir}/dist"
