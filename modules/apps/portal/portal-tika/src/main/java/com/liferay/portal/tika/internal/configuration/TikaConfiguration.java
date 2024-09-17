@@ -40,4 +40,10 @@ public interface TikaConfiguration {
 	)
 	public String tikaConfigXml();
 
+	@Meta.AD(
+		description = "tika-server-description", name = "tika-server",
+		required = false
+	)
+	public String tikaServer();
+
 }
