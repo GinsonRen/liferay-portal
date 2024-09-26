@@ -179,6 +179,7 @@ public class AssetCategoriesSelectorTag extends IncludeTag {
 		_className = null;
 		_classPK = 0;
 		_classTypePK = AssetCategoryConstants.ALL_CLASS_TYPE_PK;
+		_currentAndAncestorSiteAndDepotGroupIds = null;
 		_groupIds = null;
 		_hiddenInput = "assetCategoryIds";
 		_id = null;
@@ -189,6 +190,7 @@ public class AssetCategoriesSelectorTag extends IncludeTag {
 		_showRequiredLabel = true;
 		_singleSelect = false;
 		_visibilityTypes = _VISIBILITY_TYPES;
+		_vocabularies = null;
 	}
 
 	protected List<String[]> getCategoryIdsTitles() {
@@ -268,6 +270,10 @@ public class AssetCategoriesSelectorTag extends IncludeTag {
 	}
 
 	protected long[] getGroupIds() {
+		if (_currentAndAncestorSiteAndDepotGroupIds != null) {
+			return _currentAndAncestorSiteAndDepotGroupIds;
+		}
+
 		HttpServletRequest httpServletRequest = getRequest();
 
 		ThemeDisplay themeDisplay =
@@ -276,13 +282,18 @@ public class AssetCategoriesSelectorTag extends IncludeTag {
 
 		try {
 			if (ArrayUtil.isEmpty(_groupIds)) {
-				return SiteConnectedGroupGroupProviderUtil.
-					getCurrentAndAncestorSiteAndDepotGroupIds(
-						themeDisplay.getScopeGroupId());
+				_currentAndAncestorSiteAndDepotGroupIds =
+					SiteConnectedGroupGroupProviderUtil.
+						getCurrentAndAncestorSiteAndDepotGroupIds(
+							themeDisplay.getScopeGroupId());
+			}
+			else {
+				_currentAndAncestorSiteAndDepotGroupIds =
+					SiteConnectedGroupGroupProviderUtil.
+						getCurrentAndAncestorSiteAndDepotGroupIds(_groupIds);
 			}
 
-			return SiteConnectedGroupGroupProviderUtil.
-				getCurrentAndAncestorSiteAndDepotGroupIds(_groupIds);
+			return _currentAndAncestorSiteAndDepotGroupIds;
 		}
 		catch (Exception exception) {
 			if (_log.isDebugEnabled()) {
@@ -290,7 +301,9 @@ public class AssetCategoriesSelectorTag extends IncludeTag {
 			}
 		}
 
-		return new long[0];
+		_currentAndAncestorSiteAndDepotGroupIds = new long[0];
+
+		return _currentAndAncestorSiteAndDepotGroupIds;
 	}
 
 	@Override
@@ -491,6 +504,10 @@ public class AssetCategoriesSelectorTag extends IncludeTag {
 	}
 
 	private List<AssetVocabulary> _getVocabularies() {
+		if (_vocabularies != null) {
+			return _vocabularies;
+		}
+
 		List<AssetVocabulary> vocabularies = new ArrayList<>();
 
 		vocabularies.addAll(
@@ -513,7 +530,7 @@ public class AssetCategoriesSelectorTag extends IncludeTag {
 				vocabularies, _className, _classTypePK);
 		}
 
-		return ListUtil.filter(
+		_vocabularies = ListUtil.filter(
 			vocabularies,
 			vocabulary -> {
 				if (_showOnlyRequiredVocabularies &&
@@ -526,6 +543,8 @@ public class AssetCategoriesSelectorTag extends IncludeTag {
 
 				return true;
 			});
+
+		return _vocabularies;
 	}
 
 	private static final String _PAGE = "/asset_categories_selector/page.jsp";
@@ -541,6 +560,7 @@ public class AssetCategoriesSelectorTag extends IncludeTag {
 	private String _className;
 	private long _classPK;
 	private long _classTypePK = AssetCategoryConstants.ALL_CLASS_TYPE_PK;
+	private long[] _currentAndAncestorSiteAndDepotGroupIds;
 	private long[] _groupIds;
 	private String _hiddenInput = "assetCategoryIds";
 	private String _id;
@@ -551,5 +571,6 @@ public class AssetCategoriesSelectorTag extends IncludeTag {
 	private boolean _showRequiredLabel = true;
 	private boolean _singleSelect;
 	private int[] _visibilityTypes = _VISIBILITY_TYPES;
+	private List<AssetVocabulary> _vocabularies;
 
 }
