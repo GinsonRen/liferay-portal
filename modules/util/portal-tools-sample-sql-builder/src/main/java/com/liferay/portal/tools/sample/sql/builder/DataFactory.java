@@ -6996,7 +6996,13 @@ public class DataFactory {
 		// Other fields
 
 		userModel.setContactId(_counter.get());
+		//test is the password, please try to use the passwords encryption
+		// algorithm to get the value that set here, you can do it with
+		// portal UI manually: enable the passwords encryption algorithm,
+		// create a user with password:test, then go to DB table User_ to get
+		// the value of password_, then use the value to update userModel.setPassword("test");
 		userModel.setPassword("test");
+		userModel.setPasswordEncrypted(true);
 		userModel.setPasswordModifiedDate(new Date());
 		userModel.setReminderQueryQuestion("What is your screen name?");
 		userModel.setReminderQueryAnswer(screenName);
