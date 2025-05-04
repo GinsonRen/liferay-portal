@@ -30,6 +30,8 @@ MBMessageIterator mbMessageIterator = new MBMessageIterator(treeWalker.getMessag
 <c:if test="<%= mbMessageIterator != null %>">
 
 	<%
+	boolean initialSetting = true;
+
 	while (mbMessageIterator.hasNext()) {
 		rootIndexPage = mbMessageIterator.getIndexPage();
 
@@ -37,13 +39,22 @@ MBMessageIterator mbMessageIterator = new MBMessageIterator(treeWalker.getMessag
 			break;
 		}
 
-		request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER, treeWalker);
-		request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_CATEGORY, category);
+		if (initialSetting) {
+			boolean repliedToMessage = MBCategoryPermission.contains(permissionChecker, scopeGroupId, category.getCategoryId(), ActionKeys.REPLY_TO_MESSAGE);
+
+			request.setAttribute(MBWebKeys.MESSAGE_BOARDS_TREE_WALKER_REPLIED_TO_MESSAGE, Boolean.valueOf(repliedToMessage));
+
+			request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER, treeWalker);
+			request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_CATEGORY, category);
+			request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_DEPTH, Integer.valueOf(0));
+			request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_LAST_NODE, Boolean.valueOf(false));
+			request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_SEL_MESSAGE, message);
+			request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_THREAD, thread);
+
+			initialSetting = false;
+		}
+
 		request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_CUR_MESSAGE, mbMessageIterator.next());
-		request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_DEPTH, Integer.valueOf(0));
-		request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_LAST_NODE, Boolean.valueOf(false));
-		request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_SEL_MESSAGE, message);
-		request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_THREAD, thread);
 	%>
 
 		<div class="card-tab message-container">
